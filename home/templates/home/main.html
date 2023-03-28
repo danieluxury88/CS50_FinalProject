@@ -1,12 +1,16 @@
+{% load static %}
 <html>
 <head>
     <title>{{ settings.APP_NAME }}</title>
-    <!-- edit samples/settings.py and add APP_NAME='DJ4E Samples' or similar
-        Also make sure that home/context_processors.py exists and is included
-        settings.py context processors as 'home.context_processors.settings' -->
+    <link href="{% static 'home/styles.css' %}" rel="stylesheet">
+    <script src="{% static 'home/clock.js' %}"></script>
 </head>
-<body>
-    <h1>Main</h1>
+
+    
+
+<body onload="displayTime()">
+	<div id="clock"></div>
+    <p><b>Current Date-Time: </b>{% now "jS F Y" %}</p>
 
 
 {% if user.is_authenticated %}
@@ -19,7 +23,10 @@ Id: {{ user.id }}
 </p>
 <p>You can <a href="/accounts/logout">Logout</a></p>
 
-
 {% else %}
 <p>You can <a href="/accounts/login">Login</a> if you like.</p>
 {% endif %}
+
+</body>
+</html>
+

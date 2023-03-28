@@ -14,3 +14,8 @@ class HomeView(View):
             'installed': settings.INSTALLED_APPS,
         }
         return render(request, 'home/main.html', context)
+    
+    
+class TestView(View):
+    def get(self, request):
+        return render(request, 'home/test.html')

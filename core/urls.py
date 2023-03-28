@@ -27,7 +27,7 @@ urlpatterns = [
 urlpatterns += [
     path('favicon.ico', serve, {
             'path': 'favicon.ico',
-            'document_root': settings.BASE_DIR/'static'
+            'document_root': settings.BASE_DIR/'favicon'
         }
     ),
 ]
