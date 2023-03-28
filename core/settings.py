@@ -41,7 +41,7 @@ DJANGO_APPS = [
 # DFPC: from SoloPython sample https://www.youtube.com/watch?v=6CUgF7cglT4&t=13830s
 
 THIRD_PARTY_APPS = [
-
+    'django_extensions',
 ]
 
 PROJECT_APPS = [

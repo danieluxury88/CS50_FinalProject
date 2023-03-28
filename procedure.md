@@ -16,5 +16,7 @@ python -m venv env
     b. Modify settings.py to use .env keys.
     c. Reorder settings.py
 12. Add static folder with favicon.icon and add url route
+13. Add Home app to manage authentication
+14. Add django-extensions to include scripts package, to be run with **python manage.py runscript test**
 
-13. Define apps & models.
+15. Define apps & models.
