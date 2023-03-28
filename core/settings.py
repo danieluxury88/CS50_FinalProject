@@ -25,6 +25,8 @@ DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS_DEV')
 
+APP_NAME = "99 Hours"
+
 
 # Application definition
 
@@ -43,7 +45,7 @@ THIRD_PARTY_APPS = [
 ]
 
 PROJECT_APPS = [
-
+    'home.apps.HomeConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
@@ -71,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'home.context_processors.settings',
             ],
         },
     },
@@ -89,8 +92,6 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), // DFPC: from dj4e sample
     }
 }
-
-
 
 
 # Password validation
