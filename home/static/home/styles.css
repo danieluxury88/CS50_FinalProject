@@ -4,3 +4,10 @@
     text-align: center;
     margin-top: 50px;
 }
+
+#date_lbl {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 50px;
+}

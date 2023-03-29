@@ -29,4 +29,7 @@ from django.core.management.utils import get_random_secret_key
 print(get_random_secret_key())
 ```
 
-16. Define apps & models.
+16. Add login and & register views, using template html to split header, nav, body and footer.
+
+
+x. Define apps & models.
