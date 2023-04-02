@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ object.title }}</h1>
+  <p><strong>Status:</strong> {{ object.status }}</p>
+  <p><strong>Description:</strong> {{ object.description }}</p>
+  <p><strong>Tasks:</strong></p>
+  <ul>
+    {% for task in object.tasks.all %}
+      <li><a href="{% url 'tasks:task-detail' task.pk %}">{{ task.title }}</a></li>
+    {% empty %}
+      <li>No tasks found.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

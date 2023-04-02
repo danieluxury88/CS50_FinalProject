@@ -11,7 +11,7 @@ Start Navigation Bar
         <li><a href="{%url 'home:index'%}">Home</a></li>
         <li><a href="{%url 'home:test'%}">Test</a></li>
         {% if user.is_authenticated %}
-            <li><a href="{%url 'home:index' %}">Portfolio</a></li>
+            <li><a href="{%url 'tasks:test' %}">Tasks</a></li>
             <li><a href="{%url 'home:index' %}">Blog</a></li>
             <li><a href="{%url 'home:index'%}">Contact</a></li>
             <li><a href="{%url 'home:logout'%}">Logout</a></li>

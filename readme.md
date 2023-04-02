@@ -13,7 +13,7 @@ Organize and measure your daily life. Create cycles of time, define objectives a
 
 ## Project Description
 
-Personal (as Project) Management Django Web Project.
+Personal (as Project) Management Django Web Project. Let you add tasks, milestones and projects. Also add important dates, register events/habits and create self rules. Finally review your performance in a Report.
 
 ## Technologies Used
 
@@ -30,7 +30,10 @@ Provide step-by-step instructions for installing and setting up your project. In
 
 
 ## Distinctiveness and Complexity
-
+Use clase based views.
+Use native css.
+Use django-rest-framework
+Create 3 apps to split logic.
 
 ## Source file explanation
 
