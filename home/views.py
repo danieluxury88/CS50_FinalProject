@@ -10,6 +10,8 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
 
+from .models import User
+
 
 def login_view(request):
     if request.method == "POST":
@@ -36,7 +38,6 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("home:index"))
 
 
-User = settings.AUTH_USER_MODEL
 def register(request):
     if request.method == "POST":
         username = request.POST["username"]
