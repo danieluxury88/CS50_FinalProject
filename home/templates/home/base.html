@@ -18,30 +18,39 @@
     <!-- ================================
     Start CSS
     ================================= -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="{% static 'home/styles.css' %}" rel="stylesheet">
     {% block extend_header%}{%endblock%}
     <!-- ================================
     End CSS
     ================================= -->
   </head>
-  <body>
+  <body class ="home_page">
     {% include 'home/partials/messages.html' %}
-    {% include 'home/partials/nav.html' %}
+      <header>
+        <div class ="header"> 
+        {% include 'home/partials/nav.html' %}
+        </div>
+      </header>
 
-    {% block content %}
-    {% endblock %}
+      <main>
+        <div class ="main">
+        {% block content %}
+        {% endblock %}
+        </div>
+      </main>
 
-    {% include 'home/partials/footer.html' %}
-
-    <!-- ================================
-    Start Scripts
-    ================================= -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    {% block extend_footer %}
-    {% endblock %}
-    <!-- ================================
-    End Scripts
-    ================================= -->
+      <footer>
+        <div class="footer">
+          {% include 'home/partials/footer.html' %}
+          <!-- ================================
+          Start Scripts
+          ================================= -->
+          {% block extend_footer %}
+          {% endblock %}
+          <!-- ================================
+          End Scripts
+          ================================= -->
+        </div>
+      </footer>
   </body>
 </html>

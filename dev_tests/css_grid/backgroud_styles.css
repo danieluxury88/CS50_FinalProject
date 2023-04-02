@@ -1,0 +1,33 @@
+body
+{
+    background-color: grey;
+    padding: 15px;
+    counter-reset: section;
+}
+
+.header
+{
+    text-align: center;
+}
+
+.grid-container
+{
+    display: grid;
+}
+
+.grid-item
+{
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    background-color: rgb(57, 184, 235);
+    margin: 1px;
+    padding: 1px
+}
+
+
+.grid-item::before {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    counter-increment: section;
+    content: "Grid Item " counter(section);
+}

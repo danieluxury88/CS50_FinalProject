@@ -1,13 +1,67 @@
+html, body {
+    margin:0;
+    height: 100%;
+} 
+
+ul 
+{
+    list-style-type: none;
+}
+
 #clock {
     font-size: 10em;
     font-weight: bold;
+    font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     text-align: center;
-    margin-top: 50px;
 }
 
 #date_lbl {
     font-size: 2em;
     font-weight: bold;
     text-align: center;
-    margin-top: 50px;
+}
+
+.home_page {
+    display: grid;
+    height: 100%;    
+    align-content:space-between;
+    grid-template-areas: 
+     "header"
+     "main"
+     "footer";
+}
+
+header {
+    background-color: yellow;
+    grid-area: header;
+}
+
+.header {
+    background-color: beige;
+    display: flex;
+    justify-content: stretch;
+}
+
+#header_options {
+    display: flex;
+    gap: 10px;
+}
+
+main {
+    background-color: yellow;
+    grid-area: main;
+}
+
+.main {
+    background-color: azure;
+}
+
+footer {
+    background-color: yellow;
+    grid-area: footer;
+}
+
+.footer {
+    background-color: beige;
+    
 }

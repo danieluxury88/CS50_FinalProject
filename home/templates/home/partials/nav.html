@@ -2,40 +2,24 @@
 <!-- ================================
 Start Navigation Bar
 ================================= -->
-<header>
-    <div class="headerCol">
-    <div class="container-fluid">
-        <div class="row align-items-center">
-        <div class="col-auto">
-            <div class="logoCol"><a href="{% url 'home:index' %}"><img src="{% static 'home/images/99_logo.png' %}" alt="..." width=128></a></div>
-        </div>
-        <div class="col">
-            <div class="d-md-none">
-            <button class="navToggle">
-                <span class="navToggle__text">Toggle Menu</span>
-            </button>
-            </div>
-            <div class="navCollapseCol">
-            <div class="navCol">
-                <ul>
-                    <li><a href="{%url 'home:index'%}">Home</a></li>
-                    <li><a href="{%url 'home:test'%}">Test</a></li>
-                    {% if user.is_authenticated %}
-                        <li><a href="{%url 'home:index' %}">Portfolio</a></li>
-                        <li><a href="{%url 'home:index' %}">Blog</a></li>
-                        <li><a href="{%url 'home:index'%}">Contact</a></li>
-                        <li><a href="{%url 'home:logout'%}">Logout</a></li>
-                    {% else %}
-                        <li><a href="{%url 'home:login' %}">LogIn</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
-    </div>
-</header>
+
+<div id='header_logo'>
+    <a href="{% url 'home:index' %}"><img src="{% static 'home/images/99_logo.png' %}" alt="..." width=128></a>
+</div>
+<div>
+    <ul id='header_options'>
+        <li><a href="{%url 'home:index'%}">Home</a></li>
+        <li><a href="{%url 'home:test'%}">Test</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="{%url 'home:index' %}">Portfolio</a></li>
+            <li><a href="{%url 'home:index' %}">Blog</a></li>
+            <li><a href="{%url 'home:index'%}">Contact</a></li>
+            <li><a href="{%url 'home:logout'%}">Logout</a></li>
+        {% else %}
+            <li><a href="{%url 'home:login' %}">LogIn</a></li>
+        {% endif %}
+    </ul>
+</div>
 <!-- ================================
 End Navigation Bar
 ================================= -->
