@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <p>
+    <form action="" method="post" id="upload_form">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <input type="submit" value="Submit">
+      <input type="submit" value="Cancel" onclick="window.location.href='{% url 'tasks:index' %}';return false;">
+    </form>
+  </p>
+{% endblock %}

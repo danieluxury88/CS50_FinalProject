@@ -4,7 +4,9 @@
   <h1>Milestones</h1>
   <ul>
     {% for milestone in object_list %}
-      <li><a href="{% url 'tasks:milestone-detail' milestone.pk %}">{{ milestone.title }}</a></li>
+      <h3><li><a href="{% url 'tasks:milestone_detail' milestone.pk %}">{{ milestone.title }}</a></li></h3>
+      <a href="{% url 'tasks:milestone_update' milestone.id %}"><i class="fa fa-pencil"></i>update</a>
+      <a href="{% url 'tasks:milestone_delete' milestone.id %}"><i class="fa fa-trash">delete</i></a>
     {% empty %}
       <li>No milestones found.</li>
     {% endfor %}

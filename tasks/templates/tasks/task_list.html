@@ -2,11 +2,102 @@
 
 {% block content %}
   <h1>Tasks</h1>
+  <input type="text" id="title-filter" onkeyup="filterListByTitle()" placeholder="Filter by title...">
+  <button onclick="sortListByDuration()">Sort by duration</button>
+
+
+  <input type="checkbox" name="status" value="TO_DO" onclick="filterListByStatus()"> To do
+  <input type="checkbox" name="status" value="IN_PROGRESS" onclick="filterListByStatus()"> In progress
+  <input type="checkbox" name="status" value="CANCELLED" onclick="filterListByStatus()"> Cancelled
+  <input type="checkbox" name="status" value="COMPLETED" onclick="filterListByStatus()"> Completed
+
+
+  <div class="work-items-container">
   <ul>
     {% for task in object_list %}
-      <li><a href="{% url 'tasks:task-detail' task.pk %}">{{ task.title }}</a></li>
+    <div class="work-item">
+      <a href="{% url 'tasks:task_detail' task.pk %}"> <h2 class="title">{{ task.title }}</a></h2>
+      <p class="duration">{{ task.estimated_duration }}</p>
+      <p class="status">{{ task.status }}</p>
+      <p class="creation-time">{{ task.creation_time }}</p>
+      <p class="update-time">{{ task.update_time }}</p>
+      <a href="{% url 'tasks:task_update' task.id %}"><i class="fa fa-pencil"></i>update</a>
+      <a href="{% url 'tasks:task_delete' task.id %}"><i class="fa fa-trash">delete</i></a>
+    </div>
+
     {% empty %}
       <li>No task found.</li>
     {% endfor %}
   </ul>
+  <div>
+  <a href="{% url 'tasks:task_create' %}">Add a Task</a>
+{% endblock %}
+
+{% block extend_footer %}
+<script>
+  function filterListByTitle() {
+    let input = document.querySelector('#title-filter');
+    let filter = input.value.toUpperCase();
+    let workItems = document.querySelectorAll('.work-item');
+    workItems.forEach(function(item) {
+      let title = item.querySelector('.title').textContent.toUpperCase();
+      if (title.indexOf(filter) > -1) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+  function sortListByDuration() {
+    let workItems = document.querySelectorAll('.work-item');
+    workItems = Array.prototype.slice.call(workItems, 0);
+    workItems.sort(function(a, b) {
+      let aDuration = parseInt(a.querySelector('.duration').textContent);
+      let bDuration = parseInt(b.querySelector('.duration').textContent);
+      if (aDuration < bDuration) return -1;
+      if (aDuration > bDuration) return 1;
+      return 0;
+    });
+    let parent = document.querySelector('.work-items-container');
+    parent.innerHTML = '';
+    workItems.forEach(function(item) {
+      parent.appendChild(item);
+    });
+  }
+
+  function sortListByStatus() {
+    let workItems = document.querySelectorAll('.work-item');
+    workItems = Array.prototype.slice.call(workItems, 0);
+    workItems.sort(function(a, b) {
+      let aDuration = parseInt(a.querySelector('.duration').textContent);
+      let bDuration = parseInt(b.querySelector('.duration').textContent);
+      if (aDuration < bDuration) return -1;
+      if (aDuration > bDuration) return 1;
+      return 0;
+    });
+    let parent = document.querySelector('.work-items-container');
+    parent.innerHTML = '';
+    workItems.forEach(function(item) {
+      parent.appendChild(item);
+    });
+  }
+
+  function filterListByStatus() {
+    let workItems = document.querySelectorAll('.work-item');
+    workItems = Array.prototype.slice.call(workItems, 0);
+    let selectedStatuses = Array.from(document.querySelectorAll('input[name="status"]:checked'))
+      .map(function(checkbox) { return checkbox.value; });
+    workItems.forEach(function(item) {
+      let status = item.querySelector('.status').textContent.toUpperCase();
+      if (selectedStatuses.length === 0 || selectedStatuses.includes(status)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+</script>
+
 {% endblock %}

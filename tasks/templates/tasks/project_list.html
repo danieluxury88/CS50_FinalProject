@@ -4,9 +4,12 @@
   <h1>Projects</h1>
   <ul>
     {% for project in object_list %}
-      <li><a href="{% url 'tasks:project-detail' project.pk %}">{{ project.title }}</a></li>
+      <h3><li><a href="{% url 'tasks:project_detail' project.pk %}">{{ project.title }}</a></li></h3>
+      <a href="{% url 'tasks:project_update' project.id %}"><i class="fa fa-pencil"></i>update</a>
+      <a href="{% url 'tasks:project_delete' project.id %}"><i class="fa fa-trash">delete</i></a>
     {% empty %}
       <li>No projects found.</li>
     {% endfor %}
   </ul>
+  <a href="{% url 'tasks:project_create' %}">Add a project</a>
 {% endblock %}

@@ -3,6 +3,7 @@
 {% block content %}
   <h1>{{ object.title }}</h1>
   <p><strong>Status:</strong> {{ object.status }}</p>
-  <p><strong>Description:</strong> {{ object.description }}</p>
-  <p><strong>Tasks:</strong></p>
+  <p><strong>Creation time:</strong> {{ object.creation_time }}</p>
+  <a href="{% url 'tasks:task_update' task.id %}"><i class="fa fa-pencil"></i>update</a>
+  <a href="{% url 'tasks:task_delete' task.id %}"><i class="fa fa-trash"></i>delete</a>
 {% endblock %}
