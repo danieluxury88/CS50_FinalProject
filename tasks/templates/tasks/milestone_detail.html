@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <h1>{{ object.title }}</h1>
+<a href="{% url 'tasks:milestone_update' object.project.id object.id%}"><i class="fa fa-pencil"></i>update</a>
+<a href="{% url 'tasks:milestone_delete' object.project.id object.id%}"><i class="fa fa-trash">delete</i></a>
 <p><strong>Status:</strong> {{ object.status }}</p>
 <p><strong>Tasks: {{ num_completed_tasks }} completed of ({{object.tasks.count}}):</p>
 <p><strong>Estimated Time Left:</strong> {{ total_left_estimated_duration }} minutes <strong> Total estimated </strong>{{total_estimated_duration}}</p>
@@ -17,13 +20,12 @@
   <input type="checkbox" name="status" value="COMPLETED" onclick="filterListByStatus()"> Completed
 
   <div class="work-items-container">
-    {% for task in object.tasks.all %}
+    {% for task in tasks.all %}
     <div class="work-item">
-      <a href="{% url 'tasks:task_detail' task.pk %}"> <h2 class="title">{{ task.title }}</a></h2>
-      <p class="duration">{{ task.estimated_duration }}</p>
-      <p class="status">{{ task.status }}</p>
-      <a href="{% url 'tasks:task_update' task.id %}"><i class="fa fa-pencil"></i>update</a>
-      <a href="{% url 'tasks:task_delete' task.id %}"><i class="fa fa-trash">delete</i></a>
+      <h2 class="title">{{ task.title }}</h2>
+      <p class="duration">Duration : {{ task.estimated_duration }}</p>
+      <p class="status">Status: {{ task.status }}</p>
+      </br>
     </div>
 
     {% empty %}
@@ -31,91 +33,17 @@
     {% endfor %}
   </div>
 
-  <a href="{% url 'tasks:task_create' %}">Add a Task</a>
-  {% endblock %}
-
-
-  {% block extend_footer %}
-<script>
-  function filterListByTitle() {
-    let input = document.querySelector('#title-filter');
-    let filter = input.value.toUpperCase();
-    let workItems = document.querySelectorAll('.work-item');
-    workItems.forEach(function(item) {
-      let title = item.querySelector('.title').textContent.toUpperCase();
-      if (title.indexOf(filter) > -1) {
-        item.style.display = '';
-      } else {
-        item.style.display = 'none';
-      }
-    });
-  }
-
-  let durationSortedAscending = false;
-  function sortListByDuration() {
-    let workItems = document.querySelectorAll('.work-item');
-    workItems = Array.prototype.slice.call(workItems, 0);
-    workItems.sort(function(a, b) {
-      let aDuration = parseInt(a.querySelector('.duration').textContent);
-      let bDuration = parseInt(b.querySelector('.duration').textContent);
-      if (aDuration < bDuration) return -1;
-      if (aDuration > bDuration) return 1;
-      return 0;
-    });
-
-    if (durationSortedAscending) {
-      workItems.reverse();
-    }
-    durationSortedAscending = !durationSortedAscending;
-
-    let parent = document.querySelector('.work-items-container');
-    parent.innerHTML = '';
-    workItems.forEach(function(item) {
-      parent.appendChild(item);
-    });
-  }
-
-  let statusSortedAscending = false;
-  function sortListByStatus() {
-    let workItems = document.querySelectorAll('.work-item');
-    workItems = Array.prototype.slice.call(workItems, 0);
-    workItems.sort(function(a, b) {
-      let aStatus = a.querySelector('.status').textContent.toUpperCase();
-      let bStatus = b.querySelector('.status').textContent.toUpperCase();
-      if (aStatus < bStatus) return -1;
-      if (aStatus > bStatus) return 1;
-      return 0;
-    });
-    
-    statusSortedAscending = !statusSortedAscending;
-    if (statusSortedAscending) {
-      workItems.reverse();
-    }
-    
-
-    let parent = document.querySelector('.work-items-container');
-    parent.innerHTML = '';
-    workItems.forEach(function(item) {
-      parent.appendChild(item);
-    });
-    console.log(statusSortedAscending);
-  }
-
-  function filterListByStatus() {
-    let workItems = document.querySelectorAll('.work-item');
-    workItems = Array.prototype.slice.call(workItems, 0);
-    let selectedStatuses = Array.from(document.querySelectorAll('input[name="status"]:checked'))
-      .map(function(checkbox) { return checkbox.value; });
-    workItems.forEach(function(item) {
-      let status = item.querySelector('.status').textContent.toUpperCase();
-      if (selectedStatuses.length === 0 || selectedStatuses.includes(status)) {
-        item.style.display = 'block';
-      } else {
-        item.style.display = 'none';
-      }
-    });
-  }
-
-</script>
-
+  <a href="{% url 'tasks:task_create' object.project.id object.id%}">Add a task</a>
+  <a href="{% url 'tasks:project_detail' object.project.id%}">Return to project</a>
+  
 {% endblock %}
+  
+  
+  {% block extend_footer %}
+    <script src="{% static 'tasks/functions.js' %}"></script>
+  {% endblock %}
+  
+
+  {% comment %} <h3><li><a href="{% url 'tasks:task_detail' project_id=task.milesonte.project.id milesonte_id=milesonte.id task_id=task.pk %}">{{ task.title }}</a></li></h3>
+  <a href="{% url 'tasks:task_update' project_id=task.milesonte.project.id milesonte_id=milesonte.id task_id=task.pk %}"><i class="fa fa-pencil"></i>update</a>
+  <a href="{% url 'tasks:task_delete' project_id=task.milesonte.project.id milesonte_id=milesonte.id task_id=task.pk %}"><i class="fa fa-trash">delete</i></a> {% endcomment %}

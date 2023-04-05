@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ object.title }}</h1>
+<p><strong>Status:</strong> {{ object.status }}</p>
+<p><strong>Tasks: {{ num_completed_tasks }} completed of ({{object.tasks.count}}):</p>
+<p><strong>Estimated Time Left:</strong> {{ total_left_estimated_duration }} minutes <strong> Total estimated </strong>{{total_estimated_duration}}</p>
+<p><strong>Creation time:</strong> {{ object.creation_time }}</p>
+
+  <input type="text" id="title-filter" onkeyup="filterListByTitle()" placeholder="Filter by title...">
+  <button onclick="sortListByDuration()">Sort by duration</button>
+  <button onclick="sortListByStatus()">Sort by status</button>
+
+  <input type="checkbox" name="status" value="TO_DO" onclick="filterListByStatus()"> To do
+  <input type="checkbox" name="status" value="IN_PROGRESS" onclick="filterListByStatus()"> In progress
+  <input type="checkbox" name="status" value="CANCELLED" onclick="filterListByStatus()"> Cancelled
+  <input type="checkbox" name="status" value="COMPLETED" onclick="filterListByStatus()"> Completed
+
+  <div class="work-items-container">
+    {% for task in object.tasks.all %}
+    <div class="work-item">
+      <a href="{% url 'tasks:task_detail' task.pk %}"> <h2 class="title">{{ task.title }}</a></h2>
+      <p class="duration">{{ task.estimated_duration }}</p>
+      <p class="status">{{ task.status }}</p>
+      <a href="{% url 'tasks:task_update' task.id %}"><i class="fa fa-pencil"></i>update</a>
+      <a href="{% url 'tasks:task_delete' task.id %}"><i class="fa fa-trash">delete</i></a>
+    </div>
+
+    {% empty %}
+      <li>No task found.</li>
+    {% endfor %}
+  </div>
+
+  <a href="{% url 'tasks:task_create' %}">Add a Task</a>
+{% endblock %}
+
+
+{% block extend_footer %}
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ project.title}} </h1>
+  <a href="{% url 'tasks:project_update' project_id=project.id %}"><i class="fa fa-pencil"></i>update</a>
+  <a href="{% url 'tasks:project_delete' project_id=project.id %}"><i class="fa fa-trash">delete</i></a>
+
+  <p><strong>Status:</strong> {{ project.status }} </p>
+  <p><strong>Creation time:</strong> {{ project.creation_time }}</p>
+  <p><strong>Milestones ({{project.milestones.count}}):</strong></p>
+
+  {% for milestone in object_list %}
+      <h3><li><a href="{% url 'tasks:milestone_detail' project_id=milestone.project.id pk=milestone.pk %}">{{ milestone.title }} ( {{milestone.tasks.count}} tasks )</a></li></h3>
+      <a href="{% url 'tasks:milestone_update' project_id=milestone.project.id pk=milestone.id %}"><i class="fa fa-pencil"></i>update</a>
+      <a href="{% url 'tasks:milestone_delete' project_id=milestone.project.id pk=milestone.id %}"><i class="fa fa-trash">delete</i></a>
+  {% empty %}
+      <li>No milestones found.</li>
+  {% endfor %}
+  </ul>
+  </br>
+  <a href="{% url 'tasks:milestone_create' project.id%}">Add a milestone</a>
+  <a href="{% url 'tasks:index'%}">Return to projects</a>
+  {% endblock %}
