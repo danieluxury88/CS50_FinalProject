@@ -1,7 +1,7 @@
 from django.db.models import Sum
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse_lazy, reverse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
@@ -65,16 +65,13 @@ class ProjectDeleteView(DeleteView):
 #endregion
 
 # MILESTONES
-
-# ListView for Milestones
+#region milestone_region
 class MilestoneListView(ListView):
     model = Milestone
 
 
 class MilestoneDetailView(DetailView):
     model = Milestone
-    template_name = 'tasks/milestone_detail.html'
-    # context_object_name = 'tasks'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -114,40 +111,49 @@ class MilestoneDeleteView(DeleteView):
         print(project_id)
         return reverse('tasks:project_detail', args=[project_id])
     
-    
+ # endregion
 
 
 # TASKS
 # region task_region
-# ListView for Tasks
 class TaskListView(ListView):
     model = Task
     ordering = 'status'
-    # queryset = Task.objects.filter(status='COMPLETED')
-    # queryset = Task.objects.exclude(status='COMPLETED')
 
-    # status = self.request.GET.get('status', 'COMPLETED') TODO: when making dynamic search
-    # return WorkItem.objects.filter(status=status)
 
-# DetailView for Tasks
 class TaskDetailView(DetailView):
     model = Task
 
-# CreateView for Tasks
+
 class TaskCreateView(CreateView):
     model = Task
     fields = ['title', 'estimated_duration', 'status', 'milestone']
-    success_url = reverse_lazy('tasks:task_list')
+    success_url = reverse_lazy('tasks:milestone_detail')
 
-# UpdateView for Tasks
+    def get_success_url(self):
+        project_id = self.kwargs['project_id']
+        milestone_id = self.kwargs['milestone_id']
+        return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
+
+
 class TaskUpdateView(UpdateView):
     model = Task
     fields = ['title', 'estimated_duration', 'status', 'milestone']
-    success_url = reverse_lazy('tasks:task_list')
+    success_url = reverse_lazy('tasks:milestone_detail')
 
-# DeleteView for Tasks
+    def get_success_url(self):
+        project_id = self.kwargs['project_id']
+        milestone_id = self.kwargs['milestone_id']
+        return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
+
+
 class TaskDeleteView(DeleteView):
     model = Task
-    success_url = reverse_lazy('tasks:task_list')
+    success_url = reverse_lazy('tasks:milestone_detail')
+
+    def get_success_url(self):
+        project_id = self.kwargs['project_id']
+        milestone_id = self.kwargs['milestone_id']
+        return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
 
 #endregion

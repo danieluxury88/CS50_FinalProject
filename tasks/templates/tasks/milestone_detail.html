@@ -22,9 +22,11 @@
   <div class="work-items-container">
     {% for task in tasks.all %}
     <div class="work-item">
-      <h2 class="title">{{ task.title }}</h2>
-      <p class="duration">Duration : {{ task.estimated_duration }}</p>
-      <p class="status">Status: {{ task.status }}</p>
+      <h2 class="title"><a href="{% url 'tasks:task_detail' project_id=object.project.id milestone_id=object.id pk=task.pk %}"><i class="fa fa-trash">{{ task.title }}</i></a></h2>
+      <p>Duration: <div class="duration">{{ task.estimated_duration }}</div></p>
+      <p class="status">{{ task.status }}</p>
+      <a href="{% url 'tasks:task_update' project_id=object.project.id milestone_id=object.id pk=task.pk %}"><i class="fa fa-trash">update</i></a> 
+      <a href="{% url 'tasks:task_delete' project_id=object.project.id milestone_id=object.id pk=task.pk %}"><i class="fa fa-trash">delete</i></a> 
       </br>
     </div>
 
@@ -42,8 +44,3 @@
   {% block extend_footer %}
     <script src="{% static 'tasks/functions.js' %}"></script>
   {% endblock %}
-  
-
-  {% comment %} <h3><li><a href="{% url 'tasks:task_detail' project_id=task.milesonte.project.id milesonte_id=milesonte.id task_id=task.pk %}">{{ task.title }}</a></li></h3>
-  <a href="{% url 'tasks:task_update' project_id=task.milesonte.project.id milesonte_id=milesonte.id task_id=task.pk %}"><i class="fa fa-pencil"></i>update</a>
-  <a href="{% url 'tasks:task_delete' project_id=task.milesonte.project.id milesonte_id=milesonte.id task_id=task.pk %}"><i class="fa fa-trash">delete</i></a> {% endcomment %}

@@ -4,6 +4,7 @@
   <h1>{{ object.title }}</h1>
   <p><strong>Status:</strong> {{ object.status }}</p>
   <p><strong>Creation time:</strong> {{ object.creation_time }}</p>
-  <a href="{% url 'tasks:task_update' task.id %}"><i class="fa fa-pencil"></i>update</a>
-  <a href="{% url 'tasks:task_delete' task.id %}"><i class="fa fa-trash"></i>delete</a>
-{% endblock %}
+
+  <a href="{% url 'tasks:milestone_detail' object.milestone.project.id object.milestone.id%}">Return to milestone</a>
+  <a href="{% url 'tasks:project_detail' object.milestone.project.id %}">Return to project</a>
+  {% endblock %}

@@ -23,12 +23,10 @@ function filterListByTitle() {
       if (aDuration > bDuration) return 1;
       return 0;
     });
-
+    durationSortedAscending = !durationSortedAscending;
     if (durationSortedAscending) {
       workItems.reverse();
     }
-    durationSortedAscending = !durationSortedAscending;
-
     let parent = document.querySelector('.work-items-container');
     parent.innerHTML = '';
     workItems.forEach(function(item) {
