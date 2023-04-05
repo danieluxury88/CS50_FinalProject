@@ -1,3 +1,8 @@
+document.addEventListener('DOMContentLoaded', function () {
+  console.log('page loaded');
+  filterListByStatus();
+});
+
 function filterListByTitle() {
     let input = document.querySelector('#title-filter');
     let filter = input.value.toUpperCase();

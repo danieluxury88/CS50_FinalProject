@@ -23,6 +23,7 @@ python -m venv env
 - create virtual env **python -m venv env**
 - activate virtual env **(.\env\Scripts\activate)**
 - download packages **(pip install -r requirements.txt)**
+- Run django migrations **(python manage.py makemigrations & python manage.py migrate)**
 change fake_env.txt to .env and fill SECRET_KEY, obtaining key from **python manage.py shell** and execute:
 ```
 from django.core.management.utils import get_random_secret_key

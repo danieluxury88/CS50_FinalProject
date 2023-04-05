@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
   <h1>{{ project.title}} </h1>
@@ -9,15 +10,33 @@
   <p><strong>Creation time:</strong> {{ project.creation_time }}</p>
   <p><strong>Milestones ({{project.milestones.count}}):</strong></p>
 
-  {% for milestone in object_list %}
-      <h3><li><a href="{% url 'tasks:milestone_detail' project_id=milestone.project.id pk=milestone.pk %}">{{ milestone.title }} ( {{milestone.tasks.count}} tasks )</a></li></h3>
-      <a href="{% url 'tasks:milestone_update' project_id=milestone.project.id pk=milestone.id %}"><i class="fa fa-pencil"></i>update</a>
-      <a href="{% url 'tasks:milestone_delete' project_id=milestone.project.id pk=milestone.id %}"><i class="fa fa-trash">delete</i></a>
-  {% empty %}
-      <li>No milestones found.</li>
-  {% endfor %}
-  </ul>
-  </br>
-  <a href="{% url 'tasks:milestone_create' project.id%}">Add a milestone</a>
-  <a href="{% url 'tasks:index'%}">Return to projects</a>
+    <input type="text" id="title-filter" onkeyup="filterListByTitle()" placeholder="Filter by title...">
+    <button onclick="sortListByDuration()">Sort by duration</button>
+    <button onclick="sortListByStatus()">Sort by status</button>
+
+    <input type="checkbox" name="status" value="TO_DO" onclick="filterListByStatus()" checked> To do
+    <input type="checkbox" name="status" value="IN_PROGRESS" onclick="filterListByStatus()"checked> In progress
+    <input type="checkbox" name="status" value="CANCELLED" onclick="filterListByStatus()"> Cancelled
+    <input type="checkbox" name="status" value="COMPLETED" onclick="filterListByStatus()"> Completed
+
+    <div class="work-items-container">
+    {% for milestone in object_list %}
+    <div class="work-item">
+        <h2 class="title"><a href="{% url 'tasks:milestone_detail' project_id=milestone.project.id pk=milestone.pk %}">{{ milestone.title }} ( {{milestone.tasks.count}} tasks )</a></h2>
+        <p class="status">{{ milestone.status }}</p>
+        <a href="{% url 'tasks:milestone_update' project_id=milestone.project.id pk=milestone.id %}"><i class="fa fa-pencil"></i>update</a>
+        <a href="{% url 'tasks:milestone_delete' project_id=milestone.project.id pk=milestone.id %}"><i class="fa fa-trash">delete</i></a>
+    </div>
+    {% empty %}
+        <li>No milestones found.</li>
+    {% endfor %}
+    </div>
+    </br>
+    <a href="{% url 'tasks:milestone_create' project.id%}">Add a milestone</a>
+    <a href="{% url 'tasks:index'%}">Return to projects</a>
   {% endblock %}
+
+
+{% block extend_footer %}
+  <script src="{% static 'tasks/functions.js' %}"></script>
+{% endblock %}

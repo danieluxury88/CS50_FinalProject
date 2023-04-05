@@ -8,14 +8,14 @@
 <p><strong>Status:</strong> {{ object.status }}</p>
 <p><strong>Tasks: {{ num_completed_tasks }} completed of ({{object.tasks.count}}):</p>
 <p><strong>Estimated Time Left:</strong> {{ total_left_estimated_duration }} minutes <strong> Total estimated </strong>{{total_estimated_duration}}</p>
-<p><strong>Creation time:</strong> {{ object.creation_time }}</p>
+<p><strong>Creation time:</strong> {{ f_creation_time }}</p>
 
   <input type="text" id="title-filter" onkeyup="filterListByTitle()" placeholder="Filter by title...">
   <button onclick="sortListByDuration()">Sort by duration</button>
   <button onclick="sortListByStatus()">Sort by status</button>
 
-  <input type="checkbox" name="status" value="TO_DO" onclick="filterListByStatus()"> To do
-  <input type="checkbox" name="status" value="IN_PROGRESS" onclick="filterListByStatus()"> In progress
+  <input type="checkbox" name="status" value="TO_DO" onclick="filterListByStatus()" checked> To do
+  <input type="checkbox" name="status" value="IN_PROGRESS" onclick="filterListByStatus()"checked> In progress
   <input type="checkbox" name="status" value="CANCELLED" onclick="filterListByStatus()"> Cancelled
   <input type="checkbox" name="status" value="COMPLETED" onclick="filterListByStatus()"> Completed
 

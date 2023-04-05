@@ -1,4 +1,5 @@
 from django.db.models import Sum
+from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -76,6 +77,7 @@ class MilestoneDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         milestone = self.get_object()
+        context['f_creation_time'] = timezone.localtime(milestone.creation_time).strftime('%B %d')
         context['tasks'] = milestone.tasks.all()
         context['num_tasks'] = milestone.tasks.count()
         context['num_completed_tasks'] = milestone.tasks.filter(status='COMPLETED').count()
