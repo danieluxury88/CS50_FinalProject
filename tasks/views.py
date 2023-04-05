@@ -24,13 +24,13 @@ class ProjectDetailView(ListView):
     context_object_name = 'milestones'
 
     def get_queryset(self):
-        project = get_object_or_404(Project, id=self.kwargs['project_id'])
+        project = get_object_or_404(Project, id=self.kwargs['pk'])
         return Milestone.objects.filter(project=project)
     
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        project = get_object_or_404(Project, id=self.kwargs['project_id'])
+        project = get_object_or_404(Project, id=self.kwargs['pk'])
         context['project'] = project
         return context
 
@@ -49,7 +49,7 @@ class ProjectUpdateView(UpdateView):
     success_url = reverse_lazy('tasks:project_list')
 
     def get_object(self, queryset=None):
-        project_id = self.kwargs.get('project_id')
+        project_id = self.kwargs.get('pk')
         return get_object_or_404(Project, id=project_id)
 
 
@@ -59,7 +59,7 @@ class ProjectDeleteView(DeleteView):
     success_url = reverse_lazy('tasks:project_list')
 
     def get_object(self, queryset=None):
-        project_id = self.kwargs.get('project_id')
+        project_id = self.kwargs.get('pk')
         return get_object_or_404(Project, id=project_id)
     
 #endregion

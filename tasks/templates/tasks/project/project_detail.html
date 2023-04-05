@@ -2,8 +2,8 @@
 
 {% block content %}
   <h1>{{ project.title}} </h1>
-  <a href="{% url 'tasks:project_update' project_id=project.id %}"><i class="fa fa-pencil"></i>update</a>
-  <a href="{% url 'tasks:project_delete' project_id=project.id %}"><i class="fa fa-trash">delete</i></a>
+  <a href="{% url 'tasks:project_update' pk=project.id %}"><i class="fa fa-pencil"></i>update</a>
+  <a href="{% url 'tasks:project_delete' pk=project.id %}"><i class="fa fa-trash">delete</i></a>
 
   <p><strong>Status:</strong> {{ project.status }} </p>
   <p><strong>Creation time:</strong> {{ project.creation_time }}</p>

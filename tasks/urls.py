@@ -40,7 +40,7 @@ urlpatterns += [
     # URLs for Projects
     path('projects/', ProjectListView.as_view(), name='project_list'),
     path('projects/create/', ProjectCreateView.as_view(), name='project_create'),
-    path('projects/<int:project_id>/', ProjectDetailView.as_view(), name='project_detail'),
-    path('projects/<int:project_id>/update/', ProjectUpdateView.as_view(), name='project_update'),
-    path('projects/<int:project_id>/delete/', ProjectDeleteView.as_view(), name='project_delete'),
+    path('projects/<int:pk>/', ProjectDetailView.as_view(), name='project_detail'),
+    path('projects/<int:pk>/update/', ProjectUpdateView.as_view(), name='project_update'),
+    path('projects/<int:pk>/delete/', ProjectDeleteView.as_view(), name='project_delete'),
 ]
