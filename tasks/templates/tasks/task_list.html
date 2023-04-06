@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-  <h1>Tasks</h1>
+<h1>Tasks</h1>
   <input type="text" id="title-filter" onkeyup="filterListByTitle()" placeholder="Filter by title...">
   <button onclick="sortListByDuration()">Sort by duration</button>
+  <button onclick="sortListByStatus()">Sort by status</button>
 
 
   <input type="checkbox" name="status" value="TO_DO" onclick="filterListByStatus()" checked> To do
@@ -11,93 +13,26 @@
   <input type="checkbox" name="status" value="CANCELLED" onclick="filterListByStatus()"> Cancelled
   <input type="checkbox" name="status" value="COMPLETED" onclick="filterListByStatus()"> Completed
 
-
   <div class="work-items-container">
-  <ul>
-    {% for task in object_list %}
+    {% for task in tasks.all %}
     <div class="work-item">
-      <a href="{% url 'tasks:task_detail' task.pk %}"> <h2 class="title">{{ task.title }}</a></h2>
-      <p class="duration">{{ task.estimated_duration }}</p>
+      <h2 class="title"><a href="{% url 'tasks:task_detail' pk=task.pk %}"><i class="fa fa-trash">{{ task.title }}</i></a></h2>
+      <p>Duration: <div class="duration">{{ task.estimated_duration }}</div></p>
       <p class="status">{{ task.status }}</p>
-      <p class="creation-time">{{ task.creation_time }}</p>
-      <p class="update-time">{{ task.update_time }}</p>
-      <a href="{% url 'tasks:task_update' task.id %}"><i class="fa fa-pencil"></i>update</a>
-      <a href="{% url 'tasks:task_delete' task.id %}"><i class="fa fa-trash">delete</i></a>
-    </div>
+    </br>
+  </div>
+  
+  {% empty %}
+  <li>No task found.</li>
+  {% endfor %}
+</div>
+<a href="{% url 'tasks:task_create_alone' %}">Add a task</a>
 
-    {% empty %}
-      <li>No task found.</li>
-    {% endfor %}
-  </ul>
-  <div>
-  <a href="{% url 'tasks:task_create' %}">Add a Task</a>
 {% endblock %}
 
 {% block extend_footer %}
-<script>
-  function filterListByTitle() {
-    let input = document.querySelector('#title-filter');
-    let filter = input.value.toUpperCase();
-    let workItems = document.querySelectorAll('.work-item');
-    workItems.forEach(function(item) {
-      let title = item.querySelector('.title').textContent.toUpperCase();
-      if (title.indexOf(filter) > -1) {
-        item.style.display = '';
-      } else {
-        item.style.display = 'none';
-      }
-    });
-  }
-
-  function sortListByDuration() {
-    let workItems = document.querySelectorAll('.work-item');
-    workItems = Array.prototype.slice.call(workItems, 0);
-    workItems.sort(function(a, b) {
-      let aDuration = parseInt(a.querySelector('.duration').textContent);
-      let bDuration = parseInt(b.querySelector('.duration').textContent);
-      if (aDuration < bDuration) return -1;
-      if (aDuration > bDuration) return 1;
-      return 0;
-    });
-    let parent = document.querySelector('.work-items-container');
-    parent.innerHTML = '';
-    workItems.forEach(function(item) {
-      parent.appendChild(item);
-    });
-  }
-
-  function sortListByStatus() {
-    let workItems = document.querySelectorAll('.work-item');
-    workItems = Array.prototype.slice.call(workItems, 0);
-    workItems.sort(function(a, b) {
-      let aDuration = parseInt(a.querySelector('.duration').textContent);
-      let bDuration = parseInt(b.querySelector('.duration').textContent);
-      if (aDuration < bDuration) return -1;
-      if (aDuration > bDuration) return 1;
-      return 0;
-    });
-    let parent = document.querySelector('.work-items-container');
-    parent.innerHTML = '';
-    workItems.forEach(function(item) {
-      parent.appendChild(item);
-    });
-  }
-
-  function filterListByStatus() {
-    let workItems = document.querySelectorAll('.work-item');
-    workItems = Array.prototype.slice.call(workItems, 0);
-    let selectedStatuses = Array.from(document.querySelectorAll('input[name="status"]:checked'))
-      .map(function(checkbox) { return checkbox.value; });
-    workItems.forEach(function(item) {
-      let status = item.querySelector('.status').textContent.toUpperCase();
-      if (selectedStatuses.length === 0 || selectedStatuses.includes(status)) {
-        item.style.display = 'block';
-      } else {
-        item.style.display = 'none';
-      }
-    });
-  }
-
-</script>
-
+<script src="{% static 'tasks/functions.js' %}"></script>
 {% endblock %}
+
+  <a href="{% url 'tasks:task_update' project_id=object.project.id milestone_id=object.id pk=task.pk %}"><i class="fa fa-trash">update</i></a> 
+  <a href="{% url 'tasks:task_delete' project_id=object.project.id milestone_id=object.id pk=task.pk %}"><i class="fa fa-trash">delete</i></a> 

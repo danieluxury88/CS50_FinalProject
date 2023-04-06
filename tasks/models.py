@@ -33,7 +33,10 @@ class Milestone(WorkItem):
 
 class Task(WorkItem):
     milestone = models.ForeignKey(Milestone, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
-
+    def __str__(self):
+        if self.milestone != None:
+            return f' {self.milestone.project.title} {self.milestone.title} {self.title}'
+        return self.title
 
 
 

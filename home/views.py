@@ -15,7 +15,7 @@ from .models import User
 
 def login_view(request):
     if request.method == "POST":
-
+        print("login attempt")
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
@@ -26,7 +26,7 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse("home:index"))
         else:
-            return render(request, "login.html", {
+            return render(request, "home/login.html", {
                 "message": "Invalid username and/or password."
             })
     else:

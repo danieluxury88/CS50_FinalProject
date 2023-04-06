@@ -2,6 +2,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
 from .views import *
+from . import views
 
 app_name = "tasks"
 
@@ -9,7 +10,6 @@ tasks_patterns = [
 # URLs for Tasks
     path('projects/<int:project_id>/milestones/<int:milestone_id>/tasks/',
          include( [
-            path('', TaskListView.as_view(), name='task_list'),
             path('create/', TaskCreateView.as_view(), name='task_create'),
             path('<int:pk>/', TaskDetailView.as_view(), name='task_detail'),
             path('<int:pk>/update/', TaskUpdateView.as_view(), name='task_update'),
@@ -17,6 +17,10 @@ tasks_patterns = [
         ]
         )
     ),
+    path('tasks/', TaskListView.as_view(), name='task_list'),
+    path('tasks/create', TaskCreateView.as_view(), name='task_create_alone'),
+    path('tasks/<int:pk>/', TaskDetailView.as_view(), name='task_detail'),
+    path('tasks/<int:pk>/update/', views.update_task_status, name="task_update_status"),
 ]
 
 milestone_patterns = [

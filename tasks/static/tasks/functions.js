@@ -79,3 +79,12 @@ function filterListByTitle() {
       }
     });
   }
+
+  function update_task_state(task_id , state) {
+    fetch(`tasks/${task_id}/update` , {
+        method: 'PUT',
+        body: JSON.stringify({
+            state: state
+        })
+    }).then(()=> filterListByStatus())
+  }

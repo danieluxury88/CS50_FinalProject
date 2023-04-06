@@ -1,12 +1,15 @@
 from django.db.models import Sum
 from django.utils import timezone
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404,HttpResponse, redirect, render
 from django.urls import reverse, reverse_lazy
+
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
 from .models import Milestone, Project, Task
+
+import json
 
 
 def test(request):
@@ -120,7 +123,15 @@ class MilestoneDeleteView(DeleteView):
 # region task_region
 class TaskListView(ListView):
     model = Task
+    context_object_name = 'tasks'
     ordering = 'status'
+
+    def get_context_data(self, **kwargs):
+        print("task list")
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context['test'] = "joseu"
+        return context
 
 
 class TaskDetailView(DetailView):
@@ -133,9 +144,12 @@ class TaskCreateView(CreateView):
     success_url = reverse_lazy('tasks:milestone_detail')
 
     def get_success_url(self):
-        project_id = self.kwargs['project_id']
-        milestone_id = self.kwargs['milestone_id']
-        return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
+        try:
+            project_id = self.kwargs['project_id']
+            milestone_id = self.kwargs['milestone_id']
+            return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
+        except:
+            return reverse('tasks:task_list')
 
 
 class TaskUpdateView(UpdateView):
@@ -159,3 +173,27 @@ class TaskDeleteView(DeleteView):
         return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
 
 #endregion
+
+
+def update_task_status(request, task_id):
+
+    try:
+        task = Task.objects.get(pk=task_id)
+    except Task.DoesNotExist:
+        return JsonResponse({"error": "Task not found."}, status=404)
+
+
+
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("status") is not None:
+            print(data["status"])
+            task.status = data["status"]
+        task.save()
+        return HttpResponse(status=204)
+
+    # Task must be updated via  PUT
+    else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)
