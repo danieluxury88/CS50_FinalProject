@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+	<h1>Personal Page</h1>
+    
+    <h1>Current Cycle</h1>
+    {% if current_cycle %}
+    <p>Start Time: {{ current_cycle.start_time }}</p>
+    <p>End Time: {{ current_cycle.end_time }}</p>
+
+    <p>Time Remaining: <span id="time-remaining"></span></p>
+    {% else %}
+    <h1>No Active Cycle</h1>
+    <a href="{% url 'personal:current_cycle' %}">Get Current Cycle</a>
+    {% endif %}
+    
+    <h1>Challenges</h1>
+    {% for challenge in challengues %}
+    <p>{{challenge.title}} - {{challenge.duration}}</p>
+    {% endfor %}
+    
+    <h1>Events</h1>
+    {% for event in events %}
+    <p>{{event.title}} - {{event.date}}</p>
+    {% endfor %}
+    
+    <h1>Dates</h1>
+    {% for date in dates %}
+        <p>{{date.title}} - {{date.date}}</p>
+    {% endfor %}
+
+    
+    <button onclick="start_cycle()">Start Cycle</button>
+
+    <script>
+        function start_cycle(){
+            console.log("start cycle");
+        }
+    </script>
+{% endblock %}
+
+
+{% block extend_footer %}
+<script>
+    function updateTimer() {
+        var end_time_str = "{{ current_cycle.end_time|date:'c' }}";
+        console.log(end_time_str);
+        var end_time = new Date(end_time_str);
+        var remaining = Math.floor((end_time - new Date()) / 1000);
+        var hours = Math.floor(remaining / 3600);
+        var minutes = Math.floor((remaining % 3600) / 60);
+        var seconds = remaining % 60;
+        var display = hours + ":" + minutes + ":" + seconds;
+        document.getElementById("time-remaining").textContent = display;
+    }
+
+    setInterval(updateTimer, 1000);
+</script>
+{%endblock%}
