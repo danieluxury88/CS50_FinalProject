@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   console.log('page loaded');
   filterListByStatus();
+  sortListByPriority();
 });
 
 function filterListByTitle() {
@@ -79,6 +80,30 @@ function filterListByTitle() {
       }
     });
   }
+
+
+  let prioritySortedAscending = true;
+  function sortListByPriority() {
+    let workItems = document.querySelectorAll('.work-item');
+    workItems = Array.prototype.slice.call(workItems, 0);
+    workItems.sort(function(a, b) {
+      let aPriority = parseInt(a.querySelector('.priority').textContent);
+      let bPriority = parseInt(b.querySelector('.priority').textContent);
+      if (aPriority < bPriority) return -1;
+      if (aPriority > bPriority) return 1;
+      return 0;
+    });
+    prioritySortedAscending = !prioritySortedAscending;
+    if (prioritySortedAscending) {
+      workItems.reverse();
+    }
+    let parent = document.querySelector('.work-items-container');
+    parent.innerHTML = '';
+    workItems.forEach(function(item) {
+      parent.appendChild(item);
+    });
+  }
+
 
   function update_task_state(task_id , state) {
     fetch(`tasks/${task_id}/update` , {

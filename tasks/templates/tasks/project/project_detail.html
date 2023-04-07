@@ -11,8 +11,9 @@
   <p><strong>Milestones ({{project.milestones.count}}):</strong></p>
 
     <input type="text" id="title-filter" onkeyup="filterListByTitle()" placeholder="Filter by title...">
-    <button onclick="sortListByDuration()">Sort by duration</button>
+    <button onclick="sortListByPriority()">Sort by priority</button>
     <button onclick="sortListByStatus()">Sort by status</button>
+    <button onclick="sortListByDuration()">Sort by duration</button>
 
     <input type="checkbox" name="status" value="TO_DO" onclick="filterListByStatus()" checked> To do
     <input type="checkbox" name="status" value="IN_PROGRESS" onclick="filterListByStatus()"checked> In progress
@@ -23,7 +24,7 @@
     {% for milestone in object_list %}
     <div class="work-item">
         <h2 class="title"><a href="{% url 'tasks:milestone_detail' project_id=milestone.project.id pk=milestone.pk %}">{{ milestone.title }} ( {{milestone.tasks.count}} tasks )</a></h2>
-        <p class="status">{{ milestone.status }}</p>
+        <p class="status">{{ milestone.status }}</p> <p class="priority">{{ milestone.priority }}</p>
         <a href="{% url 'tasks:milestone_update' project_id=milestone.project.id pk=milestone.id %}"><i class="fa fa-pencil"></i>update</a>
         <a href="{% url 'tasks:milestone_delete' project_id=milestone.project.id pk=milestone.id %}"><i class="fa fa-trash">delete</i></a>
     </div>

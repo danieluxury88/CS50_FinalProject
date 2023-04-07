@@ -8,6 +8,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
 from .models import Milestone, Project, Task
+from .forms import TaskForm
 
 import json
 
@@ -100,7 +101,7 @@ class MilestoneCreateView(CreateView):
 
 class MilestoneUpdateView(UpdateView):
     model = Milestone
-    fields = ['title', 'estimated_duration', 'status', 'project']
+    fields = ['title', 'status', 'estimated_duration', 'priority', 'project']
 
     def get_success_url(self):
         project_id = self.kwargs['project_id']
@@ -154,7 +155,7 @@ class TaskCreateView(CreateView):
 
 class TaskUpdateView(UpdateView):
     model = Task
-    fields = ['title', 'estimated_duration', 'status', 'milestone']
+    fields = ['title', 'status', 'estimated_duration', 'priority', 'milestone']
     success_url = reverse_lazy('tasks:milestone_detail')
 
     def get_success_url(self):
@@ -175,25 +176,35 @@ class TaskDeleteView(DeleteView):
 #endregion
 
 
-def update_task_status(request, task_id):
+def update_task_status(request, pk):
+    model_instance = Task.objects.get(pk=pk)
+    form = TaskForm(instance=model_instance)
+    update_view = UpdateView.as_view(
+        model=Task,
+        form_class=TaskForm,
+        template_name='tasks/task_form.html'
+    )
+    return update_view(request, pk=pk, form=form)
+    
 
-    try:
-        task = Task.objects.get(pk=task_id)
-    except Task.DoesNotExist:
-        return JsonResponse({"error": "Task not found."}, status=404)
+def get_task_detail(request, pk):
+    task = get_object_or_404(Task, id=pk)
+    print("detail" , task)
+    return JsonResponse({"status": "Task found."}, status=404)
 
 
 
-    if request.method == "PUT":
-        data = json.loads(request.body)
-        if data.get("status") is not None:
-            print(data["status"])
-            task.status = data["status"]
-        task.save()
-        return HttpResponse(status=204)
 
-    # Task must be updated via  PUT
-    else:
-        return JsonResponse({
-            "error": "GET or PUT request required."
-        }, status=400)
+    # if request.method == "PUT":
+    #     data = json.loads(request.body)
+    #     if data.get("status") is not None:
+    #         print(data["status"])
+    #         task.status = data["status"]
+    #     task.save()
+    #     return HttpResponse(status=204)
+
+    # # Task must be updated via  PUT
+    # else:
+    #     return JsonResponse({
+    #         "error": "GET or PUT request required."
+    #     }, status=400)

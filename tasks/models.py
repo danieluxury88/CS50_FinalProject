@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 STATUS_CHOICES = [
@@ -6,14 +7,19 @@ STATUS_CHOICES = [
     ('IN_PROGRESS', 'In progress'),
     ('CANCELLED', 'Cancelled'),
     ('COMPLETED', 'Completed'),
+    ('OUT_OF_SCOPE', 'Out Of Scope'),
 ]
 
 class WorkItem (models.Model):
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=300)
+    priority = models.IntegerField(default=9)
+    title = models.CharField(max_length=300)
     estimated_duration = models.IntegerField(default = 0, blank= True,  null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='TO_DO')
     creation_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
+    start_time = models.DateTimeField(blank=True, null = True)
+    end_time = models.DateTimeField(blank=True, null = True)
 
     class Meta:
         abstract = True
@@ -37,6 +43,10 @@ class Task(WorkItem):
         if self.milestone != None:
             return f' {self.milestone.project.title} {self.milestone.title} {self.title}'
         return self.title
+    
+    def get_absolute_url(self):
+        # return reverse('tasks:task_detail', args=[str(self.id)])
+        return reverse('tasks:task_list')
 
 
 

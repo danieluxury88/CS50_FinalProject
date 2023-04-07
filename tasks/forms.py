@@ -1,8 +1,8 @@
 from django import forms
-
+from .models import Task
 class TaskForm(forms.ModelForm):
-    pass
+
     # Hint: this will need to be changed for use in the ads application :)
-    # class Meta:
-    #     model = Ad
-    #     fields = ['title', 'text', 'price', 'picture', 'tags']  # Picture is manual
+    class Meta:
+        model = Task
+        fields = ['title','estimated_duration','status']

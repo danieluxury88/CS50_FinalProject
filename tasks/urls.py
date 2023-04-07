@@ -19,7 +19,7 @@ tasks_patterns = [
     ),
     path('tasks/', TaskListView.as_view(), name='task_list'),
     path('tasks/create', TaskCreateView.as_view(), name='task_create_alone'),
-    path('tasks/<int:pk>/', TaskDetailView.as_view(), name='task_detail'),
+    path('tasks/<int:pk>/', views.get_task_detail, name='task_detail'),
     path('tasks/<int:pk>/update/', views.update_task_status, name="task_update_status"),
 ]
 
