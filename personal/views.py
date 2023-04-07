@@ -4,7 +4,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 from django.http import JsonResponse
 from django.utils import timezone
 
-from .models import Cycle, Date, Challenge, Event 
+from .models import Cycle, Date, Challenge, Event, WorkSession
 
 def index(request):
     # return JsonResponse({"msg":"ok"})
@@ -28,7 +28,9 @@ def index(request):
     dates = Date.objects.all()
     challenges = Challenge.objects.all()
     events = Event.objects.all()
-    context = {"msg":"Current Cycle", 
+    work_session = WorkSession.objects.first()
+    context = {"msg":"Current Cycle",
+               "work_session": work_session, 
                "current_cycle": cycle,
                "dates":dates,
                "challenges":challenges,

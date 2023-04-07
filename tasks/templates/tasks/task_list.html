@@ -4,6 +4,7 @@
 {% block content %}
 <h1>Tasks</h1>
   <input type="text" id="title-filter" onkeyup="filterListByTitle()" placeholder="Filter by title...">
+  <button onclick="sortListByPriority()">Sort by priority</button>
   <button onclick="sortListByDuration()">Sort by duration</button>
   <button onclick="sortListByStatus()">Sort by status</button>
 
@@ -17,7 +18,7 @@
     <div class="work-item">
       <h2 class="title"><a href="{% url 'tasks:task_detail' pk=task.pk %}"><i class="fa fa-trash">{{ task.title }}</i></a></h2>
       <p>Duration: <div class="duration">{{ task.estimated_duration }}</div></p>
-      <p class="status">{{ task.status }}</p>
+      <p class="status">{{ task.status }}</p> <p class="priority">{{ task.priority }}</p>
       <a href="{% url 'tasks:task_update_status' task.pk %}"><i class="fa fa-trash">update</i></a> 
     </br>
   </div>

@@ -12,6 +12,7 @@ STATUS_CHOICES = [
 
 class WorkItem (models.Model):
     title = models.CharField(max_length=300)
+    description = models.TextField(max_length=300, blank= True,  null=True)
     priority = models.IntegerField(default=9)
     title = models.CharField(max_length=300)
     estimated_duration = models.IntegerField(default = 0, blank= True,  null=True)
@@ -20,6 +21,7 @@ class WorkItem (models.Model):
     update_time = models.DateTimeField(auto_now=True)
     start_time = models.DateTimeField(blank=True, null = True)
     end_time = models.DateTimeField(blank=True, null = True)
+    due_tomorrow = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
