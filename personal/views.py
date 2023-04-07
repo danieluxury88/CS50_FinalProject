@@ -9,10 +9,7 @@ from .models import Cycle, Date, Challenge, Event, WorkSession
 def index(request):
     # return JsonResponse({"msg":"ok"})
     current_time = timezone.now()
-    existing_cycle = Cycle.objects.filter(
-        start_time__lte=current_time,
-        end_time__gte=current_time
-    ).first()
+    existing_cycle = get_current_cycle(current_time)
     if not existing_cycle:
         end_time = current_time + timezone.timedelta(seconds= 99*3600 + 59*60 + 59)
         cycle = Cycle.objects.create(
@@ -28,7 +25,7 @@ def index(request):
     dates = Date.objects.all()
     challenges = Challenge.objects.all()
     events = Event.objects.all()
-    work_session = WorkSession.objects.first()
+    work_session = get_current_work_session(current_time)
     context = {"msg":"Current Cycle",
                "work_session": work_session, 
                "current_cycle": cycle,
@@ -36,6 +33,15 @@ def index(request):
                "challenges":challenges,
                "events":events}
     return render(request, "personal/personal_page.html", context)
+
+
+def get_current_work_session(current_time):
+     work_session = WorkSession.objects.filter(start_time__lte=current_time, end_time__isnull=True).first()
+     return work_session
+
+def get_current_cycle(current_time):
+     existing_cycle = Cycle.objects.filter( start_time__lte=current_time, end_time__gte=current_time).first()
+     return existing_cycle
 
 
 def current_cycle(request):
