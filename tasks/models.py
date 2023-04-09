@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 
 STATUS_CHOICES = [
@@ -49,6 +50,18 @@ class Task(WorkItem):
     def get_absolute_url(self):
         # return reverse('tasks:task_detail', args=[str(self.id)])
         return reverse('tasks:task_list')
+    
+
+    def save(self, *args, **kwargs):
+        # Check if the status has been updated to 'IN_PROGRESS'
+        if self.status == 'IN_PROGRESS' and not self.start_time:
+            self.start_time = timezone.now()
+
+        # Check if the status has been updated to 'COMPLETED'
+        if self.status == 'COMPLETED' and not self.end_time:
+            self.end_time = timezone.now()
+
+        super(WorkItem, self).save(*args, **kwargs)
 
 
 

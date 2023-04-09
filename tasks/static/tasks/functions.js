@@ -115,6 +115,10 @@ function filterListByTitle() {
   }
 
   function updateStatus(task_id, status) {
+    let status_content = document.getElementById(`status_${task_id}`);
+    console.log(status_content);
+    console.log(status_content.innerHTML);
+    console.log(status_content.textContent);
     fetch(`${task_id}/update-status/`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -122,6 +126,7 @@ function filterListByTitle() {
         status: status,
       })
     }).then(() => {
+      status_content.textContent = status;
       filterListByStatus();
     })
   }

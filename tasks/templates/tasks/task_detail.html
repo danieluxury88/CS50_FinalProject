@@ -2,6 +2,7 @@
 
 {% block content %}
 <h1>{{ object.title }}</h1>
+<a href="{% url 'tasks:task_update' object.pk %}"><i class="fa fa-trash">update</i></a>
 <p><strong>Status:</strong> {{ object.status }}</p>
 <p><strong>Creation time:</strong> {{ object.creation_time }}</p>
 
