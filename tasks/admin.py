@@ -4,4 +4,12 @@ from .models import *
 
 admin.site.register(Project)
 admin.site.register(Milestone)
-admin.site.register(Task)
+
+
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ("title", "priority", "status")
+    search_fields = ("title",)
+    list_filter =  ("priority", "status")
+    class Meta:
+        ordering = ("priority")

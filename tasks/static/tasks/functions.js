@@ -113,3 +113,15 @@ function filterListByTitle() {
         })
     }).then(()=> filterListByStatus())
   }
+
+  function updateStatus(task_id, status) {
+    fetch(`${task_id}/update-status/`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        id: task_id,
+        status: status,
+      })
+    }).then(() => {
+      filterListByStatus();
+    })
+  }

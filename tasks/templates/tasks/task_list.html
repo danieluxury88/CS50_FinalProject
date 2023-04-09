@@ -17,9 +17,24 @@
     {% for task in tasks.all %}
     <div class="work-item">
       <h2 class="title"><a href="{% url 'tasks:task_detail' pk=task.pk %}"><i class="fa fa-trash">{{ task.title }}</i></a></h2>
-      <p>Duration: <div class="duration">{{ task.estimated_duration }}</div></p>
-      <p class="status">{{ task.status }}</p> <p class="priority">{{ task.priority }}</p>
-      <a href="{% url 'tasks:task_update_status' task.pk %}"><i class="fa fa-trash">update</i></a> 
+      <div class="task-info">
+        <p>
+          <span class="label">Status:</span>
+          <span class="status">{{ task.status }}</span>
+        </p>
+        <p>
+          <span class="label">Priority:</span>
+          <span class="priority">{{ task.priority }}</span>
+        </p>
+        <p>
+          <span class="label">Duration:</span>
+          <span class="duration">{{ task.estimated_duration }}</span>
+        </p>
+      </div>
+      <a href="{% url 'tasks:task_update' task.pk %}"><i class="fa fa-trash">update</i></a>
+      <button type="submit" class="btn-danger col-3"  onclick='updateStatus( {{task.pk}},"TO_DO")'>To Do</button>
+      <button type="submit" class="btn-danger col-3"  onclick='updateStatus( {{task.pk}},"IN_PROGRESS" )'>In Progress</button>
+      <button type="submit" class="btn-danger col-3"  onclick='updateStatus( {{task.pk}},"COMPLETED" )'>Completed</button>
     </br>
   </div>
   
@@ -33,8 +48,5 @@
 
 {% block extend_footer %}
 <script src="{% static 'tasks/functions.js' %}"></script>
-{% endblock %}
 
-{% comment %} <a href="{% url 'tasks:task_update' project_id=object.project.id milestone_id=object.id pk=task.pk %}"><i class="fa fa-trash">update</i></a> 
-<a href="{% url 'tasks:task_delete' pk=task.pk %}"><i class="fa fa-trash">delete</i></a> 
-  <a href="{% url 'tasks:task_delete' project_id=object.project.id milestone_id=object.id pk=task.pk %}"><i class="fa fa-trash">delete</i></a>  {% endcomment %}
+{% endblock %}

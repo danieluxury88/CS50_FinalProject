@@ -6,6 +6,7 @@ from django.urls import reverse, reverse_lazy
 
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import Milestone, Project, Task
 from .forms import TaskForm
@@ -114,7 +115,6 @@ class MilestoneDeleteView(DeleteView):
 
     def get_success_url(self):
         project_id = self.kwargs['project_id']
-        print(project_id)
         return reverse('tasks:project_detail', args=[project_id])
     
  # endregion
@@ -128,7 +128,6 @@ class TaskListView(ListView):
     ordering = 'status'
 
     def get_context_data(self, **kwargs):
-        print("task list")
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         context['test'] = "joseu"
@@ -139,9 +138,10 @@ class TaskDetailView(DetailView):
     model = Task
 
 
+
 class TaskCreateView(CreateView):
     model = Task
-    fields = ['title', 'estimated_duration', 'status', 'milestone']
+    fields = ['title', 'description', 'status', 'estimated_duration', 'priority', 'milestone']
     success_url = reverse_lazy('tasks:milestone_detail')
 
     def get_success_url(self):
@@ -155,7 +155,7 @@ class TaskCreateView(CreateView):
 
 class TaskUpdateView(UpdateView):
     model = Task
-    fields = ['title', 'status', 'estimated_duration', 'priority', 'milestone']
+    fields = ['title', 'description', 'status', 'estimated_duration', 'priority', 'milestone']
     success_url = reverse_lazy('tasks:milestone_detail')
 
     def get_success_url(self):
@@ -176,7 +176,7 @@ class TaskDeleteView(DeleteView):
 #endregion
 
 
-def update_task_status(request, pk):
+def update_task(request, pk):
     model_instance = Task.objects.get(pk=pk)
     form = TaskForm(instance=model_instance)
     update_view = UpdateView.as_view(
@@ -185,26 +185,27 @@ def update_task_status(request, pk):
         template_name='tasks/task_form.html'
     )
     return update_view(request, pk=pk, form=form)
-    
-
-def get_task_detail(request, pk):
-    task = get_object_or_404(Task, id=pk)
-    print("detail" , task)
-    return JsonResponse({"status": "Task found."}, status=404)
 
 
+@csrf_exempt
+def update_task_status(request, pk):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("status") is not None:
+            id = data["id"]
+            task = Task.objects.get(pk=id)
+            task.status = data["status"]
+            print(data["status"])
+            task.save()
+        return JsonResponse({"msg": "OK"})
+        data = json.loads(request.body)
+        if data.get("msg") is not None:
+            print(data["msg"])
+        return JsonResponse({"msg": "OMG OK"})
 
-
-    # if request.method == "PUT":
-    #     data = json.loads(request.body)
-    #     if data.get("status") is not None:
-    #         print(data["status"])
-    #         task.status = data["status"]
-    #     task.save()
-    #     return HttpResponse(status=204)
-
-    # # Task must be updated via  PUT
-    # else:
-    #     return JsonResponse({
-    #         "error": "GET or PUT request required."
-    #     }, status=400)
+    # Task must be updated via  PUT
+    else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)
+    return JsonResponse({"msg": "Link Ok"})
