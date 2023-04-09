@@ -66,3 +66,14 @@ class Date (models.Model):
     
 
 
+class DayRegister (models.Model):
+    date = models.DateField()
+    note = models.IntegerField(blank=True, null=True)
+    comment = models.TextField(max_length=1000)
+
+    class Meta:
+        ordering = ['date']
+
+    def __str__(self):
+        return f" {self.date.strftime('%B %d')}"
+

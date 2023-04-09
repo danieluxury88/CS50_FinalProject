@@ -28,6 +28,12 @@
     <p>{{event.title}} - {{event.date}}</p>
     {% endfor %}
     
+    <h1>Day Register</h1>
+    {% for day in days %}
+        <p>{{day.date}}- {{day.note}}</p>
+        <p>{{day.comment}}</p>
+    {% endfor %}
+
     <h1>Dates</h1>
     {% for date in dates %}
         <p>{{date.title}} - {{date.date}}</p>
