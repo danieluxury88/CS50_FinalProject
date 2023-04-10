@@ -5,8 +5,6 @@ from .views import *
 app_name = "personal"
 urlpatterns = [
     path('', views.index, name = 'index'),
-    path('', CycleDetailView.as_view(), name = 'index'),
-    path('<int:pk>', CycleListView.as_view(), name = 'index'),
-    path('current_cycle/', current_cycle, name='current_cycle'),
-    # path('<int:pk>', CycleUpdateView.as_view(), name = 'index'),
+    path('toggle_work_session/', views.toggle_work_session, name='toggle_work_session'),
+    
 ]

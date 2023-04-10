@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 from django.utils import timezone
 
 from .models import Cycle, Date, Challenge, Event, WorkSession, DayRegister
@@ -45,29 +45,18 @@ def get_current_cycle(current_time):
     return existing_cycle
 
 
-def current_cycle(request):
-    current_time = timezone.now()
-    existing_cycle = Cycle.objects.filter(
-        start_time__lte=current_time,
-        end_time__gte=current_time
-    ).first()
-    if not existing_cycle:
-        end_time = current_time + timezone.timedelta(seconds= 99*3600 + 59*60 + 59)
-        current_cycle = Cycle.objects.create(
-            start_time=current_time,
-            end_time=end_time
-        )
-        current_cycle.save()
-        # return success response or redirect to cycle detail view
+def toggle_work_session(request):
+    if request.method == 'GET':
+        current_time = timezone.now()
+        work_session = get_current_work_session(current_time)
+        if not work_session:
+            work_session = WorkSession.objects.create(
+                start_time=current_time,
+            )
+        else:
+            work_session.end_time = current_time
+        print(work_session)
+        work_session.save()
+        return HttpResponse('WorkSession updated successfully.', status=200)
     else:
-        current_cycle = existing_cycle
-        
-
-    context = {"msg":"Current Cycle", "current_cycle": current_cycle}
-    return render(request, "personal/personal_page.html", context)
-
-class CycleDetailView(DetailView):
-    model = Cycle
-
-class CycleListView(ListView):
-    model = Cycle
+        return HttpResponse('Invalid request method.', status=400)

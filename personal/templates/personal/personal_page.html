@@ -14,9 +14,12 @@
     <a href="{% url 'personal:current_cycle' %}">Get Current Cycle</a>
     {% endif %}
 
-    <h1>Work Session</h1>
-    <p>Start Time: {{ work_session.start_time }}</p>
-    <p>Duration: <span id="current_work_session_duration"></span></p>
+    <div id= "work_session_section">
+        <h1>Work Session</h1>
+        <p>Start Time: {{ work_session.start_time }}</p>
+        <p>Duration: <span id="current_work_session_duration"></span></p>
+        <button class="btn btn-primary" id="ctrl_work_session">Start</button>
+    </div>
     
     <h1>Challenges</h1>
     {% for challenge in challenges %}
@@ -39,48 +42,15 @@
         <p>{{date.title}} - {{date.date}}</p>
     {% endfor %}
 
-    
-    <button onclick="start_cycle()">Start Cycle</button>
-
-    <script>
-        function start_cycle(){
-            console.log("start cycle");
-        }
-    </script>
 {% endblock %}
 
 
 {% block extend_footer %}
 <script>
-    function updateCycleTimer() {
-        var end_time_str = "{{ current_cycle.end_time|date:'c' }}";
-        var end_time = new Date(end_time_str);
-        var remaining = Math.floor((end_time - new Date()) / 1000);
-        var hours = Math.floor(remaining / 3600);
-        var minutes = Math.floor((remaining % 3600) / 60).toString().padStart(2, '0');
-        var seconds = (remaining % 60).toString().padStart(2, '0');
-        var display = hours + ":" + minutes + ":" + seconds;
-        document.getElementById("time-remaining").textContent = display;
-
-    }
-
-    function updateWorkSessionTimer() {
-        var current_session_start_str = "{{ work_session.start_time|date:'c' }}";
-        var current_session_start = new Date(current_session_start_str);
-        var current_session_duration = Math.floor((new Date() - current_session_start) / 1000);
-        var hours = Math.floor(current_session_duration / 3600);
-        var minutes = Math.floor((current_session_duration % 3600) / 60).toString().padStart(2, '0');
-        var seconds = (current_session_duration % 60).toString().padStart(2, '0');
-        var display = hours + ":" + minutes + ":" + seconds;
-        document.getElementById("current_work_session_duration").textContent = display;
-    }
-
-    function updateTimers() {
-        updateCycleTimer();
-        updateWorkSessionTimer();
-    }
-
-    setInterval(updateTimers, 450);
+    var end_time_str = "{{ current_cycle.end_time|date:'c' }}";
+    var current_session_start_str = "{{ work_session.start_time|date:'c' }}";
 
 </script>
+
+<script src="{% static 'personal/functions.js' %}"></script>
 {%endblock%}
