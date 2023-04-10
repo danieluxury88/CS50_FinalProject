@@ -1,7 +1,6 @@
 from django.db import models
 from datetime import timedelta
 
-
 #Cycle duration
 class Cycle (models.Model):
     start_time = models.DateTimeField()
@@ -40,9 +39,31 @@ class Event(models.Model):
 
 
 #Work Session
+
+
 class WorkSession(models.Model):
     start_time = models.DateTimeField()
-    end_time = models.DateTimeField( blank=True, null=True)
+    end_time = models.DateTimeField(blank=True, null=True)
+
+    def duration(self):
+        if self.end_time is None:
+            return "Not Finished"
+        else:
+            duration = self.end_time - self.start_time
+            hours, remainder = divmod(duration.seconds, 3600)
+            minutes, _ = divmod(remainder, 60)
+            return f"{hours}h {minutes}m"
+
+    def __str__(self):
+        start_time_str = self.start_time.strftime('%B %d %H:%M')
+        if self.end_time is None:
+            return f"{start_time_str} - Not Finished"
+        else:
+            end_time_str = self.end_time.strftime('%B %d %H:%M')
+            duration_str = self.duration()
+            return f"{start_time_str} - {end_time_str} (Duration: {duration_str})"
+
+
 
 
 
