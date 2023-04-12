@@ -1,15 +1,16 @@
 from django.shortcuts import render
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
-from django.http import JsonResponse,HttpResponse
+from django.http import JsonResponse,HttpResponse,HttpResponseRedirect
 from django.utils import timezone
+from datetime import timedelta
 
 from .models import Cycle, Date, Challenge, Event, WorkSession, DayRegister
 
 def index(request):
-    current_time = timezone.now()
-    cycle = get_current_cycle(current_time)
-    work_session = get_current_work_session(current_time)
+    cycle = Cycle.get_current_cycle()
+    print(cycle)
+    work_session = WorkSession.get_current_work_session()
         
     dates = Date.objects.all()
     challenges = Challenge.objects.all()
@@ -26,36 +27,28 @@ def index(request):
     return render(request, "personal/personal_page.html", context)
 
 
-def get_current_work_session(current_time):
-     work_session = WorkSession.objects.filter(start_time__lte=current_time, end_time__isnull=True).first()
-     return work_session
+def create_cycle(request):
+    start_time = timezone.now()
+    end_time = start_time + timedelta(hours=99, minutes =59, seconds =99)
+    print(start_time, end_time)
+    cycle = Cycle.objects.create( start_time=start_time, end_time=end_time )
+    cycle.save()
+    return JsonResponse({"msg":"Cycle Created"})
 
-def get_current_cycle(current_time):
-    existing_cycle = Cycle.objects.filter( start_time__lte=current_time, end_time__gte=current_time).first()
-    if not existing_cycle:
-        end_time = current_time + timezone.timedelta(seconds= 99*3600 + 59*60 + 59)
-        cycle = Cycle.objects.create(
-            start_time=current_time,
-            end_time=end_time
-        )
-        cycle.save()
-        # return success response or redirect to cycle detail view
-    else:
-        cycle = existing_cycle
-    return existing_cycle
+
+
 
 
 def toggle_work_session(request):
     if request.method == 'GET':
         current_time = timezone.now()
-        work_session = get_current_work_session(current_time)
+        work_session = WorkSession.get_current_work_session()
         if not work_session:
             work_session = WorkSession.objects.create(
                 start_time=current_time,
             )
         else:
             work_session.end_time = current_time
-        print(work_session)
         work_session.save()
         return HttpResponse('WorkSession updated successfully.', status=200)
     else:

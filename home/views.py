@@ -69,15 +69,11 @@ def register(request):
 
 class HomeView(View):
     def get(self, request):
-        current_time = timezone.now()
-        current_cycle = Cycle.objects.filter(
-            start_time__lte=current_time,
-            end_time__gte=current_time
-        ).first()
-        if not current_cycle:
-            current_cycle = None
-        else:
-            cycle = current_cycle
+        current_cycle = Cycle.get_current_cycle()
+        # if not current_cycle:
+        #     current_cycle = None
+        # else:
+        #     cycle = current_cycle
 
         context= {"msg": "ok", "current_cycle":current_cycle}
         return render(request, 'home/index.html', context)
