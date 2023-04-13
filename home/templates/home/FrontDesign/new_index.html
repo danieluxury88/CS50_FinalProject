@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,7 +59,7 @@
                 <div class="navbar-text px-2" id="nav_cycle_remain_time" style="font-weight: bold;">Cycle</div>
             </div>
             <div class="d-flex">
-                <div class="navbar-text" id="timer" style="font-weight: bold;"></div>
+                <div class="navbar-text" id="nav_clock" style="font-weight: bold;"></div>
             </div>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav ms-auto me-3">
@@ -313,19 +314,21 @@
                                             <div class="card-body">
                                                 <div class="container">
                                                     <div class="row">
+
                                                         <h4>Duration</h4>
                                                         <p id="ws_start_time">17:29:15</p>
+                                                        <p class="border" id="timer"></p>
+                                                        
+
                                                     </div>
                                                 </div>
-                                                <p class="border" id="digital-clock"></p>
                                             </div>
                                         </div>  
                                     </div>
                                 </div>
                                 <div class="row justify-content-end">
                                     <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
-                                        <div class="btn btn-success mx-auto ">Start</div>
-                                        <div class="btn btn-danger mx-1">Stop</div>
+                                        <div class="btn btn-danger mx-1" id="btn_toggle_work_session">Stop</div>
                                     </div>
 
                                         
@@ -548,98 +551,21 @@
                 integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
                 crossorigin="anonymous"></script>
 
-            <script>
-                function updateTimer() {
-                    const now = new Date();
-                    const hours = now.getHours();
-                    const minutes = now.getMinutes();
-                    const seconds = now.getSeconds();
-                    const timeString = `${hours}:${padZero(minutes)}:${padZero(seconds)}`;
-                    document.getElementById("timer").innerHTML = timeString;
-                }
-
-                function padZero(number) {
-                    return number < 10 ? "0" + number : number;
-                }
-
-                setInterval(updateTimer, 1000);
-            </script>
-
-            <script>
-                function myFunction() {
-                    // add your desired functionality here
-                    console.log('Button clicked!');
-                }
-            </script>
-
-            <script>
-                function updateClock() {
-                var now = new Date();
-                var hours = now.getHours();
-                var minutes = now.getMinutes();
-                var seconds = now.getSeconds();
-                var timeString = hours + ':' + minutes + ':' + seconds;
-                document.getElementById('digital-clock').innerHTML = timeString;
-                }
-                
-                setInterval(updateClock, 1000);
-            </script>
+            <script src="{% static 'home/front_logic.js' %}"></script>
+            
 
             <script>
                 var cycle_end_time_str = "{{ current_cycle.end_time|date:'c' }}";
                 var cycle_start_time_str = "{{ current_cycle.start_time|date:'c' }}";
+                var end_time_str = "{{ current_cycle.end_time|date:'c' }}";
             </script>
 
             <script>
-                let isInverted = false;
-            
-                function updateProgressBar() {
-                    const progressBar = document.getElementById('day-progress-bar');
-                    const progressBarInner = progressBar.querySelector('.progress-bar');
-                    const progressText = document.getElementById('day_progress-text');
-            
-                    const currentTime = new Date();
-                    const startHour = 6; // 6 AM
-                    const endHour = 22; // 10 PM
-            
-                    const totalMinutes = (endHour - startHour) * 60;
-                    const elapsedMinutes = currentTime.getHours()*60 + currentTime.getMinutes() - startHour * 60;
 
-            
-                    let progressPercentage = (elapsedMinutes / totalMinutes) * 100;
-            
-                    if (isInverted) {
-                        progressPercentage = 100 - progressPercentage;
-                    }
-            
-                    if (progressPercentage < 0) {
-                        progressPercentage = 0;
-                    } else if (progressPercentage > 100) {
-                        progressPercentage = 100;
-                    }
-            
-                    const progressPercentageFixed = progressPercentage.toFixed(0);
-                    progressBar.setAttribute('aria-valuenow', progressPercentageFixed);
-                    progressBarInner.style.width = `${progressPercentageFixed}%`;
-                    progressText.textContent = `${progressPercentageFixed}%`;
-                }
-            
-                function toggleInverted() {
-                    isInverted = !isInverted;
-                    updateProgressBar();
-                }
-            
-                updateProgressBar();
-            
-                setInterval(updateProgressBar, 60000); // Update every minute
-            
-                const progressBar = document.getElementById('day-progress-bar');
-                progressBar.addEventListener('click', toggleInverted);
             </script>
 
             <script>
                 let isCycleInverted = true;
-                var end_time_str = "{{ current_cycle.end_time|date:'c' }}";
                 function updateCycleProgressBar() {
                     const progressBar = document.getElementById('cycle-progress-bar');
                     const progressBarInner = progressBar.querySelector('.progress-bar');
@@ -702,11 +628,6 @@
                 }
 
             </script>
-
-            
-            
-            
-
         </footer>
     </div>
 </body>

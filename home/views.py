@@ -12,11 +12,12 @@ from django.core.paginator import Paginator
 from django.utils import timezone
 
 from .models import User
-from personal.models import Cycle
+from personal.models import Cycle, WorkSession
 
 
 def index(request):
     current_cycle = Cycle.get_current_cycle()
+    work_session = WorkSession.get_current_work_session()
     # if not current_cycle:
     #     current_cycle = None
     # else:
@@ -24,7 +25,10 @@ def index(request):
 
     print(current_cycle)
 
-    context= {"msg": "ok", "current_cycle":current_cycle}
+    context= {"msg": "ok", 
+              "current_cycle":current_cycle,
+              "work_session": work_session,
+              }
     return render(request, "home/FrontDesign/new_index.html", context)
 
 
