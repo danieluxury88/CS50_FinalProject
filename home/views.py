@@ -15,6 +15,19 @@ from .models import User
 from personal.models import Cycle
 
 
+def index(request):
+    current_cycle = Cycle.get_current_cycle()
+    # if not current_cycle:
+    #     current_cycle = None
+    # else:
+    #     cycle = current_cycle
+
+    print(current_cycle)
+
+    context= {"msg": "ok", "current_cycle":current_cycle}
+    return render(request, "home/FrontDesign/new_index.html", context)
+
+
 def login_view(request):
     if request.method == "POST":
         print("login attempt")

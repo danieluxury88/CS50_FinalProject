@@ -28,6 +28,17 @@
             display: grid;
             grid-template-rows: auto 1fr auto;
         }
+
+        /* .ws_container{
+            max-height: 400px; 
+        } */
+
+        /* .ws_list_container { 
+            max-height: 300px; 
+            overflow-y: auto; 
+        } */
+
+
     </style>
 </head>
 
@@ -44,7 +55,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="d-flex">
-                <div class="navbar-text px-2" id="cycle" style="font-weight: bold;">Cycle</div>
+                <div class="navbar-text px-2" id="nav_cycle_remain_time" style="font-weight: bold;">Cycle</div>
             </div>
             <div class="d-flex">
                 <div class="navbar-text" id="timer" style="font-weight: bold;"></div>
@@ -69,14 +80,37 @@
         </div>
     </nav>
 
-    <div class="progress my-1" role="progressbar" aria-label="Animated striped example" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 5%"></div>
-      </div>
+    <h1>Day</h1>
+    <div class="progress my-1 mb-4" role="progressbar" aria-label="Animated striped example" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100" id="day-progress-bar">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 5%" id="day-progress-bar-inner">
+            <span class="progress-text" id="day_progress-text">5%</span>
+        </div>
+    </div>
+    <hr style="border-top: 3px solid black;">
+    <section id="Cycle">
+        {% if  current_cycle %}
+        <h1>Cycle</h1>
+        <div class="progress my-1 mb-4" role="progressbar" aria-label="Animated striped example" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100" id="cycle-progress-bar">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 5%">
+                <span class="progress-text" id="cycle_progress-text">5%</span>
+            </div>
+        </div>
+        
+        
+        {% else %}
+        <div class="d-grid gap-2 my-2">
+            <button class="btn btn-primary" type="button">Start Cycle</button>
+        </div>
+        {% endif %}
+    </section>
+    <hr style="border-top: 3px solid black;">
 
+    <main class="my-1">
 
-    <main class="my-5 py-5">
+        
+
         <section id="Goals">
-        <div class="container mb-3">
+        <div class="container my-3">
             <div class="row">
                 <div class="col-md-10">
                    <h1 class="mx-1">Goals <span class="badge bg-secondary">2</span></h1>
@@ -87,7 +121,7 @@
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
                                     aria-controls="panelsStayOpen-collapseOne">
-                                    Style Today Page
+                                    Integrate With Django
                                     <span
                                         class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
                                         <span class="visually-hidden">unread messages</span></span>
@@ -97,7 +131,7 @@
 
                             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
                                 <div class="accordion-body">
-                                    Add Styles for Today
+                                    Integrate work cycle, work-cycle, tasks, events
                                     <ol class="list-group list-group-numbered my-2">
                                         <li class="list-group-item d-flex justify-content-between align-items-start"
                                             onclick="myFunction()" title="Click to take a note">
@@ -105,7 +139,7 @@
                                                 <div class="row">
                                                     <div class="col-md-8">
                                                         <div class="fw-bold">
-                                                            Make Task Item Selectable
+                                                            Integrate cycle logic
                                                         </div>
                                                         Content for list item
                                                     </div>
@@ -145,6 +179,30 @@
                                                 </div>
                                             </div>
                                         </li>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start"
+                                    onclick="myFunction()" title="Click to take a note">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="fw-bold">
+                                                        Add Button to add task
+                                                    </div>
+                                                    Content for list item
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <a class="btn btn-outline-primary" href="#"
+                                                        role="button">To Do</a>
+
+                                                    <a class="btn btn-outline-primary" href="#"
+                                                        role="button">In Progress</a>
+
+                                                    <a class="btn btn-outline-primary" href="#"
+                                                        role="button">Completed</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
                                     </ol>
                                 </div>
                                 <div class="col-md-2 my-1 mx-1 ms-auto d-flex justify-content-end">
@@ -237,10 +295,11 @@
             </div>
         </div>
         </section>
+
         <hr style="border-top: 3px solid black;">
 
         <section id="Work_Sessions">
-            <div class="container mt-5 ">
+            <div class="container ws_container my-3 ">
                 <div class="row">
                     <div class="col-md-10">
                         <div class="row justify-content-between">
@@ -277,8 +336,11 @@
                                     <h2>Work Sessions</h2>
                                 </div>
                                 <div class="row justify-content-end">
-                                    <div class="card">
+                                    <div class="card ws_list_container">
                                         <ul class="list-group list-group-flush">
+                                            <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
+                                            <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
+                                            <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
                                             <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
                                             <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
                                             <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
@@ -295,7 +357,156 @@
             </div>
         </section>
 
-        
+
+        <hr style="border-top: 3px solid black;">
+
+
+        <section id="Events">
+            <div class="container my-3">
+                <div class="row">
+                    <div class="col-md-10">
+                       <h1 class="mx-1">Events</h1>
+                        <div class="accordion" id="accordionPanelsStayOpenExample">
+                            <div class="accordion-item my-2">
+                                <h2 class="accordion-header ">
+                                    <div class="row justify-content-end">
+                                        <div class="col-md-10">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#panelsStayOpen-collapseEventOne" aria-expanded="true"
+                                        aria-controls="panelsStayOpen-collapseEventOne">
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
+                                            <span class="visually-hidden">unread messages</span></span>
+                                        Meditation
+                                    </button>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="btn btn-primary"> New</div>
+                                        </div>
+
+                                    </div>
+                                    
+    
+                                </h2>
+    
+                                <div id="panelsStayOpen-collapseEventOne" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <ol class="list-group list my-2">
+                                            <li class="list-group-item d-flex justify-content-between align-items-start" 
+                                            onclick="myFunction()" title="Click to take a note">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <div class="fw-bold">
+                                                                Meditation
+                                                            </div>
+                                                            6:30 AM 
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button"><i class="bi bi-trash"></i> </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-start" 
+                                                onclick="myFunction()" title="Click to take a note">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <div class="fw-bold">
+                                                                    Meditation
+                                                                </div>
+                                                                6:30 AM 
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <a class="btn btn-outline-primary" href="#"
+                                                                    role="button"><i class="bi bi-trash"></i> </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item my-2">
+                                <h2 class="accordion-header ">
+                                    <div class="row justify-content-end">
+                                        <div class="col-md-10">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#panelsStayOpen-collapseEventTwo" aria-expanded="true"
+                                        aria-controls="panelsStayOpen-collapseEventTwo">
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
+                                            <span class="visually-hidden">unread messages</span></span>
+                                        Exercise
+                                    </button>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="btn btn-primary"> New</div>
+                                        </div>
+
+                                    </div>
+                                    
+    
+                                </h2>
+    
+                                <div id="panelsStayOpen-collapseEventTwo" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <ol class="list-group list my-2">
+                                            <li class="list-group-item d-flex justify-content-between align-items-start" 
+                                            onclick="myFunction()" title="Click to take a note">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <div class="fw-bold">
+                                                                Exercise
+                                                            </div>
+                                                            6:30 AM 
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button"><i class="bi bi-trash"></i> </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-start" 
+                                                onclick="myFunction()" title="Click to take a note">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <div class="fw-bold">
+                                                                    Exercise
+                                                                </div>
+                                                                6:30 AM 
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <a class="btn btn-outline-primary" href="#"
+                                                                    role="button"><i class="bi bi-trash"></i> </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
+                                <button class="btn btn-primary position-relative start-0"> New Event Type</button>
+                            </div>
+                        </div>
+    
+    
+                    </div>
+                </div>
+            </div>
+            </section>
+
         <hr style="border-top: 3px solid black;">
 
         <section id="Css_sample">
@@ -373,6 +584,128 @@
                 
                 setInterval(updateClock, 1000);
             </script>
+
+            <script>
+                var cycle_end_time_str = "{{ current_cycle.end_time|date:'c' }}";
+                var cycle_start_time_str = "{{ current_cycle.start_time|date:'c' }}";
+            </script>
+
+            <script>
+                let isInverted = false;
+            
+                function updateProgressBar() {
+                    const progressBar = document.getElementById('day-progress-bar');
+                    const progressBarInner = progressBar.querySelector('.progress-bar');
+                    const progressText = document.getElementById('day_progress-text');
+            
+                    const currentTime = new Date();
+                    const startHour = 6; // 6 AM
+                    const endHour = 22; // 10 PM
+            
+                    const totalMinutes = (endHour - startHour) * 60;
+                    const elapsedMinutes = currentTime.getHours()*60 + currentTime.getMinutes() - startHour * 60;
+
+            
+                    let progressPercentage = (elapsedMinutes / totalMinutes) * 100;
+            
+                    if (isInverted) {
+                        progressPercentage = 100 - progressPercentage;
+                    }
+            
+                    if (progressPercentage < 0) {
+                        progressPercentage = 0;
+                    } else if (progressPercentage > 100) {
+                        progressPercentage = 100;
+                    }
+            
+                    const progressPercentageFixed = progressPercentage.toFixed(0);
+                    progressBar.setAttribute('aria-valuenow', progressPercentageFixed);
+                    progressBarInner.style.width = `${progressPercentageFixed}%`;
+                    progressText.textContent = `${progressPercentageFixed}%`;
+                }
+            
+                function toggleInverted() {
+                    isInverted = !isInverted;
+                    updateProgressBar();
+                }
+            
+                updateProgressBar();
+            
+                setInterval(updateProgressBar, 60000); // Update every minute
+            
+                const progressBar = document.getElementById('day-progress-bar');
+                progressBar.addEventListener('click', toggleInverted);
+            </script>
+
+            <script>
+                let isCycleInverted = true;
+                var end_time_str = "{{ current_cycle.end_time|date:'c' }}";
+                function updateCycleProgressBar() {
+                    const progressBar = document.getElementById('cycle-progress-bar');
+                    const progressBarInner = progressBar.querySelector('.progress-bar');
+                    const progressText = document.getElementById('cycle_progress-text');
+                    
+                    console.log(end_time_str);
+
+                    var end_time = new Date(end_time_str);
+                    var remaining = Math.floor((end_time - new Date()) / 1000);
+        
+
+            
+                    let progressPercentage = remaining/3600;
+            
+                    if (isCycleInverted) {
+                        progressPercentage = 100 - progressPercentage;
+                    }
+            
+                    if (progressPercentage < 0) {
+                        progressPercentage = 0;
+                    } else if (progressPercentage > 100) {
+                        progressPercentage = 100;
+                    }
+            
+                    const progressPercentageFixed = progressPercentage.toFixed(0);
+                    progressBar.setAttribute('aria-valuenow', progressPercentageFixed);
+                    progressBarInner.style.width = `${progressPercentageFixed}%`;
+                    progressText.textContent = `${progressPercentageFixed}%`;
+                }
+            
+                function toggleCycleInverted() {
+                    isCycleInverted = !isCycleInverted;
+                    updateCycleProgressBar();
+                }
+            
+                updateCycleProgressBar();
+                updateNavCycleTimer();
+            
+                setInterval(updateCycleProgressBar, 60000); // Update every minute
+                setInterval(updateNavCycleTimer, 500); // Update every minute
+                
+                const cycle_progressBar = document.getElementById('cycle-progress-bar');
+                cycle_progressBar.addEventListener('click', toggleCycleInverted);
+
+                function updateNavCycleTimer() {
+                    
+                    const nav_cycle_lbl = document.getElementById('nav_cycle_remain_time');
+                    if (end_time_str) {
+                        var end_time = new Date(end_time_str);
+                        var remaining = Math.floor((end_time - new Date()) / 1000);
+            
+                        
+                        var hours = Math.floor(remaining / 3600);
+                        var minutes = Math.floor((remaining % 3600) / 60).toString().padStart(2, '0');
+                        var seconds = (remaining % 60).toString().padStart(2, '0');
+                        var display = hours + ":" + minutes + ":" + seconds;
+                        nav_cycle_lbl.textContent = display;
+                    }
+
+                }
+
+            </script>
+
+            
+            
+            
 
         </footer>
     </div>
