@@ -3,6 +3,8 @@
 Start Navigation Bar
 ================================= -->
 
+
+
 <div id='header_logo'>
     <a href="{% url 'home:index' %}"><img src="{% static 'home/images/99_logo.png' %}" alt="..." width=128></a>
 </div>
@@ -14,7 +16,6 @@ Start Navigation Bar
             <li><a href="{%url 'tasks:index' %}">Missions</a></li>
             <li><a href="{%url 'personal:index' %}">Cycle</a></li>
             <li><a href="{%url 'report:index'%}">Report</a></li>
-            <li><a href="{%url 'home:index'%}">Contact</a></li>
             <li><a href="{%url 'home:logout'%}">Logout</a></li>
         {% else %}
             <li><a href="{%url 'home:login' %}">LogIn</a></li>

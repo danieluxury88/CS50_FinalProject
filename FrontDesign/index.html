@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+
+    <style>
+        /* style for li element */
+        .list-group-item {
+            transition: background-color 0.3s ease;
+        }
+
+        /* style for li element when hovered */
+        .list-group-item:hover {
+            background-color: lightgray;
+            cursor: pointer;
+        }
+
+        body {
+            min-height: 100%;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="99_logo_black.png" alt="L" width="24" height="24" class="d-inline-block align-text-top">
+                Hours
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="d-flex">
+                <div class="navbar-text px-2" id="cycle" style="font-weight: bold;">Cycle</div>
+            </div>
+            <div class="d-flex">
+                <div class="navbar-text" id="timer" style="font-weight: bold;"></div>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav ms-auto me-3">
+                    <a class="nav-link active" aria-current="page" href="#">Today</a>
+                    <a class="nav-link" href="#">Missions</a>
+                    <li class="nav-item dropdown me-5">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Reports
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Yesterday</a></li>
+                            <li><a class="dropdown-item" href="#">Cycle</a></li>
+                            <li><a class="dropdown-item" href="#">History</a></li>
+                        </ul>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="progress my-1" role="progressbar" aria-label="Animated striped example" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 5%"></div>
+      </div>
+
+
+    <main class="my-5 py-5">
+        <section id="Goals">
+        <div class="container mb-3">
+            <div class="row">
+                <div class="col-md-10">
+                   <h1 class="mx-1">Goals <span class="badge bg-secondary">2</span></h1>
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                        <div class="accordion-item my-2">
+                            <h2 class="accordion-header ">
+
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                                    aria-controls="panelsStayOpen-collapseOne">
+                                    Style Today Page
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
+                                        <span class="visually-hidden">unread messages</span></span>
+                                </button>
+
+                            </h2>
+
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    Add Styles for Today
+                                    <ol class="list-group list-group-numbered my-2">
+                                        <li class="list-group-item d-flex justify-content-between align-items-start"
+                                            onclick="myFunction()" title="Click to take a note">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <div class="fw-bold">
+                                                            Make Task Item Selectable
+                                                        </div>
+                                                        Content for list item
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <a class="btn btn-outline-primary" href="#"
+                                                            role="button">To Do</a>
+
+                                                        <a class="btn btn-outline-primary" href="#"
+                                                            role="button">In Progress</a>
+
+                                                        <a class="btn btn-outline-primary" href="#"
+                                                            role="button">Completed</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-start"
+                                            onclick="myFunction()" title="Click to take a note">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <div class="fw-bold">
+                                                            Add Button to add task
+                                                        </div>
+                                                        Content for list item
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <a class="btn btn-outline-primary" href="#"
+                                                            role="button">To Do</a>
+
+                                                        <a class="btn btn-outline-primary" href="#"
+                                                            role="button">In Progress</a>
+
+                                                        <a class="btn btn-outline-primary" href="#"
+                                                            role="button">Completed</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div class="col-md-2 my-1 mx-1 ms-auto d-flex justify-content-end">
+                                    <button class="btn btn-primary"> New Task</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item my-2">
+                            <h2 class="accordion-header ">
+
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true"
+                                    aria-controls="panelsStayOpen-collapseTwo">
+                                    Milestone #2
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
+                                        <span class="visually-hidden">unread messages</span>
+                                    </span>
+                                </button>
+
+                            </h2>
+
+                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    Milestone Description #2
+                                    <ol class="list-group list-group-numbered my-2">
+                                        <li class="list-group-item d-flex justify-content-between align-items-start"
+                                            onclick="myFunction()" title="Click to take a note">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <div class="fw-bold">
+                                                            Task #1
+                                                        </div>
+                                                        Task #1 - Description
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <a class="btn btn-outline-primary" href="#"
+                                                            role="button">To Do</a>
+
+                                                        <a class="btn btn-outline-primary" href="#"
+                                                            role="button">In Progress</a>
+
+                                                        <a class="btn btn-outline-primary" href="#"
+                                                            role="button">Completed</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-start"
+                                            onclick="myFunction()" title="Click to take a note">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <div class="fw-bold">
+                                                            Task #2
+                                                        </div>
+                                                        Task #2 - Description
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <a class="btn btn-outline-primary" href="#"
+                                                            role="button">To Do</a>
+
+                                                        <a class="btn btn-outline-primary" href="#"
+                                                            role="button">In Progress</a>
+
+                                                        <a class="btn btn-outline-primary" href="#"
+                                                            role="button">Completed</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div class="col-md-2 my-1 mx-1 ms-auto d-flex justify-content-end">
+                                    <button class="btn btn-primary"> New Task</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
+                            <button class="btn btn-primary position-relative start-0"> New Milestone</button>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        </section>
+        <hr style="border-top: 3px solid black;">
+
+        <section id="Work_Sessions">
+            <div class="container mt-5 ">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="row justify-content-between">
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <h2>Current</h2>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <h4>Duration</h4>
+                                                        <p id="ws_start_time">17:29:15</p>
+                                                    </div>
+                                                </div>
+                                                <p class="border" id="digital-clock"></p>
+                                            </div>
+                                        </div>  
+                                    </div>
+                                </div>
+                                <div class="row justify-content-end">
+                                    <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
+                                        <div class="btn btn-success mx-auto ">Start</div>
+                                        <div class="btn btn-danger mx-1">Stop</div>
+                                    </div>
+
+                                        
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row justify-content-end">
+                                    <h2>Work Sessions</h2>
+                                </div>
+                                <div class="row justify-content-end">
+                                    <div class="card">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
+                                            <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
+                                            <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
+                                        </ul>
+                                        <div class="card-footer">
+                                            Total Time: 12:00
+                                        </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <hr style="border-top: 3px solid black;">
+
+        <section id="Css_sample">
+            <div class="container mt-5 border">
+                <div class="row justify-content-between">
+                    <div class="col-md-5 border">
+                        <div class="row">
+                            <h1>Current Work Session</h1>
+                        </div>
+                    </div>
+                    <div class="col-md-5 border">
+                        <div class="row">
+                            <h1>Current Work Session</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    
+
+
+    
+
+    <div class="container footer my-5">
+        <footer class="py-3 my-4 footer">
+            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Contact</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+            </ul>
+            <p class="text-center text-muted">© 2023 Quito Light Of the World, Inc</p>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+                crossorigin="anonymous"></script>
+
+            <script>
+                function updateTimer() {
+                    const now = new Date();
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+                    const seconds = now.getSeconds();
+                    const timeString = `${hours}:${padZero(minutes)}:${padZero(seconds)}`;
+                    document.getElementById("timer").innerHTML = timeString;
+                }
+
+                function padZero(number) {
+                    return number < 10 ? "0" + number : number;
+                }
+
+                setInterval(updateTimer, 1000);
+            </script>
+
+            <script>
+                function myFunction() {
+                    // add your desired functionality here
+                    console.log('Button clicked!');
+                }
+            </script>
+
+            <script>
+                function updateClock() {
+                var now = new Date();
+                var hours = now.getHours();
+                var minutes = now.getMinutes();
+                var seconds = now.getSeconds();
+                var timeString = hours + ':' + minutes + ':' + seconds;
+                document.getElementById('digital-clock').innerHTML = timeString;
+                }
+                
+                setInterval(updateClock, 1000);
+            </script>
+
+        </footer>
+    </div>
+</body>
+
+</html>
