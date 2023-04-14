@@ -56,7 +56,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="d-flex">
-                <div class="navbar-text px-2" id="nav_cycle_remain_time" style="font-weight: bold;">Cycle</div>
+                <div class="navbar-text px-2" id="nav_cycle_lbl_time" style="font-weight: bold;">Cycle</div>
             </div>
             <div class="d-flex">
                 <div class="navbar-text" id="nav_clock" style="font-weight: bold;"></div>
@@ -163,7 +163,7 @@
                                                 <div class="row">
                                                     <div class="col-md-8">
                                                         <div class="fw-bold">
-                                                            Add Button to add task
+                                                            Add Work Cycle logic
                                                         </div>
                                                         Content for list item
                                                     </div>
@@ -187,7 +187,7 @@
                                             <div class="row">
                                                 <div class="col-md-8">
                                                     <div class="fw-bold">
-                                                        Add Button to add task
+                                                        Add Milestone logic
                                                     </div>
                                                     Content for list item
                                                 </div>
@@ -532,11 +532,6 @@
     </main>
 
 
-    
-
-
-    
-
     <div class="container footer my-5">
         <footer class="py-3 my-4 footer">
             <ul class="nav justify-content-center border-bottom pb-3 mb-3">
@@ -553,80 +548,10 @@
 
             <script src="{% static 'home/front_logic.js' %}"></script>
             
-
             <script>
                 var cycle_end_time_str = "{{ current_cycle.end_time|date:'c' }}";
                 var cycle_start_time_str = "{{ current_cycle.start_time|date:'c' }}";
                 var end_time_str = "{{ current_cycle.end_time|date:'c' }}";
-            </script>
-
-            <script>
-
-            </script>
-
-            <script>
-                let isCycleInverted = true;
-                function updateCycleProgressBar() {
-                    const progressBar = document.getElementById('cycle-progress-bar');
-                    const progressBarInner = progressBar.querySelector('.progress-bar');
-                    const progressText = document.getElementById('cycle_progress-text');
-                    
-                    console.log(end_time_str);
-
-                    var end_time = new Date(end_time_str);
-                    var remaining = Math.floor((end_time - new Date()) / 1000);
-        
-
-            
-                    let progressPercentage = remaining/3600;
-            
-                    if (isCycleInverted) {
-                        progressPercentage = 100 - progressPercentage;
-                    }
-            
-                    if (progressPercentage < 0) {
-                        progressPercentage = 0;
-                    } else if (progressPercentage > 100) {
-                        progressPercentage = 100;
-                    }
-            
-                    const progressPercentageFixed = progressPercentage.toFixed(0);
-                    progressBar.setAttribute('aria-valuenow', progressPercentageFixed);
-                    progressBarInner.style.width = `${progressPercentageFixed}%`;
-                    progressText.textContent = `${progressPercentageFixed}%`;
-                }
-            
-                function toggleCycleInverted() {
-                    isCycleInverted = !isCycleInverted;
-                    updateCycleProgressBar();
-                }
-            
-                updateCycleProgressBar();
-                updateNavCycleTimer();
-            
-                setInterval(updateCycleProgressBar, 60000); // Update every minute
-                setInterval(updateNavCycleTimer, 500); // Update every minute
-                
-                const cycle_progressBar = document.getElementById('cycle-progress-bar');
-                cycle_progressBar.addEventListener('click', toggleCycleInverted);
-
-                function updateNavCycleTimer() {
-                    
-                    const nav_cycle_lbl = document.getElementById('nav_cycle_remain_time');
-                    if (end_time_str) {
-                        var end_time = new Date(end_time_str);
-                        var remaining = Math.floor((end_time - new Date()) / 1000);
-            
-                        
-                        var hours = Math.floor(remaining / 3600);
-                        var minutes = Math.floor((remaining % 3600) / 60).toString().padStart(2, '0');
-                        var seconds = (remaining % 60).toString().padStart(2, '0');
-                        var display = hours + ":" + minutes + ":" + seconds;
-                        nav_cycle_lbl.textContent = display;
-                    }
-
-                }
-
             </script>
         </footer>
     </div>
