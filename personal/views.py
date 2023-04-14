@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 from django.http import JsonResponse,HttpResponse,HttpResponseRedirect
-from django.utils import timezone
+from django.utils import timezone, formats
 from datetime import timedelta
 
 from .models import Cycle, Date, Challenge, Event, WorkSession, DayRegister
@@ -49,7 +49,10 @@ def start_cycle(request):
     # You can customize the text field if you want, here I'm just using the id of the object
     text = f"WorkSession {work_session.id}"
 
-    return JsonResponse({'id': work_session.id, 'text': text, 'start_time': start_time_timestamp})
+    local_start_time = timezone.localtime(work_session.start_time, timezone=timezone.pytz.timezone('America/Guayaquil'))
+    formatted_local_start_time = formats.date_format(local_start_time, "H:i")
+
+    return JsonResponse({'id': work_session.id, 'text': text, 'start_time': start_time_timestamp, 'formatted_local_start_time': formatted_local_start_time})
 
 def stop_cycle(request):
     current_time = timezone.now()

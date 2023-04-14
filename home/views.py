@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
-from django.utils import timezone
+from django.utils import timezone, formats
 
 from .models import User
 from personal.models import Cycle, WorkSession
@@ -101,12 +101,18 @@ class TestView(View):
 
         if current_work_cycle:
             start_time_timestamp  = int(current_work_cycle.start_time.timestamp())
+            local_start_time = timezone.localtime(current_work_cycle.start_time, timezone=timezone.pytz.timezone('America/Guayaquil'))
+            formatted_local_start_time = formats.date_format(local_start_time, "H:i")
+            print(formatted_local_start_time)
             id= current_work_cycle.pk
             text = f"WorkSession {current_work_cycle.id}"
         else:
+            formatted_local_start_time = None
+            local_start_time = None
             start_time_timestamp = None
             id= None
             text = None
 
-        context= {"msg": "ok", "object":current_work_cycle, 'id': id, 'text': text, 'start_time': start_time_timestamp}
+        context= {"msg": "ok", "object":current_work_cycle, 'id': id, 'text': text, 'start_time': start_time_timestamp, "local_start_time": local_start_time,
+                  'formatted_local_start_time': formatted_local_start_time}
         return render(request, 'home/test.html', context)
