@@ -15,15 +15,14 @@ from .models import User
 from personal.models import Cycle, WorkSession
 
 
+
+
+
 def index(request):
     current_cycle = Cycle.get_current_cycle()
     work_session = WorkSession.get_current_work_session()
-    # if not current_cycle:
-    #     current_cycle = None
-    # else:
-    #     cycle = current_cycle
 
-    print(current_cycle)
+
 
     context= {"msg": "ok", 
               "current_cycle":current_cycle,
@@ -98,4 +97,16 @@ class HomeView(View):
     
 class TestView(View):
     def get(self, request):
-        return render(request, 'home/test.html')
+        current_work_cycle = WorkSession.get_current_work_session()
+
+        if current_work_cycle:
+            start_time_timestamp  = int(current_work_cycle.start_time.timestamp())
+            id= current_work_cycle.pk
+            text = f"WorkSession {current_work_cycle.id}"
+        else:
+            start_time_timestamp = None
+            id= None
+            text = None
+
+        context= {"msg": "ok", "object":current_work_cycle, 'id': id, 'text': text, 'start_time': start_time_timestamp}
+        return render(request, 'home/test.html', context)

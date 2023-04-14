@@ -38,6 +38,37 @@ def create_cycle(request):
 
 
 
+def start_cycle(request):
+    # Logic to create the WorkSession object
+    start_time = timezone.now()
+    work_session = WorkSession.objects.create(start_time=start_time)
+
+    # Convert the start_time to a Unix timestamp (in seconds)
+    start_time_timestamp = int(start_time.timestamp())
+
+    # You can customize the text field if you want, here I'm just using the id of the object
+    text = f"WorkSession {work_session.id}"
+
+    return JsonResponse({'id': work_session.id, 'text': text, 'start_time': start_time_timestamp})
+
+def stop_cycle(request):
+    current_time = timezone.now()
+    work_session = WorkSession.get_current_work_session()
+    if  work_session:
+        work_session.end_time = current_time
+        work_session.save()
+    
+
+    # You can customize the text field if you want, here I'm just using the id of the object
+    text = f"WorkSession {work_session.id}"
+
+    return JsonResponse({'id': work_session.id, 'text': text})
+
+
+
+
+
+
 
 def toggle_work_session(request):
     if request.method == 'GET':

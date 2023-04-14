@@ -1,0 +1,24 @@
+body {
+    min-height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+.list-group-item {
+    transition: background-color 0.3s ease;
+}
+
+/* style for li element when hovered */
+.list-group-item:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+/* .ws_container{
+    max-height: 400px; 
+} */
+
+/* .ws_list_container { 
+    max-height: 300px; 
+    overflow-y: auto; 
+} */
