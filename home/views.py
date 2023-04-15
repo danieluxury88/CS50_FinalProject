@@ -19,17 +19,17 @@ def index(request):
     current_work_session = WorkSession.get_current_work_session()
 
     if current_work_session:
-        start_time_timestamp  = int(current_work_session.start_time.timestamp())
+        work_session_start_time_timestamp  = int(current_work_session.start_time.timestamp())
         local_start_time = timezone.localtime(current_work_session.start_time, timezone=timezone.pytz.timezone('America/Guayaquil'))
         formatted_local_start_time = formats.date_format(local_start_time, "H:i")
     else:
-        start_time_timestamp = None
+        work_session_start_time_timestamp = None
 
 
     context= {"msg": "ok", 
               "current_cycle":current_cycle,
               "current_work_session":current_work_session, 
-              "start_time": start_time_timestamp
+              "work_session_start_time": work_session_start_time_timestamp,
               }
     return render(request, "home/index.html", context)
 
@@ -93,15 +93,16 @@ class TestView(View):
         current_work_session = WorkSession.get_current_work_session()
 
         if current_work_session:
-            start_time_timestamp  = int(current_work_session.start_time.timestamp())
+            work_session_start_time_timestamp  = int(current_work_session.start_time.timestamp())
             local_start_time = timezone.localtime(current_work_session.start_time, timezone=timezone.pytz.timezone('America/Guayaquil'))
             formatted_local_start_time = formats.date_format(local_start_time, "H:i")
         else:
-            start_time_timestamp = None
+            work_session_start_time_timestamp = None
 
 
         context= {
                   "current_cycle":current_cycle,
                   "current_work_session":current_work_session, 
-                  'start_time': start_time_timestamp}
+                  "work_session_start_time": work_session_start_time_timestamp,
+              }
         return render(request, 'home/test.html', context)

@@ -6,16 +6,7 @@
 
 
 <body>
-    <div id="worksession-container">
-        {% timezone "America/Guayaquil" %}
-        <h4>Start Time:</h4>
-            <p id="work_session_start_time">{{ current_work_session.start_time|date:"H:i" }}</p>
-        {% endtimezone %}
-        <h4>Duration:</h4>
-        <span id="chronometer"></span>
-    </div>
 
-    <button id="start-work-cycle-btn">Start Cycle</button>
 
 </body>
 </html>
@@ -26,15 +17,9 @@
 
 
 {% block extend_footer %}
-<script>
-    const djangoData = {
-        startTime: {{ start_time|default:"null" }},
-        csrfToken: "{{ csrf_token }}",
-        startCycleUrl: "{% url 'personal:start_cycle' %}",
-        stopCycleUrl: "{% url 'personal:stop_cycle' %}",
-    };
-</script>
-<script src="{% static 'home/work_cycle.js' %}"></script>
+const djangoData = {
+    csrfToken: "{{ csrf_token }}",
+};
 {%endblock%}
 
 

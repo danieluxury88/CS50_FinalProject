@@ -431,10 +431,10 @@
 {% block extend_footer %}
 <script>
     const djangoData = {
-        startTime: {{ start_time|default:"null" }},
         csrfToken: "{{ csrf_token }}",
-        startCycleUrl: "{% url 'personal:start_cycle' %}",
-        stopCycleUrl: "{% url 'personal:stop_cycle' %}",
+        workSessionStartTime: {{ work_session_start_time|default:"null" }},
+        startWorkSessionUrl: "{% url 'personal:start_work_session' %}",
+        stopWorkSessionUrl: "{% url 'personal:stop_work_session' %}",
     };
 </script>
 

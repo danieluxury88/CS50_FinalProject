@@ -1,11 +1,13 @@
-from django.shortcuts import render
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView)
-from django.http import JsonResponse,HttpResponse,HttpResponseRedirect
-from django.utils import timezone, formats
 from datetime import timedelta
 
-from .models import Cycle, Date, Challenge, Event, WorkSession, DayRegister
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
+from django.utils import formats, timezone
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
+
+from .models import Challenge, Cycle, Date, DayRegister, Event, WorkSession
+
 
 def index(request):
     cycle = Cycle.get_current_cycle()
@@ -33,12 +35,14 @@ def create_cycle(request):
     print(start_time, end_time)
     cycle = Cycle.objects.create( start_time=start_time, end_time=end_time )
     cycle.save()
-    return JsonResponse({"msg":"Cycle Created"})
+    context = {"msg":"Cycle Created",
+               "current_cycle": cycle}
+    return JsonResponse(context)
 
 
 
 
-def start_cycle(request):
+def start_work_session(request):
     # Logic to create the WorkSession object
     start_time = timezone.now()
     work_session = WorkSession.objects.create(start_time=start_time)
@@ -54,7 +58,7 @@ def start_cycle(request):
 
     return JsonResponse({'id': work_session.id, 'text': text, 'start_time': start_time_timestamp, 'formatted_local_start_time': formatted_local_start_time})
 
-def stop_cycle(request):
+def stop_work_session(request):
     current_time = timezone.now()
     work_session = WorkSession.get_current_work_session()
     if  work_session:

@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    const startTime = djangoData.startTime;
+    const workSessionStartTime = djangoData.workSessionStartTime;
 
     const workSessionContainer = document.getElementById('worksession-container');
-    if (startTime) {
+    if (workSessionStartTime) {
         workSessionContainer.style.display = "block";    
-        startChronometer(startTime);
+        startChronometer(workSessionStartTime);
         const startWorkCycleButton = document.getElementById('start-work-cycle-btn');
         startWorkCycleButton.innerHTML = "Stop Cycle";
         startWorkCycleButton.removeEventListener('click', StartCycle);
@@ -33,6 +33,8 @@ function formatTime(timeInSeconds) {
 }
 
 let intervalId;
+
+
 
 function startChronometer(startTime) {
     const startTimestamp = startTime * 1000;
@@ -65,7 +67,7 @@ async function StartCycle() {
         }
     };
     try {
-        const response = await fetch(djangoData.startCycleUrl, requestOptions);
+        const response = await fetch(djangoData.startWorkSessionUrl, requestOptions);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -104,7 +106,7 @@ async function StopCycle() {
         }
     };
     try {
-        const response = await fetch(djangoData.stopCycleUrl, requestOptions);
+        const response = await fetch(djangoData.stopWorkSessionUrl, requestOptions);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
