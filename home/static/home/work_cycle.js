@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", function() {
         startWorkCycleButton.innerHTML = "Stop Cycle";
         startWorkCycleButton.removeEventListener('click', StartCycle);
         startWorkCycleButton.addEventListener('click', StopCycle);
+        startWorkCycleButton.classList.add("btn-danger");
+        startWorkCycleButton.classList.remove("btn-success");
     }
     else {
         workSessionContainer.style.display = "none"; 
@@ -17,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function() {
         startWorkCycleButton.innerHTML = "Start Cycle";
         startWorkCycleButton.removeEventListener('click', StopCycle);
         startWorkCycleButton.addEventListener('click', StartCycle);
+        startWorkCycleButton.classList.remove("btn-danger");
+        startWorkCycleButton.classList.add("btn-success");
     }
     
 });
@@ -79,6 +83,10 @@ async function StartCycle() {
         startWorkCycleButton.innerHTML = "Stop Cycle";
         startWorkCycleButton.removeEventListener('click', StartCycle);
         startWorkCycleButton.addEventListener('click', StopCycle);
+
+        startWorkCycleButton.classList.add("btn-danger");
+        startWorkCycleButton.classList.remove("btn-success");
+
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         alert('Error creating object');
@@ -107,6 +115,8 @@ async function StopCycle() {
         startWorkCycleButton.innerHTML = "Start Cycle";
         startWorkCycleButton.removeEventListener('click', StopCycle);
         startWorkCycleButton.addEventListener('click', StartCycle);
+        startWorkCycleButton.classList.remove("btn-danger");
+        startWorkCycleButton.classList.add("btn-success");
         stopChronometer();
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);

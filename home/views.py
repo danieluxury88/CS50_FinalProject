@@ -1,25 +1,35 @@
-from django.shortcuts import render
-from django.views import View
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
-from django.core.paginator import Paginator
-from django.utils import timezone, formats
+from django.utils import formats, timezone
+from django.views import View
 
-from .models import User
 from personal.models import Cycle, WorkSession
 
+from .models import User
 
 
 def index(request):
     current_cycle = Cycle.get_current_cycle()
-    work_session = WorkSession.get_current_work_session()
+
+    current_work_session = WorkSession.get_current_work_session()
+
+    if current_work_session:
+        start_time_timestamp  = int(current_work_session.start_time.timestamp())
+        local_start_time = timezone.localtime(current_work_session.start_time, timezone=timezone.pytz.timezone('America/Guayaquil'))
+        formatted_local_start_time = formats.date_format(local_start_time, "H:i")
+    else:
+        start_time_timestamp = None
+
 
     context= {"msg": "ok", 
               "current_cycle":current_cycle,
-              "work_session": work_session,
+              "current_work_session":current_work_session, 
+              "start_time": start_time_timestamp
               }
     return render(request, "home/index.html", context)
 
@@ -80,24 +90,18 @@ def register(request):
 class TestView(View):
     def get(self, request):
         current_cycle = Cycle.get_current_cycle()
-        current_work_cycle = WorkSession.get_current_work_session()
+        current_work_session = WorkSession.get_current_work_session()
 
-        if current_work_cycle:
-            start_time_timestamp  = int(current_work_cycle.start_time.timestamp())
-            local_start_time = timezone.localtime(current_work_cycle.start_time, timezone=timezone.pytz.timezone('America/Guayaquil'))
+        if current_work_session:
+            start_time_timestamp  = int(current_work_session.start_time.timestamp())
+            local_start_time = timezone.localtime(current_work_session.start_time, timezone=timezone.pytz.timezone('America/Guayaquil'))
             formatted_local_start_time = formats.date_format(local_start_time, "H:i")
-            print(formatted_local_start_time)
-            id= current_work_cycle.pk
-            text = f"WorkSession {current_work_cycle.id}"
         else:
-            formatted_local_start_time = None
-            local_start_time = None
             start_time_timestamp = None
-            id= None
-            text = None
 
-        context= {"msg": "ok",
+
+        context= {
                   "current_cycle":current_cycle,
-                  "object":current_work_cycle, 'id': id, 'text': text, 'start_time': start_time_timestamp, "local_start_time": local_start_time,
-                  'formatted_local_start_time': formatted_local_start_time}
+                  "current_work_session":current_work_session, 
+                  'start_time': start_time_timestamp}
         return render(request, 'home/test.html', context)

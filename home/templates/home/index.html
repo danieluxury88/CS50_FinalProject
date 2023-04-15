@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load tz %}
 {% load static %}
 
 {% block content %}
@@ -206,11 +207,14 @@
                                                 <div class="container">
                                                     <div class="row">
 
-                                                        <h4>Duration</h4>
-                                                        <p id="ws_start_time">17:29:15</p>
-                                                        <p class="border" id="timer"></p>
-                                                        
-
+                                                        <div id="worksession-container">
+                                                            {% timezone "America/Guayaquil" %}
+                                                            <h4>Start Time:</h4>
+                                                                <p id="work_session_start_time">{{ current_work_session.start_time|date:"H:i" }}</p>
+                                                            {% endtimezone %}
+                                                            <h4>Duration:</h4>
+                                                            <span id="chronometer"></span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -219,10 +223,8 @@
                                 </div>
                                 <div class="row justify-content-end">
                                     <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
-                                        <div class="btn btn-danger mx-1" id="btn_toggle_work_session">Create Cycle </div>
+                                        <button class="btn btn-danger mx-1" id="start-work-cycle-btn">Start Cycle</button>
                                     </div>
-
-                                        
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -427,4 +429,14 @@
 {% endblock %}
 
 {% block extend_footer %}
+<script>
+    const djangoData = {
+        startTime: {{ start_time|default:"null" }},
+        csrfToken: "{{ csrf_token }}",
+        startCycleUrl: "{% url 'personal:start_cycle' %}",
+        stopCycleUrl: "{% url 'personal:stop_cycle' %}",
+    };
+</script>
+
+<script src="{% static 'home/work_cycle.js' %}"></script>
 {%endblock%}
