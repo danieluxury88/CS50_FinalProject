@@ -8,10 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const nav_cycle_time_lbl = document.getElementById('nav_cycle_lbl_time');
     nav_cycle_time_lbl.addEventListener('click', toggleCycleBar);
 
-    btn_toggle_work_session.onclick = toggleWorkingSession;
-
     updateNavClock();
-    updateAuxClock();
     updateNavCycleTimer();
     updateDayProgressBar();
     updateCycleProgressBar();
@@ -21,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function updatePeriodicData () { 
   setInterval(updateNavClock, 1000);
-  setInterval(updateAuxClock, 1000);
   setInterval(updateDayProgressBar, 60000);
   setInterval(updateCycleProgressBar, 60000); // Update every minute
   setInterval(updateNavCycleTimer, 500); // Update every minute
@@ -48,11 +44,6 @@ function updateNavClock() {
   updateTimer("nav_clock", now );
 }
 
-function updateAuxClock() {
-  var now = new Date();
-  updateTimer("timer", now );
-}
-
 let isDayBarInverted = false;
 
 function toggleInverted() {
@@ -69,8 +60,8 @@ function updateDayProgressBar() {
 
 function calculateDayProgressBarPercentage(inverted){
   const currentTime = new Date();
-  const startHour = 6; // 6 AM
-  const endHour = 23; // 10 PM
+  const startHour = 6;  // 6 AM
+  const endHour = 23;   //11 PM
   const totalMinutes = (endHour - startHour) * 60;
   const elapsedMinutes = currentTime.getHours()*60 + currentTime.getMinutes() - startHour * 60;
   progressPercentage = (elapsedMinutes / totalMinutes) * 100;
@@ -150,14 +141,6 @@ function updateProgressBar(progressBar, progressText, progressPercentage, isInve
     progressText.textContent = internal_label + ` ${progressPercentageFixed}%`;
 }
 
-
-function toggleWorkingSession(){
-  event.preventDefault();
-  console.log("button");
-  fetch(`personal/toggle_work_session/` , {
-      method: 'GET',
-  });
-}
 
 function myFunction() {
   // add your desired functionality here

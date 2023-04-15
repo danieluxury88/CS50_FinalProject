@@ -1,20 +1,15 @@
 from django.shortcuts import render
 from django.views import View
 from django.conf import settings
-
-
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
 from django.utils import timezone, formats
 
 from .models import User
 from personal.models import Cycle, WorkSession
-
-
 
 
 
@@ -80,21 +75,11 @@ def register(request):
     else:
         return render(request, "home/register.html")
 
-
-class HomeView(View):
-    def get(self, request):
-        current_cycle = Cycle.get_current_cycle()
-        # if not current_cycle:
-        #     current_cycle = None
-        # else:
-        #     cycle = current_cycle
-
-        context= {"msg": "ok", "current_cycle":current_cycle}
-        return render(request, 'home/index.html', context)
     
     
 class TestView(View):
     def get(self, request):
+        current_cycle = Cycle.get_current_cycle()
         current_work_cycle = WorkSession.get_current_work_session()
 
         if current_work_cycle:
@@ -111,6 +96,8 @@ class TestView(View):
             id= None
             text = None
 
-        context= {"msg": "ok", "object":current_work_cycle, 'id': id, 'text': text, 'start_time': start_time_timestamp, "local_start_time": local_start_time,
+        context= {"msg": "ok",
+                  "current_cycle":current_cycle,
+                  "object":current_work_cycle, 'id': id, 'text': text, 'start_time': start_time_timestamp, "local_start_time": local_start_time,
                   'formatted_local_start_time': formatted_local_start_time}
         return render(request, 'home/test.html', context)

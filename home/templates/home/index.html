@@ -431,11 +431,4 @@
 {% endblock %}
 
 {% block extend_footer %}
-<script src="{% static 'home/front_logic.js' %}"></script>
-            
-<script>
-    var cycle_end_time_str = "{{ current_cycle.end_time|date:'c' }}";
-    var cycle_start_time_str = "{{ current_cycle.start_time|date:'c' }}";
-    var end_time_str = "{{ current_cycle.end_time|date:'c' }}";
-</script>
 {%endblock%}

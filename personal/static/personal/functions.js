@@ -51,18 +51,6 @@ function updateTimers() {
 
 
 
-function toggleWorkingSession(){
-    ctrl_work_session_btn = document.getElementById("ctrl_work_session")
-    event.preventDefault();
-    console.log("button");
-    fetch(`toggle_work_session/` , {
-        method: 'GET',
-    })
-    .then(()=> startWorkSessionTimer());
-
-}
-
-
 // .then(response => {
 //     if (response.ok) {
 //       // Update the end time in the HTML DOM.
