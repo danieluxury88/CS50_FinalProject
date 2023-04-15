@@ -22,13 +22,11 @@ def index(request):
     current_cycle = Cycle.get_current_cycle()
     work_session = WorkSession.get_current_work_session()
 
-
-
     context= {"msg": "ok", 
               "current_cycle":current_cycle,
               "work_session": work_session,
               }
-    return render(request, "home/FrontDesign/new_index.html", context)
+    return render(request, "home/new_new_index.html", context)
 
 
 def login_view(request):
