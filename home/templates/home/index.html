@@ -207,13 +207,13 @@
                                                 <div class="container">
                                                     <div class="row">
 
-                                                        <div id="worksession-container">
+                                                        <div id="work_session-container">
                                                             {% timezone "America/Guayaquil" %}
                                                             <h4>Start Time:</h4>
                                                                 <p id="work_session_start_time">{{ current_work_session.start_time|date:"H:i" }}</p>
                                                             {% endtimezone %}
                                                             <h4>Duration:</h4>
-                                                            <span id="chronometer"></span>
+                                                            <span id="work_session_chronometer"></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -416,11 +416,11 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 border" id="worksession-container">
+                    <div class="col-md-12 border" id="work_session-container">
                         {% if work_session %}
                             <p id="object-text">{{ work_session.start_time }}</p>
                         {% else %}
-                            <button id="start-work-cycle-btn">Create Object</button>
+                            <button id="start-work-cycle-btn"></button>
                         {% endif %}
                     </div>
                 </div>

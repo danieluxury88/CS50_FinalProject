@@ -40,6 +40,35 @@ function UpdateStringTimer(element_id, timeString ) {
 }
 
 
+function formatTime(timeInSeconds) {
+  const hours = Math.floor(timeInSeconds / 3600);
+  const minutes = Math.floor((timeInSeconds - (hours * 3600)) / 60);
+  const seconds = timeInSeconds % 60;
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+
+function startChronometer(startTime, chronometerID) {
+  const startTimestamp = startTime * 1000;
+  const now = new Date().getTime();
+  const elapsedTime = Math.floor((now - startTimestamp) / 1000);
+  const chronometer = document.getElementById(chronometerID);
+  chronometer.textContent = formatTime(elapsedTime);
+
+  intervalId = setInterval(() => {
+      const now = new Date().getTime();
+      const elapsedTime = Math.floor((now - startTimestamp) / 1000);
+      chronometer.textContent = formatTime(elapsedTime);
+  }, 1000);
+
+  return intervalId;
+}
+
+function stopChronometer(intervalId) {
+  clearInterval(intervalId);
+}
+
+
 function myFunction() {
   // add your desired functionality here
   console.log('Button clicked!');

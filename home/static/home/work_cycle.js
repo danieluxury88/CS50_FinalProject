@@ -2,62 +2,50 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const workSessionStartTime = djangoData.workSessionStartTime;
 
-    const workSessionContainer = document.getElementById('worksession-container');
+    const workSessionContainer = document.getElementById('work_session-container');
     if (workSessionStartTime) {
         workSessionContainer.style.display = "block";    
-        startChronometer(workSessionStartTime);
-        const startWorkCycleButton = document.getElementById('start-work-cycle-btn');
-        startWorkCycleButton.innerHTML = "Stop Cycle";
-        startWorkCycleButton.removeEventListener('click', StartCycle);
-        startWorkCycleButton.addEventListener('click', StopCycle);
-        startWorkCycleButton.classList.add("btn-danger");
-        startWorkCycleButton.classList.remove("btn-success");
+        startWorkSessionChronometer(workSessionStartTime, 'work_session_chronometer');
+        configureWorkSessionButton("Stop");
     }
     else {
-        workSessionContainer.style.display = "none"; 
-        const startWorkCycleButton = document.getElementById('start-work-cycle-btn');
-        startWorkCycleButton.innerHTML = "Start Cycle";
-        startWorkCycleButton.removeEventListener('click', StopCycle);
-        startWorkCycleButton.addEventListener('click', StartCycle);
-        startWorkCycleButton.classList.remove("btn-danger");
-        startWorkCycleButton.classList.add("btn-success");
+        workSessionContainer.style.display = "none";
+        configureWorkSessionButton("Start");
     }
     
 });
 
-function formatTime(timeInSeconds) {
-    const hours = Math.floor(timeInSeconds / 3600);
-    const minutes = Math.floor((timeInSeconds - (hours * 3600)) / 60);
-    const seconds = timeInSeconds % 60;
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+function configureWorkSessionButton ( state )
+{
+    const startWorkCycleButton = document.getElementById('start-work-cycle-btn');
+    if (state == "Start") {
+        startWorkCycleButton.innerHTML = "Start Work Session";
+        startWorkCycleButton.removeEventListener('click', StopWorkSession);
+        startWorkCycleButton.addEventListener('click', StartWorkSession);
+        startWorkCycleButton.classList.remove("btn-danger");
+        startWorkCycleButton.classList.add("btn-success");
+    }
+    else if (state == "Stop") {
+        startWorkCycleButton.innerHTML = "Stop Work Session";
+        startWorkCycleButton.removeEventListener('click', StartWorkSession);
+        startWorkCycleButton.addEventListener('click', StopWorkSession);
+        startWorkCycleButton.classList.add("btn-danger");
+        startWorkCycleButton.classList.remove("btn-success");
+    }
 }
 
-let intervalId;
+let workSessionIntervalId;
 
-
-
-function startChronometer(startTime) {
-    const startTimestamp = startTime * 1000;
-    const now = new Date().getTime();
-    const elapsedTime = Math.floor((now - startTimestamp) / 1000);
-    const chronometer = document.getElementById('chronometer');
-    chronometer.textContent = formatTime(elapsedTime);
-
-    intervalId = setInterval(() => {
-        const now = new Date().getTime();
-        const elapsedTime = Math.floor((now - startTimestamp) / 1000);
-        chronometer.textContent = formatTime(elapsedTime);
-    }, 1000);
-
-    return intervalId;
+function startWorkSessionChronometer(workSessionStartTime){
+    workSessionIntervalId = startChronometer(workSessionStartTime, 'work_session_chronometer');
 }
 
-function stopChronometer() {
-    clearInterval(intervalId);
+function stopWorkSessionChronometer(){
+    stopChronometer(workSessionIntervalId);
 }
 
 
-async function StartCycle() {
+async function StartWorkSession() {
     const csrfToken = djangoData.csrfToken;
     const requestOptions = {
         method: 'POST',
@@ -76,18 +64,12 @@ async function StartCycle() {
         const workSessionStartTime = document.getElementById('work_session_start_time');
         workSessionStartTime.innerHTML = `${data.formatted_local_start_time}`;
 
-        const workSessionContainer = document.getElementById('worksession-container');
+        const workSessionContainer = document.getElementById('work_session-container');
         workSessionContainer.style.display = 'block';
 
         
-        startChronometer(data.start_time);
-        const startWorkCycleButton = document.getElementById('start-work-cycle-btn');
-        startWorkCycleButton.innerHTML = "Stop Cycle";
-        startWorkCycleButton.removeEventListener('click', StartCycle);
-        startWorkCycleButton.addEventListener('click', StopCycle);
-
-        startWorkCycleButton.classList.add("btn-danger");
-        startWorkCycleButton.classList.remove("btn-success");
+        startWorkSessionChronometer(data.start_time, 'work_session_chronometer');
+        configureWorkSessionButton("Start");
 
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
@@ -96,7 +78,7 @@ async function StartCycle() {
 }
 
 
-async function StopCycle() {
+async function StopWorkSession() {
     const csrfToken = djangoData.csrfToken;
     const requestOptions = {
         method: 'POST',
@@ -111,15 +93,10 @@ async function StopCycle() {
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        const workSessionContainer = document.getElementById('worksession-container');
+        const workSessionContainer = document.getElementById('work_session-container');
         workSessionContainer.style.display = 'none';
-        const startWorkCycleButton = document.getElementById('start-work-cycle-btn');
-        startWorkCycleButton.innerHTML = "Start Cycle";
-        startWorkCycleButton.removeEventListener('click', StopCycle);
-        startWorkCycleButton.addEventListener('click', StartCycle);
-        startWorkCycleButton.classList.remove("btn-danger");
-        startWorkCycleButton.classList.add("btn-success");
-        stopChronometer();
+        configureWorkSessionButton("Start");
+        stopWorkSessionChronometer();
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         alert('Error creating object');
