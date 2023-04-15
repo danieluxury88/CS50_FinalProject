@@ -26,7 +26,7 @@ def index(request):
               "current_cycle":current_cycle,
               "work_session": work_session,
               }
-    return render(request, "home/new_new_index.html", context)
+    return render(request, "home/index.html", context)
 
 
 def login_view(request):
