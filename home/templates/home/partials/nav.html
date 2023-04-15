@@ -48,7 +48,6 @@ Start Navigation Bar
 <hr style="border-top: 3px solid black;">
 
 <section id="Cycle">
-    {% if  current_cycle %}
     <h1>Cycle</h1>
     <div class="progress my-1 mb-4" role="progressbar" aria-label="Animated striped example" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100" id="cycle-progress-bar">
         <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 5%">
@@ -56,12 +55,9 @@ Start Navigation Bar
         </div>
     </div>
     
-    
-    {% else %}
-    <div class="d-grid gap-2 my-2">
-        <button class="btn btn-primary" type="button">Start Cycle</button>
+    <div class="d-grid gap-2 my-2" >
+        <button class="btn btn-primary" type="button" style="display: none;" id="cycle-start-button">Start Cycle</button>
     </div>
-    {% endif %}
 </section>
 <hr style="border-top: 3px solid black;">
 <!-- ================================

@@ -3,36 +3,83 @@
 
 {% block content %}
         <section id="Goals">
-        <div class="container my-3">
-            <div class="row">
-                <div class="col-md-10">
-                   <h1 class="mx-1">Goals <span class="badge bg-secondary">2</span></h1>
-                    <div class="accordion" id="accordionPanelsStayOpenExample">
-                        <div class="accordion-item my-2">
-                            <h2 class="accordion-header ">
+            <div class="container my-3">
+                <div class="row">
+                    <div class="col-md-10">
+                    <h1 class="mx-1">Goals <span class="badge bg-secondary">2</span></h1>
+                        <div class="accordion" id="accordionPanelsStayOpenExample">
+                            <div class="accordion-item my-2">
+                                <h2 class="accordion-header ">
 
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                                    aria-controls="panelsStayOpen-collapseOne">
-                                    Integrate With Django
-                                    <span
-                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
-                                        <span class="visually-hidden">unread messages</span></span>
-                                </button>
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                                        aria-controls="panelsStayOpen-collapseOne">
+                                        Integrate With Django
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
+                                            <span class="visually-hidden">unread messages</span></span>
+                                    </button>
 
-                            </h2>
+                                </h2>
 
-                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
-                                <div class="accordion-body">
-                                    Integrate work cycle, work-cycle, tasks, events
-                                    <ol class="list-group list-group-numbered my-2">
+                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        Integrate work cycle, work-cycle, tasks, events
+                                        <ol class="list-group list-group-numbered my-2">
+                                            <li class="list-group-item d-flex justify-content-between align-items-start"
+                                                onclick="myFunction()" title="Click to take a note">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <div class="fw-bold">
+                                                                Integrate cycle logic
+                                                            </div>
+                                                            Content for list item
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button">To Do</a>
+
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button">In Progress</a>
+
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button">Completed</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-start"
+                                                onclick="myFunction()" title="Click to take a note">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <div class="fw-bold">
+                                                                Add Work Cycle logic
+                                                            </div>
+                                                            Content for list item
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button">To Do</a>
+
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button">In Progress</a>
+
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button">Completed</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-start"
-                                            onclick="myFunction()" title="Click to take a note">
+                                        onclick="myFunction()" title="Click to take a note">
                                             <div class="container">
                                                 <div class="row">
                                                     <div class="col-md-8">
                                                         <div class="fw-bold">
-                                                            Integrate cycle logic
+                                                            Add Milestone logic
                                                         </div>
                                                         Content for list item
                                                     </div>
@@ -49,146 +96,98 @@
                                                 </div>
                                             </div>
                                         </li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-start"
-                                            onclick="myFunction()" title="Click to take a note">
-                                            <div class="container">
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                        <div class="fw-bold">
-                                                            Add Work Cycle logic
-                                                        </div>
-                                                        Content for list item
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <a class="btn btn-outline-primary" href="#"
-                                                            role="button">To Do</a>
-
-                                                        <a class="btn btn-outline-primary" href="#"
-                                                            role="button">In Progress</a>
-
-                                                        <a class="btn btn-outline-primary" href="#"
-                                                            role="button">Completed</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-start"
-                                    onclick="myFunction()" title="Click to take a note">
-                                        <div class="container">
-                                            <div class="row">
-                                                <div class="col-md-8">
-                                                    <div class="fw-bold">
-                                                        Add Milestone logic
-                                                    </div>
-                                                    Content for list item
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <a class="btn btn-outline-primary" href="#"
-                                                        role="button">To Do</a>
-
-                                                    <a class="btn btn-outline-primary" href="#"
-                                                        role="button">In Progress</a>
-
-                                                    <a class="btn btn-outline-primary" href="#"
-                                                        role="button">Completed</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    </ol>
+                                        </ol>
+                                    </div>
+                                    <div class="col-md-2 my-1 mx-1 ms-auto d-flex justify-content-end">
+                                        <button class="btn btn-primary"> New Task</button>
+                                    </div>
                                 </div>
-                                <div class="col-md-2 my-1 mx-1 ms-auto d-flex justify-content-end">
-                                    <button class="btn btn-primary"> New Task</button>
+                            </div>
+
+                            <div class="accordion-item my-2">
+                                <h2 class="accordion-header ">
+
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true"
+                                        aria-controls="panelsStayOpen-collapseTwo">
+                                        Milestone #2
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
+                                            <span class="visually-hidden">unread messages</span>
+                                        </span>
+                                    </button>
+
+                                </h2>
+
+                                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        Milestone Description #2
+                                        <ol class="list-group list-group-numbered my-2">
+                                            <li class="list-group-item d-flex justify-content-between align-items-start"
+                                                onclick="myFunction()" title="Click to take a note">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-7">
+                                                            <div class="fw-bold">
+                                                                Task #1
+                                                            </div>
+                                                            Task #1 - Description
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button">To Do</a>
+
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button">In Progress</a>
+
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button">Completed</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-start"
+                                                onclick="myFunction()" title="Click to take a note">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-7">
+                                                            <div class="fw-bold">
+                                                                Task #2
+                                                            </div>
+                                                            Task #2 - Description
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button">To Do</a>
+
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button">In Progress</a>
+
+                                                            <a class="btn btn-outline-primary" href="#"
+                                                                role="button">Completed</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                    <div class="col-md-2 my-1 mx-1 ms-auto d-flex justify-content-end">
+                                        <button class="btn btn-primary"> New Task</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="accordion-item my-2">
-                            <h2 class="accordion-header ">
-
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true"
-                                    aria-controls="panelsStayOpen-collapseTwo">
-                                    Milestone #2
-                                    <span
-                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
-                                        <span class="visually-hidden">unread messages</span>
-                                    </span>
-                                </button>
-
-                            </h2>
-
-                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-                                <div class="accordion-body">
-                                    Milestone Description #2
-                                    <ol class="list-group list-group-numbered my-2">
-                                        <li class="list-group-item d-flex justify-content-between align-items-start"
-                                            onclick="myFunction()" title="Click to take a note">
-                                            <div class="container">
-                                                <div class="row">
-                                                    <div class="col-md-7">
-                                                        <div class="fw-bold">
-                                                            Task #1
-                                                        </div>
-                                                        Task #1 - Description
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <a class="btn btn-outline-primary" href="#"
-                                                            role="button">To Do</a>
-
-                                                        <a class="btn btn-outline-primary" href="#"
-                                                            role="button">In Progress</a>
-
-                                                        <a class="btn btn-outline-primary" href="#"
-                                                            role="button">Completed</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-start"
-                                            onclick="myFunction()" title="Click to take a note">
-                                            <div class="container">
-                                                <div class="row">
-                                                    <div class="col-md-7">
-                                                        <div class="fw-bold">
-                                                            Task #2
-                                                        </div>
-                                                        Task #2 - Description
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <a class="btn btn-outline-primary" href="#"
-                                                            role="button">To Do</a>
-
-                                                        <a class="btn btn-outline-primary" href="#"
-                                                            role="button">In Progress</a>
-
-                                                        <a class="btn btn-outline-primary" href="#"
-                                                            role="button">Completed</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ol>
-                                </div>
-                                <div class="col-md-2 my-1 mx-1 ms-auto d-flex justify-content-end">
-                                    <button class="btn btn-primary"> New Task</button>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
+                                <button class="btn btn-primary position-relative start-0"> New Milestone</button>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
-                            <button class="btn btn-primary position-relative start-0"> New Milestone</button>
-                        </div>
-                    </div>
 
 
+                    </div>
                 </div>
             </div>
-        </div>
         </section>
-
         <hr style="border-top: 3px solid black;">
 
         <section id="Work_Sessions">
@@ -251,10 +250,7 @@
                 </div>
             </div>
         </section>
-
-
         <hr style="border-top: 3px solid black;">
-
 
         <section id="Events">
             <div class="container my-3">
@@ -418,11 +414,11 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 border" id="object-container">
+                    <div class="col-md-12 border" id="worksession-container">
                         {% if work_session %}
                             <p id="object-text">{{ work_session.start_time }}</p>
                         {% else %}
-                            <button id="create-object-btn">Create Object</button>
+                            <button id="start-work-cycle-btn">Create Object</button>
                         {% endif %}
                     </div>
                 </div>

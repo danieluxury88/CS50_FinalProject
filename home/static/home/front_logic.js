@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     const progressBar = document.getElementById('day-progress-bar');
     progressBar.addEventListener('click', toggleInverted);
-    
-    const cycle_progressBar = document.getElementById('cycle-progress-bar');
-    cycle_progressBar.addEventListener('click', toggleCycleBar);
 
+    manageCycleElements(cycle);
     const nav_cycle_time_lbl = document.getElementById('nav_cycle_lbl_time');
     nav_cycle_time_lbl.addEventListener('click', toggleCycleBar);
 
@@ -15,6 +13,21 @@ document.addEventListener('DOMContentLoaded', function () {
     updatePeriodicData();
 
   });
+
+  function manageCycleElements (cycle){
+    const cycle_progressBar = document.getElementById('cycle-progress-bar');
+    const cycle_startButton = document.getElementById('cycle-start-button');
+    if (cycle == "None") {
+      cycle_startButton.style.display = "block";      
+      cycle_progressBar.style.display = "none";
+      cycle_progressBar.addEventListener('click', toggleCycleBar);
+    }
+    else {
+      cycle_startButton.style.display = "none";      
+      cycle_progressBar.style.display = "block";
+      cycle_progressBar.addEventListener('click', toggleCycleBar);
+    }
+  }
 
 function updatePeriodicData () { 
   setInterval(updateNavClock, 1000);
@@ -81,8 +94,8 @@ function toggleCycleBar() {
 }
 
 function updateNavCycleTimer() {                  
-  if (end_time_str) {
-      var end_time = new Date(end_time_str);
+  if (cycle_end_time_str) {
+      var end_time = new Date(cycle_end_time_str);
       var remaining = Math.floor((end_time - new Date()) / 1000);
       if (!isCycleBarInverted) {
         remaining = 99*60*60+59*60+59 - remaining;
@@ -97,7 +110,7 @@ function updateNavCycleTimer() {
 
 
 function calculateCycleProgressBarPercentage(inverted){
-  var end_time = new Date(end_time_str);
+  var end_time = new Date(cycle_end_time_str);
   var remaining = Math.floor((end_time - new Date()) / 1000);
   let progressPercentage = remaining/3600;
 

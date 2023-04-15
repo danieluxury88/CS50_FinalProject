@@ -1,20 +1,22 @@
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("page loaded");
 
     const startTime = djangoData.startTime;
 
+    const workSessionContainer = document.getElementById('worksession-container');
     if (startTime) {
+        workSessionContainer.style.display = "block";    
         startChronometer(startTime);
-        const createObjectButton = document.getElementById('create-object-btn');
-        createObjectButton.innerHTML = "Stop Cycle";
-        createObjectButton.removeEventListener('click', StartCycle);
-        createObjectButton.addEventListener('click', StopCycle);
+        const startWorkCycleButton = document.getElementById('start-work-cycle-btn');
+        startWorkCycleButton.innerHTML = "Stop Cycle";
+        startWorkCycleButton.removeEventListener('click', StartCycle);
+        startWorkCycleButton.addEventListener('click', StopCycle);
     }
     else {
-        const createObjectButton = document.getElementById('create-object-btn');
-        createObjectButton.innerHTML = "Start Cycle";
-        createObjectButton.removeEventListener('click', StopCycle);
-        createObjectButton.addEventListener('click', StartCycle);
+        workSessionContainer.style.display = "none"; 
+        const startWorkCycleButton = document.getElementById('start-work-cycle-btn');
+        startWorkCycleButton.innerHTML = "Start Cycle";
+        startWorkCycleButton.removeEventListener('click', StopCycle);
+        startWorkCycleButton.addEventListener('click', StartCycle);
     }
     
 });
@@ -26,6 +28,8 @@ function formatTime(timeInSeconds) {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
+let intervalId;
+
 function startChronometer(startTime) {
     const startTimestamp = startTime * 1000;
     const now = new Date().getTime();
@@ -33,11 +37,17 @@ function startChronometer(startTime) {
     const chronometer = document.getElementById('chronometer');
     chronometer.textContent = formatTime(elapsedTime);
 
-    setInterval(() => {
+    intervalId = setInterval(() => {
         const now = new Date().getTime();
         const elapsedTime = Math.floor((now - startTimestamp) / 1000);
         chronometer.textContent = formatTime(elapsedTime);
     }, 1000);
+
+    return intervalId;
+}
+
+function stopChronometer() {
+    clearInterval(intervalId);
 }
 
 
@@ -56,17 +66,19 @@ async function StartCycle() {
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        const objectContainer = document.getElementById('object-container');
-        objectContainer.innerHTML = '<p id="object-text">' + data.text + '</p><span id="chronometer">00:00:00</span>';
-        
-        const startTimeContainer = document.getElementById('start-time-container');
-        startTimeContainer.innerHTML = `<p>Start Time: ${data.formatted_local_start_time}</p>`;
 
+        const workSessionStartTime = document.getElementById('work_session_start_time');
+        workSessionStartTime.innerHTML = `${data.formatted_local_start_time}`;
+
+        const workSessionContainer = document.getElementById('worksession-container');
+        workSessionContainer.style.display = 'block';
+
+        
         startChronometer(data.start_time);
-        const createObjectButton = document.getElementById('create-object-btn');
-        createObjectButton.innerHTML = "Stop Cycle";
-        createObjectButton.removeEventListener('click', StartCycle);
-        createObjectButton.addEventListener('click', StopCycle);
+        const startWorkCycleButton = document.getElementById('start-work-cycle-btn');
+        startWorkCycleButton.innerHTML = "Stop Cycle";
+        startWorkCycleButton.removeEventListener('click', StartCycle);
+        startWorkCycleButton.addEventListener('click', StopCycle);
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         alert('Error creating object');
@@ -89,12 +101,13 @@ async function StopCycle() {
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        const objectContainer = document.getElementById('object-container');
-        objectContainer.innerHTML = '';
-        const createObjectButton = document.getElementById('create-object-btn');
-        createObjectButton.innerHTML = "Start Cycle";
-        createObjectButton.removeEventListener('click', StopCycle);
-        createObjectButton.addEventListener('click', StartCycle);
+        const workSessionContainer = document.getElementById('worksession-container');
+        workSessionContainer.style.display = 'none';
+        const startWorkCycleButton = document.getElementById('start-work-cycle-btn');
+        startWorkCycleButton.innerHTML = "Start Cycle";
+        startWorkCycleButton.removeEventListener('click', StopCycle);
+        startWorkCycleButton.addEventListener('click', StartCycle);
+        stopChronometer();
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         alert('Error creating object');

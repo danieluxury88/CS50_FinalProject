@@ -6,20 +6,16 @@
 
 
 <body>
-    <div id="object-container">
-        {% if object %}
-            {% timezone "America/Guayaquil" %}
-             <p>Start Time: {{ object.start_time|date:"H:i" }}</p>
-            {% endtimezone %}
-
-            <span id="chronometer">00:00:00</span>
-        {% endif %}  
+    <div id="worksession-container">
+        {% timezone "America/Guayaquil" %}
+        <h4>Start Time:</h4>
+            <p id="work_session_start_time">{{ object.start_time|date:"H:i" }}</p>
+        {% endtimezone %}
+        <h4>Duration:</h4>
+        <span id="chronometer"></span>
     </div>
 
-    <div id="start-time-container"></div>
-
-    <button id="create-object-btn">Start Cycle</button>
-
+    <button id="start-work-cycle-btn">Start Cycle</button>
 
 
     <script>
