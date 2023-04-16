@@ -12,6 +12,7 @@ from personal.models import Cycle, WorkSession
 
 from .models import User
 from personal.models import Cycle
+from tasks.models import Milestone, Task
 
 from datetime import timedelta
 import json
@@ -34,10 +35,13 @@ def index(request):
     else:
         work_session_start_time_timestamp = None
 
+    tasks_without_milestones = Task.objects.filter(milestone__isnull=True)
+
 
     context= {"msg": "ok", 
               "current_cycle_str":current_cycle_str,
               "work_session_start_time": work_session_start_time_timestamp,
+              "tasks_without_milestones": tasks_without_milestones,
               }
     return render(request, "home/index.html", context)
 
@@ -97,11 +101,13 @@ def register(request):
 class TestView(View):
     def get(self, request):
         current_cycle = Cycle.get_current_cycle()
-
         if current_cycle:
             current_cycle_str = json.dumps(current_cycle.to_dict())
         else:
             current_cycle_str = None
+
+
+        
 
         context= {
                   "current_cycle_str":current_cycle_str,

@@ -112,9 +112,9 @@
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true"
                                         aria-controls="panelsStayOpen-collapseTwo">
-                                        Milestone #2
+                                        Indepent Tasks
                                         <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">{{ tasks_without_milestones|length }}
                                             <span class="visually-hidden">unread messages</span>
                                         </span>
                                     </button>
@@ -123,54 +123,33 @@
 
                                 <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
                                     <div class="accordion-body">
-                                        Milestone Description #2
+                                        Independent Tasks
                                         <ol class="list-group list-group-numbered my-2">
-                                            <li class="list-group-item d-flex justify-content-between align-items-start"
-                                                onclick="myFunction()" title="Click to take a note">
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-md-7">
-                                                            <div class="fw-bold">
-                                                                Task #1
-                                                            </div>
-                                                            Task #1 - Description
-                                                        </div>
-                                                        <div class="col-md-5">
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button">To Do</a>
-
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button">In Progress</a>
-
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button">Completed</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                            {% for task in tasks_without_milestones  %}                                            
                                                 <li class="list-group-item d-flex justify-content-between align-items-start"
-                                                onclick="myFunction()" title="Click to take a note">
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-md-7">
-                                                            <div class="fw-bold">
-                                                                Task #2
+                                                    onclick="myFunction()" title="Click to take a note">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <div class="fw-bold">
+                                                                    {{task.title}}
+                                                                </div>
+                                                                {{task.description}}
                                                             </div>
-                                                            Task #2 - Description
-                                                        </div>
-                                                        <div class="col-md-5">
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button">To Do</a>
+                                                            <div class="col-md-5">
+                                                                <a class="btn btn-outline-primary" href="#"
+                                                                    role="button">To Do</a>
 
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button">In Progress</a>
+                                                                <a class="btn btn-outline-primary" href="#"
+                                                                    role="button">In Progress</a>
 
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button">Completed</a>
+                                                                <a class="btn btn-outline-primary" href="#"
+                                                                    role="button">Completed</a>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </li>
+                                                </li>
+                                            {% endfor %}
                                         </ol>
                                     </div>
                                     <div class="col-md-2 my-1 mx-1 ms-auto d-flex justify-content-end">
@@ -179,6 +158,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
                                 <button class="btn btn-primary position-relative start-0"> New Milestone</button>

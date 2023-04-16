@@ -9,6 +9,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Milestone, Project, Task
+from personal.models import Cycle
 from .forms import TaskForm
 
 import json
@@ -22,6 +23,19 @@ def test(request):
 class ProjectListView(ListView):
     model = Project
     template_name = 'tasks/project/project_list.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        current_cycle = Cycle.get_current_cycle()
+        if current_cycle:
+            current_cycle_str = json.dumps(current_cycle.to_dict())
+        else:
+            current_cycle_str = None
+
+        context['current_cycle_str'] = current_cycle_str
+        return context
 
 
 class ProjectDetailView(ListView):
