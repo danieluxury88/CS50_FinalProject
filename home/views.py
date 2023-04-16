@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import formats, timezone
@@ -11,10 +11,19 @@ from django.views import View
 from personal.models import Cycle, WorkSession
 
 from .models import User
+from personal.models import Cycle
+
+from datetime import timedelta
+import json
 
 
 def index(request):
     current_cycle = Cycle.get_current_cycle()
+
+    if current_cycle:
+        current_cycle_str = json.dumps(current_cycle.to_dict())
+    else:
+        current_cycle_str = None
 
     current_work_session = WorkSession.get_current_work_session()
 
@@ -28,10 +37,21 @@ def index(request):
 
     context= {"msg": "ok", 
               "current_cycle":current_cycle,
+              "current_cycle_str":current_cycle_str,
               "current_work_session":current_work_session, 
               "work_session_start_time": work_session_start_time_timestamp,
               }
     return render(request, "home/index.html", context)
+
+
+def create_cycle(request):
+    start_time = timezone.now()
+    end_time = start_time + timedelta(hours=99, minutes =59, seconds =99)
+    cycle = Cycle.objects.create( start_time=start_time, end_time=end_time )
+    cycle.save()
+    context = {"msg":"Cycle Created", "current_cycle": json.dumps(cycle.to_dict()) }
+    return JsonResponse(context)
+
 
 
 def login_view(request):

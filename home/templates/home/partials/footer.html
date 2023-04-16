@@ -20,9 +20,7 @@ Start Footer
         <script src="{% static 'home/utils-update-time-components-functions.js' %}"></script>
     
     <script>
-        var cycle = "{{ current_cycle }}";
-        var cycle_end_time_str = "{{ current_cycle.end_time|date:'c' }}";
-        var cycle_start_time_str = "{{ current_cycle.start_time|date:'c' }}";
+        var current_cycle_obj = '{{current_cycle_str|escapejs }}';
     </script>
 </div>
 <!-- ================================

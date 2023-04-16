@@ -69,7 +69,7 @@ async function StartWorkSession() {
 
         
         startWorkSessionChronometer(data.start_time, 'work_session_chronometer');
-        configureWorkSessionButton("Start");
+        configureWorkSessionButton("Stop");
 
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);

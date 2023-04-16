@@ -29,6 +29,19 @@ class Cycle (models.Model):
         start_time_str = self.start_time.strftime('%B %d %H:%M')
         end_time_str = self.end_time.strftime('%B %d %H:%M')
         return f"{start_time_str} - {end_time_str}"
+    
+    def end_time_formatted(self):
+        return self.end_time.strftime('%Y-%m-%dT%H:%M:%S%z')
+    
+
+    def to_dict(self):
+        return {
+            "start_time": self.start_time.strftime('%Y-%m-%dT%H:%M:%S%z'),
+            "end_time": self.end_time.strftime('%Y-%m-%dT%H:%M:%S%z'),
+            "end_time_formatted": self.end_time_formatted(),
+            "str_representation": str(self),
+        }
+
 
         
 

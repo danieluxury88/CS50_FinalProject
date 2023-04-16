@@ -35,8 +35,7 @@ def create_cycle(request):
     print(start_time, end_time)
     cycle = Cycle.objects.create( start_time=start_time, end_time=end_time )
     cycle.save()
-    context = {"msg":"Cycle Created",
-               "current_cycle": cycle}
+    context = {"msg":"Cycle Created", "current_cycle": cycle.to_dict() }
     return JsonResponse(context)
 
 

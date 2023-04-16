@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block content %}
+        
         <section id="Goals">
             <div class="container my-3">
                 <div class="row">
@@ -436,6 +437,15 @@
         startWorkSessionUrl: "{% url 'personal:start_work_session' %}",
         stopWorkSessionUrl: "{% url 'personal:stop_work_session' %}",
     };
+
+    const djangoCycleData = {
+        csrfToken: "{{ csrf_token }}",
+        createCycleUrl: "{% url 'home:create_cycle' %}",
+    };
+    document.addEventListener("DOMContentLoaded", function() {
+        const starCycleBtn = document.getElementById('cycle-start-button');
+        starCycleBtn.addEventListener('click', StartCycle);
+    });
 </script>
 
 <script src="{% static 'home/work_cycle.js' %}"></script>
