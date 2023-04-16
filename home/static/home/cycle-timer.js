@@ -12,37 +12,34 @@ document.addEventListener('DOMContentLoaded', function () {
     updatePeriodicData();
   });
 
+function isCurrentCycleActive() 
+{
+  if (current_cycle_obj == "None")
+    return false;
+  updateInternalVariables(current_cycle_obj);
+  return true;
+}
 
-  function manageCycleElements (isCurrentCycleActiveVar){
-    const cycle_progressBar = document.getElementById('cycle-progress-bar');
-    const cycle_startButton = document.getElementById('cycle-start-button');
-    if (!isCurrentCycleActiveVar) {
-      cycle_startButton.style.display = "block";      
-      cycle_progressBar.style.display = "none";
-      cycle_progressBar.addEventListener('click', toggleCycleBar);
-    }
-    else {
-      cycle_startButton.style.display = "none";      
-      cycle_progressBar.style.display = "block";
-      cycle_progressBar.addEventListener('click', toggleCycleBar);
-    }
+function manageCycleElements (isCurrentCycleActiveVar)
+{
+  const cycle_progressBar = document.getElementById('cycle-progress-bar');
+  const cycle_startButton = document.getElementById('cycle-start-button');
+
+  if (!isCurrentCycleActiveVar) {
+    cycle_startButton.style.display = "block";      
+    cycle_progressBar.style.display = "none";
+    cycle_progressBar.addEventListener('click', toggleCycleBar);
   }
-
-
+  else {
+    cycle_startButton.style.display = "none";      
+    cycle_progressBar.style.display = "block";
+    cycle_progressBar.addEventListener('click', toggleCycleBar);
+  }
+}
 
 function updatePeriodicData () { 
   setInterval(updateCycleProgressBar, 60000);
   setInterval(updateNavCycleTimer, 500);
-}
-
-
-function isCurrentCycleActive()
-{
-  if (current_cycle_obj == "None")
-    return false;
-  console.log("from start",current_cycle_obj );
-  updateInternalVariables(current_cycle_obj);
-  return true;
 }
 
 function updateInternalVariables(json_obj)
@@ -51,20 +48,15 @@ function updateInternalVariables(json_obj)
   var start_time = current_cycle.start_time;
   var end_time = current_cycle.end_time;
   internal_cycle_end_time_str = end_time;
-  console.log("Cycle start_time:", start_time);
-  console.log("Cycle end_time:", end_time);
 }
 
 
-let isCycleBarInverted = false;
-
+let isCycleBarInverted = true;
 function toggleCycleBar() {
   isCycleBarInverted = !isCycleBarInverted;
   updateNavCycleTimer();
   updateCycleProgressBar();
 }
-
-
 
 function updateNavCycleTimer() {                  
   if (internal_cycle_end_time_str) {
@@ -82,8 +74,8 @@ function updateNavCycleTimer() {
   }
 }
 
-
-function calculateCycleProgressBarPercentage(inverted){
+function calculateCycleProgressBarPercentage(inverted)
+{
   var end_time = new Date(internal_cycle_end_time_str);
   var remaining = Math.floor((end_time - new Date()) / 1000);
   let progressPercentage = remaining/3600;
@@ -94,19 +86,13 @@ function calculateCycleProgressBarPercentage(inverted){
   return progressPercentage;
 }
 
-
-
-function updateCycleProgressBar() {
+function updateCycleProgressBar()
+{
   const progressBar = document.getElementById('cycle-progress-bar');
   const progressText = document.getElementById('cycle_progress-text');
   progressPercentage = calculateCycleProgressBarPercentage(isCycleBarInverted);
   updateProgressBar(progressBar,progressText, progressPercentage, isCycleBarInverted );
 }
-
-
-
-
-
 
 async function StartCycle() {
   const csrfToken = djangoCycleData.csrfToken;
@@ -124,14 +110,8 @@ async function StartCycle() {
           throw new Error('Network response was not ok');
       }
       const data = await response.json();
-
-      var cycle_end_time_str = data.current_cycle.end_time_formatted;
-      console.log(data.current_cycle);
-
       manageCycleElements(true);
-      console.log("from function",data.current_cycle );
       updateInternalVariables(data.current_cycle);
-      console.log(internal_cycle_end_time_str);
       updateNavCycleTimer();
       updateCycleProgressBar();
       updatePeriodicData();

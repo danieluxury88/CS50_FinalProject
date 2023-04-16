@@ -36,9 +36,7 @@ def index(request):
 
 
     context= {"msg": "ok", 
-              "current_cycle":current_cycle,
               "current_cycle_str":current_cycle_str,
-              "current_work_session":current_work_session, 
               "work_session_start_time": work_session_start_time_timestamp,
               }
     return render(request, "home/index.html", context)
@@ -110,19 +108,13 @@ def register(request):
 class TestView(View):
     def get(self, request):
         current_cycle = Cycle.get_current_cycle()
-        current_work_session = WorkSession.get_current_work_session()
 
-        if current_work_session:
-            work_session_start_time_timestamp  = int(current_work_session.start_time.timestamp())
-            local_start_time = timezone.localtime(current_work_session.start_time, timezone=timezone.pytz.timezone('America/Guayaquil'))
-            formatted_local_start_time = formats.date_format(local_start_time, "H:i")
+        if current_cycle:
+            current_cycle_str = json.dumps(current_cycle.to_dict())
         else:
-            work_session_start_time_timestamp = None
-
+            current_cycle_str = None
 
         context= {
-                  "current_cycle":current_cycle,
-                  "current_work_session":current_work_session, 
-                  "work_session_start_time": work_session_start_time_timestamp,
+                  "current_cycle_str":current_cycle_str,
               }
         return render(request, 'home/test.html', context)
