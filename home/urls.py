@@ -13,6 +13,4 @@ urlpatterns = [
     path('test', views.TestView.as_view(), name ='test'),
     path('', views.index, name ='index'),
 
-    path('create-cycle/', views.create_cycle, name = 'create_cycle'),
-
 ]

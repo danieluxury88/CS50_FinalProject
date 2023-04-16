@@ -8,6 +8,8 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 
 from .models import Challenge, Cycle, Date, DayRegister, Event, WorkSession
 
+import json
+
 
 def index(request):
     cycle = Cycle.get_current_cycle()
@@ -32,13 +34,10 @@ def index(request):
 def create_cycle(request):
     start_time = timezone.now()
     end_time = start_time + timedelta(hours=99, minutes =59, seconds =99)
-    print(start_time, end_time)
     cycle = Cycle.objects.create( start_time=start_time, end_time=end_time )
     cycle.save()
-    context = {"msg":"Cycle Created", "current_cycle": cycle.to_dict() }
+    context = {"msg":"Cycle Created", "current_cycle": json.dumps(cycle.to_dict()) }
     return JsonResponse(context)
-
-
 
 
 def start_work_session(request):
@@ -57,6 +56,7 @@ def start_work_session(request):
 
     return JsonResponse({'id': work_session.id, 'text': text, 'start_time': start_time_timestamp, 'formatted_local_start_time': formatted_local_start_time})
 
+
 def stop_work_session(request):
     current_time = timezone.now()
     work_session = WorkSession.get_current_work_session()
@@ -71,22 +71,20 @@ def stop_work_session(request):
     return JsonResponse({'id': work_session.id, 'text': text})
 
 
-
-
-
-
-
-def toggle_work_session(request):
-    if request.method == 'GET':
-        current_time = timezone.now()
-        work_session = WorkSession.get_current_work_session()
-        if not work_session:
-            work_session = WorkSession.objects.create(
-                start_time=current_time,
-            )
-        else:
-            work_session.end_time = current_time
-        work_session.save()
-        return HttpResponse('WorkSession updated successfully.', status=200)
-    else:
-        return HttpResponse('Invalid request method.', status=400)
+"""
+UNUSED FUNCTION
+"""
+# def toggle_work_session(request):
+#     if request.method == 'GET':
+#         current_time = timezone.now()
+#         work_session = WorkSession.get_current_work_session()
+#         if not work_session:
+#             work_session = WorkSession.objects.create(
+#                 start_time=current_time,
+#             )
+#         else:
+#             work_session.end_time = current_time
+#         work_session.save()
+#         return HttpResponse('WorkSession updated successfully.', status=200)
+#     else:
+#         return HttpResponse('Invalid request method.', status=400)

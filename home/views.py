@@ -41,17 +41,6 @@ def index(request):
               }
     return render(request, "home/index.html", context)
 
-
-def create_cycle(request):
-    start_time = timezone.now()
-    end_time = start_time + timedelta(hours=99, minutes =59, seconds =99)
-    cycle = Cycle.objects.create( start_time=start_time, end_time=end_time )
-    cycle.save()
-    context = {"msg":"Cycle Created", "current_cycle": json.dumps(cycle.to_dict()) }
-    return JsonResponse(context)
-
-
-
 def login_view(request):
     if request.method == "POST":
         print("login attempt")

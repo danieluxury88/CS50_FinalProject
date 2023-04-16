@@ -22,6 +22,7 @@ class WorkItem (models.Model):
     update_time = models.DateTimeField(auto_now=True)
     start_time = models.DateTimeField(blank=True, null = True)
     end_time = models.DateTimeField(blank=True, null = True)
+    due_today = models.BooleanField(default=False)
     due_tomorrow = models.BooleanField(default=False)
 
     class Meta:
