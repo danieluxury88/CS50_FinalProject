@@ -11,7 +11,7 @@ from django.views import View
 from personal.models import Cycle, WorkSession
 
 from .models import User
-from personal.models import Cycle
+from personal.models import Cycle, WorkSession
 from tasks.models import Milestone, Task
 
 from datetime import timedelta
@@ -37,11 +37,16 @@ def index(request):
 
     tasks_without_milestones = Task.objects.filter(milestone__isnull=True)
 
+    today_work_sessions = WorkSession.get_today_work_sessions()
+    today_total_work_session_duration = WorkSession.get_todays_work_sessions_duration()
+
 
     context= {"msg": "ok", 
               "current_cycle_str":current_cycle_str,
               "work_session_start_time": work_session_start_time_timestamp,
               "tasks_without_milestones": tasks_without_milestones,
+              "today_work_sessions":today_work_sessions,
+              "today_total_work_session_duration":today_total_work_session_duration,
               }
     return render(request, "home/index.html", context)
 

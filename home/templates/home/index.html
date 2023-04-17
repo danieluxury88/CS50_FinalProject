@@ -153,7 +153,7 @@
                                         </ol>
                                     </div>
                                     <div class="col-md-2 my-1 mx-1 ms-auto d-flex justify-content-end">
-                                        <button class="btn btn-primary"> New Task</button>
+                                        <button class="btn btn-primary" onclick="navigateToCreateTask('{% url 'tasks:task_create_alone' %}', '{% url 'home:index' %}')">New Task</button>
                                     </div>
                                 </div>
                             </div>
@@ -215,15 +215,15 @@
                                 <div class="row justify-content-end">
                                     <div class="card ws_list_container">
                                         <ul class="list-group list-group-flush">
-                                            <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
-                                            <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
-                                            <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
-                                            <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
-                                            <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
-                                            <li class="list-group-item jus"> <strong> Start Time: </strong> 7:00<br><strong>End Time: </strong>9:30<br><strong>Duration: </strong>2:30</li>
+                                            {% for work_session in today_work_sessions  %}
+                                            <li class="list-group-item jus"> <strong> Start Time: </strong> {{work_session.start_time|date:"g:i a"}}<br><strong>End Time: </strong>{{work_session.end_time|date:"g:i a"}}<br><strong>Duration: </strong>{{work_session.duration}}</li>
+                                            {% empty %}
+                                            <li class="list-group-item jus"> <strong> Not work sessions today yet </strong></li>
+                                            {% endfor %}
+                                            
                                         </ul>
                                         <div class="card-footer">
-                                            Total Time: 12:00
+                                            Total Time: {{today_total_work_session_duration}}
                                         </div>
                                         </div>
                                 </div>
@@ -427,6 +427,17 @@
         starCycleBtn.addEventListener('click', StartCycle);
     });
 </script>
+
+<script>
+    function navigateToCreateTask(createTaskUrl, homeUrl) {
+        if (createTaskUrl.includes("tasks:milestone_detail")) {
+            location.href = homeUrl;
+        } else {
+            location.href = createTaskUrl;
+        }
+    }
+    </script>
+    
 
 <script src="{% static 'home/work_cycle.js' %}"></script>
 {%endblock%}

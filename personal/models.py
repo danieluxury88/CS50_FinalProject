@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import timedelta
+from datetime import timedelta,datetime
 from django.utils import timezone
 from django.db.models import Q
 
@@ -106,6 +106,39 @@ class WorkSession(models.Model):
             end_time_str = self.end_time.strftime('%B %d %H:%M')
             duration_str = self.duration()
             return f"{start_time_str} - {end_time_str} (Duration: {duration_str})"
+        
+
+    @staticmethod
+    def get_today_work_sessions():
+        today = timezone.localdate()
+        tomorrow = today + timezone.timedelta(days=1)
+
+        return WorkSession.objects.filter(
+            start_time__range=(today, tomorrow - timezone.timedelta(seconds=1)),
+            end_time__range=(today, tomorrow - timezone.timedelta(seconds=1)),
+        )
+    
+
+    @classmethod
+    def get_todays_work_sessions_duration(cls):
+        today = timezone.localdate()
+        tomorrow = today + timezone.timedelta(days=1)
+
+        work_sessions_today = cls.objects.filter(
+            start_time__range=(today, tomorrow - timezone.timedelta(seconds=1)),
+            end_time__range=(today, tomorrow - timezone.timedelta(seconds=1)),
+        )
+
+        total_duration = timedelta()
+        for session in work_sessions_today:
+            if session.end_time is not None:
+                total_duration += session.end_time - session.start_time
+
+        print(total_duration)
+        hours, remainder = divmod(total_duration.seconds, 3600)
+        minutes, _ = divmod(remainder, 60)
+        return f"{hours}h {minutes}m"
+
         
 
     @staticmethod
