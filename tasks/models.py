@@ -1,6 +1,18 @@
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from enum import Enum, unique
+
+
+@unique
+class DueDateChoice(Enum):
+    DUE_TODAY = 1
+    DUE_TOMORROW = 2
+    DUE_THIS_CYCLE = 3
+    DUE_NEXT_CYCLE = 4
+    UNPLANIFIED = 5
+    COMPLETED = 6
+
 
 
 STATUS_CHOICES = [
@@ -22,8 +34,7 @@ class WorkItem (models.Model):
     update_time = models.DateTimeField(auto_now=True)
     start_time = models.DateTimeField(blank=True, null = True)
     end_time = models.DateTimeField(blank=True, null = True)
-    due_today = models.BooleanField(default=False)
-    due_tomorrow = models.BooleanField(default=False)
+    due_date = models.IntegerField(choices=[(tag.value, tag.name.replace('_', ' ')) for tag in DueDateChoice], default=DueDateChoice.UNPLANIFIED.value)
 
     class Meta:
         abstract = True

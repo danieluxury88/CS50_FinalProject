@@ -92,6 +92,7 @@ class MilestoneListView(ListView):
 
 class MilestoneDetailView(DetailView):
     model = Milestone
+    fields = ['title', 'estimated_duration', 'status', 'project', 'due_date', 'due_tomorrow']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -107,7 +108,7 @@ class MilestoneDetailView(DetailView):
 
 class MilestoneCreateView(CreateView):
     model = Milestone
-    fields = ['title', 'estimated_duration', 'status', 'project']
+    fields = ['title', 'estimated_duration', 'status', 'project', 'due_date', 'due_tomorrow']
     
     def get_success_url(self):
         project_id = self.kwargs['project_id']
@@ -116,7 +117,7 @@ class MilestoneCreateView(CreateView):
 
 class MilestoneUpdateView(UpdateView):
     model = Milestone
-    fields = ['title', 'status', 'estimated_duration', 'priority', 'project']
+    fields = ['title', 'estimated_duration', 'status', 'project', 'due_date', 'due_tomorrow']
 
     def get_success_url(self):
         project_id = self.kwargs['project_id']
@@ -155,7 +156,7 @@ class TaskDetailView(DetailView):
 
 class TaskCreateView(CreateView):
     model = Task
-    fields = ['title', 'description', 'status', 'estimated_duration', 'priority', 'milestone']
+    fields = ['title', 'description', 'status', 'estimated_duration', 'priority', 'milestone', 'due_date']
     success_url = reverse_lazy('tasks:milestone_detail')
 
     def get_success_url(self):

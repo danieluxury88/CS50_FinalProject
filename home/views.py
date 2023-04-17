@@ -12,7 +12,7 @@ from personal.models import Cycle, WorkSession
 
 from .models import User
 from personal.models import Cycle, WorkSession
-from tasks.models import Milestone, Task
+from tasks.models import Milestone, Task, DueDateChoice
 
 from datetime import timedelta
 import json
@@ -35,7 +35,7 @@ def index(request):
     else:
         work_session_start_time_timestamp = None
 
-    tasks_without_milestones = Task.objects.filter(milestone__isnull=True)
+    tasks_without_milestones = Task.objects.filter(milestone__isnull=True, due_date=DueDateChoice.DUE_TODAY.value).order_by('priority')
 
     today_work_sessions = WorkSession.get_today_work_sessions()
     today_total_work_session_duration = WorkSession.get_todays_work_sessions_duration()
