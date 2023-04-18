@@ -1,0 +1,47 @@
+<!-- work_sessions.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Sessions</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'personal/work_sessions.js' %}"></script>
+</head>
+<body>
+    <h1>Work Sessions</h1>
+    <button id="create-work-session" class="btn btn-primary">Create Work Session</button>
+    <ul id="work-session-list">
+        {% for work_session in work_sessions %}
+            <li id="work-session-{{ work_session.id }}">
+                Work Session {{ work_session.id }} - Start Time: {{ work_session.start_time|date:"g:i a" }} - End Time: {{ work_session.end_time|date:"g:i a" }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Modal -->
+    <div class="modal fade" id="end-time-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Set End Time</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="datetime-local" id="end-time-input" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="save-end-time" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

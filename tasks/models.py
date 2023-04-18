@@ -10,17 +10,18 @@ class DueDateChoice(Enum):
     DUE_TOMORROW = 2
     DUE_THIS_CYCLE = 3
     DUE_NEXT_CYCLE = 4
-    UNPLANIFIED = 5
+    UNPLANNED = 5
     COMPLETED = 6
 
 
 
 STATUS_CHOICES = [
-    ('TO_DO', 'To do'),
     ('IN_PROGRESS', 'In progress'),
-    ('CANCELLED', 'Cancelled'),
+    ('TO_DO', 'To do'),
     ('COMPLETED', 'Completed'),
+    ('BACKLOG', 'Backlog'),
     ('OUT_OF_SCOPE', 'Out Of Scope'),
+    ('CANCELLED', 'Cancelled'),
 ]
 
 class WorkItem (models.Model):
@@ -34,7 +35,7 @@ class WorkItem (models.Model):
     update_time = models.DateTimeField(auto_now=True)
     start_time = models.DateTimeField(blank=True, null = True)
     end_time = models.DateTimeField(blank=True, null = True)
-    due_date = models.IntegerField(choices=[(tag.value, tag.name.replace('_', ' ')) for tag in DueDateChoice], default=DueDateChoice.UNPLANIFIED.value)
+    due_date = models.IntegerField(choices=[(tag.value, tag.name.replace('_', ' ')) for tag in DueDateChoice], default=DueDateChoice.UNPLANNED.value)
 
     class Meta:
         abstract = True

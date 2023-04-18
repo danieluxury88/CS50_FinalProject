@@ -92,7 +92,7 @@ class MilestoneListView(ListView):
 
 class MilestoneDetailView(DetailView):
     model = Milestone
-    fields = ['title', 'estimated_duration', 'status', 'project', 'due_date', 'due_tomorrow']
+    fields = ['title', 'estimated_duration', 'status', 'project', 'due_date']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -108,7 +108,7 @@ class MilestoneDetailView(DetailView):
 
 class MilestoneCreateView(CreateView):
     model = Milestone
-    fields = ['title', 'estimated_duration', 'status', 'project', 'due_date', 'due_tomorrow']
+    fields = ['title', 'estimated_duration', 'status', 'project', 'due_date']
     
     def get_success_url(self):
         project_id = self.kwargs['project_id']
@@ -117,7 +117,7 @@ class MilestoneCreateView(CreateView):
 
 class MilestoneUpdateView(UpdateView):
     model = Milestone
-    fields = ['title', 'estimated_duration', 'status', 'project', 'due_date', 'due_tomorrow']
+    fields = ['title', 'estimated_duration', 'status', 'project', 'due_date']
 
     def get_success_url(self):
         project_id = self.kwargs['project_id']
@@ -200,6 +200,30 @@ def update_task(request, pk):
         template_name='tasks/task_form.html'
     )
     return update_view(request, pk=pk, form=form)
+
+
+@csrf_exempt
+def update_task_status(request, pk):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("status") is not None:
+            id = data["id"]
+            task = Task.objects.get(pk=id)
+            task.status = data["status"]
+            print(data["status"])
+            task.save()
+        return JsonResponse({"msg": "OK"})
+        data = json.loads(request.body)
+        if data.get("msg") is not None:
+            print(data["msg"])
+        return JsonResponse({"msg": "OMG OK"})
+
+    # Task must be updated via  PUT
+    else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)
+    return JsonResponse({"msg": "Link Ok"})
 
 
 @csrf_exempt

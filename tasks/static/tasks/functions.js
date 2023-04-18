@@ -119,7 +119,7 @@ function filterListByTitle() {
     console.log(status_content);
     console.log(status_content.innerHTML);
     console.log(status_content.textContent);
-    fetch(`${task_id}/update-status/`, {
+    fetch(`duty/tasks/${task_id}/update-status/`, {
       method: 'PUT',
       body: JSON.stringify({
         id: task_id,
@@ -129,4 +129,42 @@ function filterListByTitle() {
       status_content.textContent = status;
       filterListByStatus();
     })
+  }
+
+  function updateTaskDueDate(task_id, selectElement) {
+    console.log(task_id);
+    console.log(selectElement);
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    const selectedValue = selectedOption.value;
+    const selectedText = selectedOption.text;
+
+    console.log(`Selected Value: ${selectedValue}, Selected Text: ${selectedText}`);
+    // fetch(`${task_id}/update-task-due-date/`, {
+    //   method: 'PUT',
+    //   body: JSON.stringify({
+    //     id: task_id,
+    //     status: status,
+    //   })
+    // }).then(() => {
+    //   console.log("ok");
+    // })
+  }
+
+  function updateMilestoneDueDate(milestone_id, selectElement) {
+    console.log(milestone_id);
+    console.log(selectElement);
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    const selectedValue = selectedOption.value;
+    const selectedText = selectedOption.text;
+
+    console.log(`Selected Value: ${selectedValue}, Selected Text: ${selectedText}`);
+    // fetch(`${task_id}/update-milestone-due-date/`, {
+    //   method: 'PUT',
+    //   body: JSON.stringify({
+    //     id: milestone_id,
+    //     status: status,
+    //   })
+    // }).then(() => {
+    //   console.log("ok");
+    // })
   }

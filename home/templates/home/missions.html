@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% load tz %}
+{% load static %}
+
+{% block content %}
+        
+        <section id="Projects">
+            <div class="container my-3">
+                <div class="row">
+                    <div class="col-md-10">
+                    <h1 class="mx-1">Projects <span class="badge bg-secondary">{{ projects|length }}</span></h1>
+                        <div class="accordion" id="accordionPanelsStayOpenExample">
+                            {% for project in projects %}
+                            <div class="accordion-item my-2">
+                                <h2 class="accordion-header ">
+
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#panelsStayOpen-{{project.pk}}" aria-expanded="true"
+                                        aria-controls="panelsStayOpen-{{project.pk}}">
+                                        {{project.title}}
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">{{ project.milestones.all|length }}
+                                            <span class="visually-hidden">unread messages</span></span>
+                                    </button>
+                                </h2>
+
+                                <div id="panelsStayOpen-{{project.pk}}" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        {{ project.description|default:'' }}
+                                        <ol class="list-group list-group-numbered my-2">
+                                            {% for milestone in project.milestones.all %}                                       
+                                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <div class="fw-bold">
+                                                                <a href="{% url 'tasks:milestone_update' milestone.project.id milestone.id%}">
+                                                                    {{milestone.title}}
+                                                                </a>
+                                                            </div>
+                                                            {{ milestone.description|default:'' }}
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <form action="/action_page.php" id="myForm">
+                                                                <label for="dues">Due:</label>
+                                                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="milestone_due" id="milestone_due" onchange="updateMilestoneDueDate({{milestone.pk}}, this)">
+                                                                    <option value="1" {% if milestone.due_date == 1 %}selected{% endif %}>Today</option>
+                                                                    <option value="2" {% if milestone.due_date == 2 %}selected{% endif %}>Tomorrow</option>
+                                                                    <option value="3" {% if milestone.due_date == 3 %}selected{% endif %}>This Cycle</option>
+                                                                    <option value="4" {% if milestone.due_date == 4 %}selected{% endif %}>Next Cycle</option>
+                                                                    <option value="5" {% if milestone.due_date == 5 %}selected{% endif %}>Unplanned</option>
+                                                                    <option value="6" {% if milestone.due_date == 6 %}selected{% endif %}>Completed</option>
+                                                                </select>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            {% endfor %}
+                                        </ol>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 my-1 mx-1 ms-auto d-flex justify-content-end">
+                                            <a href="{% url 'tasks:project_delete' pk=project.id  %}"><button class="btn btn-primary w-200 mx-1"><i class="bi bi-trash"></i></button></a>
+                                            <a href="{% url 'tasks:project_update' pk=project.id  %}"><button class="btn btn-primary w-200 mx-1"><i class="bi bi-pencil-square"></i></button></a>
+                                            <a href="{% url 'tasks:milestone_create' project_id=project.id  %}"><button class="btn btn-primary w-200 mx-1"><i class="bi bi-plus-square-fill"></i></button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
+                                <a href="{% url 'tasks:project_create' %}"><button class="btn btn-primary position-relative start-0">New Project</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr style="border-top: 3px solid black;">
+
+        <section id="Independent Tasks">
+            <div class="container my-3">
+                <div class="row">
+                    
+                    <div class="col-md-10">
+                        <h1 class="mx-1">Independent Tasks <span class="badge bg-secondary">{{ independent_tasks|length }}</span></h1>
+                        <div class="accordion" id="accordionPanelsStayOpenExample">
+                            <div class="accordion-item my-2">
+                                <h2 class="accordion-header ">
+
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#panelsStayOpen-IndependentTasks" aria-expanded="true"
+                                        aria-controls="panelsStayOpen-IndependentTasks">
+                                        {{project.title}}
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">{{ independent_tasks|length }}
+                                            <span class="visually-hidden">unread messages</span></span>
+                                    </button>
+                                </h2>
+
+                                <div id="panelsStayOpen-IndependentTasks" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+                                        {{ project.description|default:'' }}
+                                        <div class = "row my-1">
+                                            <input type="text" id="title-filter" onkeyup="filterListByTitle()" placeholder="Filter by title...">
+                                        </div>
+                                        <div class = "row my-1">
+                                            <div class="col-md-10">
+                                                <button onclick="sortListByPriority()">Sort by priority</button>
+                                                <button onclick="sortListByDuration()">Sort by duration</button>
+                                                <button onclick="sortListByStatus()">Sort by status</button>
+                                            </div>
+                                        </div>
+                                        <div class = "row my-1">
+                                            <div class="col-md-10">
+                                                <input type="checkbox" name="status" value="TO_DO" onclick="filterListByStatus()" checked> To do
+                                                <input type="checkbox" name="status" value="IN_PROGRESS" onclick="filterListByStatus()" checked> In progress
+                                                <input type="checkbox" name="status" value="CANCELLED" onclick="filterListByStatus()"> Cancelled
+                                                <input type="checkbox" name="status" value="COMPLETED" onclick="filterListByStatus()"> Completed
+                                                <input type="checkbox" name="status" value="OUT_OF_SCOPE" onclick="filterListByStatus()"> Out of Scope
+                                                <input type="checkbox" name="status" value="BACKLOG" onclick="filterListByStatus()"> Backlog
+                                            </div>
+                                        <div>
+                                        <ol class="list-group list-group-numbered my-2">
+                                            <div class="work-items-container">
+                                            {% for task in independent_tasks %}     
+                                            <div class="work-item">
+                                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                    <div class="fw-bold title">
+                                                                        <a href="{% url 'tasks:task_update' task.pk %}">
+                                                                        {{task.title}}
+                                                                        </a>
+                                                                    </div>
+                                                                    {{ task.description|default:'' }}
+                                                                    <p>
+                                                                        <span class="label"><strong>Status:</strong></span>
+                                                                        <span class="status" id = "status_{{task.pk}}">{{ task.status }}</span>
+                                                                        <span class="label"><strong>Priority:</strong></span>
+                                                                        <span class="priority">{{ task.priority }}</span>
+                                                                        <span class="label"><strong>Duration:</strong></span>
+                                                                        <span class="duration">{{ task.estimated_duration }}</span>
+                                                                    </p>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},"TO_DO")'
+                                                                    role="button">To Do</a>
+
+                                                                <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},"IN_PROGRESS")'
+                                                                    role="button">In Progress</a>
+
+                                                                <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},"COMPLETED")'
+                                                                    role="button">Completed</a>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <form action="/action_page.php" id="myForm">
+                                                                    <label for="dues">Due:</label>
+                                                                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="task_due" id="task_due" onchange="updateTaskDueDate({{task.pk}}, this)">
+                                                                        <option value="1" {% if task.due_date == 1 %}selected{% endif %}>Today</option>
+                                                                        <option value="2" {% if task.due_date == 2 %}selected{% endif %}>Tomorrow</option>
+                                                                        <option value="3" {% if task.due_date == 3 %}selected{% endif %}>This Cycle</option>
+                                                                        <option value="4" {% if task.due_date == 4 %}selected{% endif %}>Next Cycle</option>
+                                                                        <option value="5" {% if task.due_date == 5 %}selected{% endif %}>Unplanned</option>
+                                                                        <option value="6" {% if task.due_date == 6 %}selected{% endif %}>Completed</option>
+                                                                    </select>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </div>
+                                            {% endfor %}
+                                            </div>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="row">
+                            <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
+                                <a href="{% url 'tasks:task_create_alone' %}"><button class="btn btn-primary position-relative start-0">Create Task</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}
+
+{% block extend_footer %}
+<script>
+
+    const djangoCycleData = {
+        csrfToken: "{{ csrf_token }}",
+        createCycleUrl: "{% url 'personal:create_cycle' %}",
+    };
+    document.addEventListener("DOMContentLoaded", function() {
+        const starCycleBtn = document.getElementById('cycle-start-button');
+        starCycleBtn.addEventListener('click', StartCycle);
+    });
+</script>
+
+<script>
+    function printSelectedOption(milestone_id) {
+        const selectElement = document.getElementById('milestone_due');
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const selectedValue = selectedOption.value;
+        const selectedText = selectedOption.text;
+
+        console.log(`MilestoneId: ${milestone_id} Selected Value: ${selectedValue}, Selected Text: ${selectedText}`);
+    }
+</script>
+
+<script src="{% static 'home/work_cycle.js' %}"></script>
+<script src="{% static 'tasks/functions.js' %}"></script>
+{%endblock%}

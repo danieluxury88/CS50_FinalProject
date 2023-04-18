@@ -194,15 +194,20 @@
 </section>
 <hr style="border-top: 3px solid black;">
 
+
+<button class="btn btn-sm btn-outline-primary" id="show">show</button>
+<button class="btn btn-sm btn-outline-primary" id="hide">hide</button>
+
+<div id="emails-view">
+
+</div>
+
 {% endblock %}
 
-
-
-
 {% block extend_footer %}
-<script>
 
-</script>
+    <script src="{% static 'home/test.js' %}"></script>
+
 {%endblock%}
 
 

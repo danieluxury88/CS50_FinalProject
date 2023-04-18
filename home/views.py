@@ -12,7 +12,7 @@ from personal.models import Cycle, WorkSession
 
 from .models import User
 from personal.models import Cycle, WorkSession
-from tasks.models import Milestone, Task, DueDateChoice
+from tasks.models import Project,Milestone, Task, DueDateChoice
 
 from datetime import timedelta
 import json
@@ -49,6 +49,45 @@ def index(request):
               "today_total_work_session_duration":today_total_work_session_duration,
               }
     return render(request, "home/index.html", context)
+
+
+class MissionView(View):
+    def get(self, request):
+        current_cycle = Cycle.get_current_cycle()
+        if current_cycle:
+            current_cycle_str = json.dumps(current_cycle.to_dict())
+        else:
+            current_cycle_str = None
+
+
+        projects = Project.objects.all()
+        # independent_tasks = Task.objects.filter(milestone__isnull=True).exclude(due_date=DueDateChoice.COMPLETED.value).exclude(status='COMPLETED').order_by('priority').order_by('due_date')
+        independent_tasks = Task.objects.filter(milestone__isnull=True).order_by('-status').order_by('due_date').order_by('priority').order_by('due_date')
+
+        context= {
+                  "current_cycle_str":current_cycle_str,
+                  "projects":projects,
+                   "independent_tasks": independent_tasks,
+              }
+        return render(request, 'home/missions.html', context)
+    
+
+class TestView(View):
+    def get(self, request):
+        current_cycle = Cycle.get_current_cycle()
+        if current_cycle:
+            current_cycle_str = json.dumps(current_cycle.to_dict())
+        else:
+            current_cycle_str = None
+
+        context= {
+                  "current_cycle_str":current_cycle_str,
+              }
+        return render(request, 'home/test.html', context)
+
+
+
+#region authentication
 
 def login_view(request):
     if request.method == "POST":
@@ -100,21 +139,8 @@ def register(request):
         return HttpResponseRedirect(reverse("home:index"))
     else:
         return render(request, "home/register.html")
+    
+#endregion
 
     
     
-class TestView(View):
-    def get(self, request):
-        current_cycle = Cycle.get_current_cycle()
-        if current_cycle:
-            current_cycle_str = json.dumps(current_cycle.to_dict())
-        else:
-            current_cycle_str = None
-
-
-        
-
-        context= {
-                  "current_cycle_str":current_cycle_str,
-              }
-        return render(request, 'home/test.html', context)

@@ -74,3 +74,16 @@ function myFunction() {
   console.log('Button clicked!');
 }
 
+
+function viewTask(taskId) {
+    console.log(taskId);
+    // Get the list item element
+    const listItem = document.querySelector(`[data-url*="tasks/task_update/${taskId}/"]`);
+
+    // Get the URL from the data-url attribute
+    const url = listItem.getAttribute('data-url');
+
+    // Navigate to the URL
+    window.location.href = url;
+}
+
