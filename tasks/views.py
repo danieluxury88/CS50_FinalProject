@@ -8,7 +8,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Milestone, Project, Task
+from .models import Milestone, Project, Task, Status
 from personal.models import Cycle
 from .forms import TaskForm
 
@@ -209,34 +209,13 @@ def update_task_status(request, pk):
         if data.get("status") is not None:
             id = data["id"]
             task = Task.objects.get(pk=id)
-            task.status = data["status"]
-            print(data["status"])
+            status = data["status"]
+            task.status = status
             task.save()
-        return JsonResponse({"msg": "OK"})
-        data = json.loads(request.body)
-        if data.get("msg") is not None:
-            print(data["msg"])
-        return JsonResponse({"msg": "OMG OK"})
 
-    # Task must be updated via  PUT
-    else:
-        return JsonResponse({
-            "error": "GET or PUT request required."
-        }, status=400)
-    return JsonResponse({"msg": "Link Ok"})
-
-
-@csrf_exempt
-def update_task_status(request, pk):
-    if request.method == "PUT":
-        data = json.loads(request.body)
-        if data.get("status") is not None:
-            id = data["id"]
-            task = Task.objects.get(pk=id)
-            task.status = data["status"]
-            print(data["status"])
-            task.save()
-        return JsonResponse({"msg": "OK"})
+            status_str = Status(status)
+            status_str_rep = status_str.name.replace('_', ' ')
+        return JsonResponse({"msg": "OK", "status": status_str_rep})
         data = json.loads(request.body)
         if data.get("msg") is not None:
             print(data["msg"])

@@ -46,7 +46,6 @@ def work_sessions_no_csrf(request):
 
 def index(request):
     cycle = Cycle.get_current_cycle()
-    print(cycle)
     work_session = WorkSession.get_current_work_session()
         
     dates = Date.objects.all()

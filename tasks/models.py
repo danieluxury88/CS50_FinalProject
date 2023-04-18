@@ -13,16 +13,15 @@ class DueDateChoice(Enum):
     UNPLANNED = 5
     COMPLETED = 6
 
+@unique
+class Status(Enum):
+    IN_PROGRESS = 1
+    TO_DO = 2
+    COMPLETED = 3 
+    BACKLOG = 4
+    OUT_OF_SCOPE = 5
+    CANCELLED = 6
 
-
-STATUS_CHOICES = [
-    ('IN_PROGRESS', 'In progress'),
-    ('TO_DO', 'To do'),
-    ('COMPLETED', 'Completed'),
-    ('BACKLOG', 'Backlog'),
-    ('OUT_OF_SCOPE', 'Out Of Scope'),
-    ('CANCELLED', 'Cancelled'),
-]
 
 class WorkItem (models.Model):
     title = models.CharField(max_length=300)
@@ -30,7 +29,7 @@ class WorkItem (models.Model):
     priority = models.IntegerField(default=9)
     title = models.CharField(max_length=300)
     estimated_duration = models.IntegerField(default = 0, blank= True,  null=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='TO_DO')
+    status = models.IntegerField(choices=[(tag.value, tag.name.replace('_', ' ')) for tag in Status], default=Status.TO_DO.value)
     creation_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
     start_time = models.DateTimeField(blank=True, null = True)

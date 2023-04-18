@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-  console.log('page loaded');
   filterListByStatus();
   sortListByPriority();
 });
@@ -71,6 +70,7 @@ function filterListByTitle() {
     workItems = Array.prototype.slice.call(workItems, 0);
     let selectedStatuses = Array.from(document.querySelectorAll('input[name="status"]:checked'))
       .map(function(checkbox) { return checkbox.value; });
+
     workItems.forEach(function(item) {
       let status = item.querySelector('.status').textContent.toUpperCase();
       if (selectedStatuses.length === 0 || selectedStatuses.includes(status)) {
@@ -116,17 +116,17 @@ function filterListByTitle() {
 
   function updateStatus(task_id, status) {
     let status_content = document.getElementById(`status_${task_id}`);
-    console.log(status_content);
-    console.log(status_content.innerHTML);
-    console.log(status_content.textContent);
     fetch(`duty/tasks/${task_id}/update-status/`, {
       method: 'PUT',
       body: JSON.stringify({
         id: task_id,
         status: status,
       })
+    }).then(response => response.json())
+      .then(data => {
+        const newStatus = data.status;
+        status_content.textContent = newStatus;
     }).then(() => {
-      status_content.textContent = status;
       filterListByStatus();
     })
   }

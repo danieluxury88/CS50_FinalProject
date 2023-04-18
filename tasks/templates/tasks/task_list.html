@@ -32,9 +32,9 @@
         </p>
       </div>
       <a href="{% url 'tasks:task_update' task.pk %}"><i class="fa fa-trash">update</i></a>
-      <button type="submit" class="btn-danger col-3"  onclick='updateStatus( {{task.pk}},"TO_DO")'>To Do</button>
-      <button type="submit" class="btn-danger col-3"  onclick='updateStatus( {{task.pk}},"IN_PROGRESS" )'>In Progress</button>
-      <button type="submit" class="btn-danger col-3"  onclick='updateStatus( {{task.pk}},"COMPLETED" )'>Completed</button>
+      <button type="submit" class="btn-danger col-3"  onclick='updateStatus( {{task.pk}},1 )'>In Progress</button>
+      <button type="submit" class="btn-danger col-3"  onclick='updateStatus( {{task.pk}},2)'>To Do</button>
+      <button type="submit" class="btn-danger col-3"  onclick='updateStatus( {{task.pk}},3 )'>Completed</button>
     </br>
   </div>
   

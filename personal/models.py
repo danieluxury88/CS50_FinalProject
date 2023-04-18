@@ -134,7 +134,6 @@ class WorkSession(models.Model):
             if session.end_time is not None:
                 total_duration += session.end_time - session.start_time
 
-        print(total_duration)
         hours, remainder = divmod(total_duration.seconds, 3600)
         minutes, _ = divmod(remainder, 60)
         return f"{hours}h {minutes}m"

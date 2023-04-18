@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load tz %}
 {% load static %}
+{% load due_date_tags %}
 
 {% block content %}
         
@@ -118,11 +119,11 @@
                                         </div>
                                         <div class = "row my-1">
                                             <div class="col-md-10">
-                                                <input type="checkbox" name="status" value="TO_DO" onclick="filterListByStatus()" checked> To do
-                                                <input type="checkbox" name="status" value="IN_PROGRESS" onclick="filterListByStatus()" checked> In progress
+                                                <input type="checkbox" name="status" value="IN PROGRESS" onclick="filterListByStatus()" checked> In progress
+                                                <input type="checkbox" name="status" value="TO DO" onclick="filterListByStatus()" checked> To do
                                                 <input type="checkbox" name="status" value="CANCELLED" onclick="filterListByStatus()"> Cancelled
                                                 <input type="checkbox" name="status" value="COMPLETED" onclick="filterListByStatus()"> Completed
-                                                <input type="checkbox" name="status" value="OUT_OF_SCOPE" onclick="filterListByStatus()"> Out of Scope
+                                                <input type="checkbox" name="status" value="OUT OF_SCOPE" onclick="filterListByStatus()"> Out of Scope
                                                 <input type="checkbox" name="status" value="BACKLOG" onclick="filterListByStatus()"> Backlog
                                             </div>
                                         <div>
@@ -142,7 +143,7 @@
                                                                     {{ task.description|default:'' }}
                                                                     <p>
                                                                         <span class="label"><strong>Status:</strong></span>
-                                                                        <span class="status" id = "status_{{task.pk}}">{{ task.status }}</span>
+                                                                        <span class="status" id = "status_{{task.pk}}">{{ task.status|status_display }}</span>
                                                                         <span class="label"><strong>Priority:</strong></span>
                                                                         <span class="priority">{{ task.priority }}</span>
                                                                         <span class="label"><strong>Duration:</strong></span>
@@ -150,13 +151,13 @@
                                                                     </p>
                                                             </div>
                                                             <div class="col-md-4">
-                                                                <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},"TO_DO")'
-                                                                    role="button">To Do</a>
-
-                                                                <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},"IN_PROGRESS")'
+                                                                <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},1)'
                                                                     role="button">In Progress</a>
 
-                                                                <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},"COMPLETED")'
+                                                                <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},2)'
+                                                                    role="button">To Do</a>
+
+                                                                <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},3)'
                                                                     role="button">Completed</a>
                                                             </div>
                                                             <div class="col-md-4">
