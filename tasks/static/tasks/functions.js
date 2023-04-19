@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function filterListByTitle() {
+    console.log("filterListByTitle");
     let input = document.querySelector('#title-filter');
     let filter = input.value.toUpperCase();
     let workItems = document.querySelectorAll('.work-item');
@@ -19,6 +20,7 @@ function filterListByTitle() {
 
   let durationSortedAscending = false;
   function sortListByDuration() {
+    console.log("sortListByDuration");
     let workItems = document.querySelectorAll('.work-item');
     workItems = Array.prototype.slice.call(workItems, 0);
     workItems.sort(function(a, b) {
@@ -41,6 +43,7 @@ function filterListByTitle() {
 
   let statusSortedAscending = false;
   function sortListByStatus() {
+    console.log("sortListByStatus");
     let workItems = document.querySelectorAll('.work-item');
     workItems = Array.prototype.slice.call(workItems, 0);
     workItems.sort(function(a, b) {
@@ -66,6 +69,7 @@ function filterListByTitle() {
   }
 
   function filterListByStatus() {
+    console.log("filterListByStatus");
     let workItems = document.querySelectorAll('.work-item');
     workItems = Array.prototype.slice.call(workItems, 0);
     let selectedStatuses = Array.from(document.querySelectorAll('input[name="status"]:checked'))
@@ -84,6 +88,7 @@ function filterListByTitle() {
 
   let prioritySortedAscending = true;
   function sortListByPriority() {
+    console.log("sortListByPriority");
     let workItems = document.querySelectorAll('.work-item');
     workItems = Array.prototype.slice.call(workItems, 0);
     workItems.sort(function(a, b) {
@@ -106,6 +111,7 @@ function filterListByTitle() {
 
 
   function update_task_state(task_id , state) {
+    console.log("update_task_state");
     fetch(`tasks/${task_id}/update` , {
         method: 'PUT',
         body: JSON.stringify({
@@ -115,6 +121,7 @@ function filterListByTitle() {
   }
 
   function updateStatus(task_id, status) {
+    console.log("updateStatus");
     let status_content = document.getElementById(`status_${task_id}`);
     fetch(`duty/tasks/${task_id}/update-status/`, {
       method: 'PUT',
@@ -132,39 +139,46 @@ function filterListByTitle() {
   }
 
   function updateTaskDueDate(task_id, selectElement) {
+    console.log("updateTaskDueDate");
     console.log(task_id);
     console.log(selectElement);
     const selectedOption = selectElement.options[selectElement.selectedIndex];
     const selectedValue = selectedOption.value;
     const selectedText = selectedOption.text;
 
+    console.log(selectedText);
+    console.log(selectedValue);
+
     console.log(`Selected Value: ${selectedValue}, Selected Text: ${selectedText}`);
-    // fetch(`${task_id}/update-task-due-date/`, {
-    //   method: 'PUT',
-    //   body: JSON.stringify({
-    //     id: task_id,
-    //     status: status,
-    //   })
-    // }).then(() => {
-    //   console.log("ok");
-    // })
+    fetch(`duty/tasks/${task_id}/update-task-due-date/`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        id: task_id,
+        due_date: selectedValue,
+      })
+    }).then(() => {
+      console.log("ok");
+    })
   }
 
   function updateMilestoneDueDate(milestone_id, selectElement) {
+    console.log("updateMilestoneDueDate");
     console.log(milestone_id);
     console.log(selectElement);
     const selectedOption = selectElement.options[selectElement.selectedIndex];
     const selectedValue = selectedOption.value;
     const selectedText = selectedOption.text;
+    console.log(selectedText);
+    console.log(selectedValue);
 
     console.log(`Selected Value: ${selectedValue}, Selected Text: ${selectedText}`);
-    // fetch(`${task_id}/update-milestone-due-date/`, {
-    //   method: 'PUT',
-    //   body: JSON.stringify({
-    //     id: milestone_id,
-    //     status: status,
-    //   })
-    // }).then(() => {
-    //   console.log("ok");
-    // })
+    fetch(`duty/milestones/${milestone_id}/update-milestone-due-date/`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        id: milestone_id,
+        due_date: selectedValue,
+      })
+    }).then(() => {
+      console.log("ok");
+    })
   }

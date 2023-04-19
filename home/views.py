@@ -35,6 +35,9 @@ def index(request):
     else:
         work_session_start_time_timestamp = None
 
+    milestones_due_today = Milestone.objects.filter(due_date=DueDateChoice.DUE_TODAY.value)
+    print(milestones_due_today)
+
     tasks_without_milestones = Task.objects.filter(milestone__isnull=True, due_date=DueDateChoice.DUE_TODAY.value).order_by('priority')
 
     today_work_sessions = WorkSession.get_today_work_sessions()
@@ -44,6 +47,7 @@ def index(request):
     context= {"msg": "ok", 
               "current_cycle_str":current_cycle_str,
               "work_session_start_time": work_session_start_time_timestamp,
+              "milestones_for_today":milestones_due_today,
               "tasks_without_milestones": tasks_without_milestones,
               "today_work_sessions":today_work_sessions,
               "today_total_work_session_duration":today_total_work_session_duration,

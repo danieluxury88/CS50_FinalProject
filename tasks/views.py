@@ -111,8 +111,11 @@ class MilestoneCreateView(CreateView):
     fields = ['title', 'estimated_duration', 'status', 'project', 'due_date']
     
     def get_success_url(self):
-        project_id = self.kwargs['project_id']
-        return reverse('tasks:project_detail', args=[project_id])
+        try:
+            project_id = self.kwargs['project_id']
+            return reverse('tasks:project_detail', args=[project_id])
+        except:
+            return reverse('home:index')
     
 
 class MilestoneUpdateView(UpdateView):
@@ -120,8 +123,11 @@ class MilestoneUpdateView(UpdateView):
     fields = ['title', 'estimated_duration', 'status', 'project', 'due_date']
 
     def get_success_url(self):
-        project_id = self.kwargs['project_id']
-        return reverse('tasks:project_detail', args=[project_id])
+        try:
+            project_id = self.kwargs['project_id']
+            return reverse('tasks:project_detail', args=[project_id])
+        except:
+            return reverse('home:index')
     
 
 class MilestoneDeleteView(DeleteView):
@@ -129,8 +135,11 @@ class MilestoneDeleteView(DeleteView):
     success_url = reverse_lazy('tasks:project_detail')
 
     def get_success_url(self):
-        project_id = self.kwargs['project_id']
-        return reverse('tasks:project_detail', args=[project_id])
+        try:
+            project_id = self.kwargs['project_id']
+            return reverse('tasks:project_detail', args=[project_id])
+        except:
+            return reverse('home:index')
     
  # endregion
 
@@ -215,8 +224,7 @@ def update_task_status(request, pk):
 
             status_str = Status(status)
             status_str_rep = status_str.name.replace('_', ' ')
-        return JsonResponse({"msg": "OK", "status": status_str_rep})
-        data = json.loads(request.body)
+            return JsonResponse({"msg": "OK", "status": status_str_rep})
         if data.get("msg") is not None:
             print(data["msg"])
         return JsonResponse({"msg": "OMG OK"})
@@ -226,4 +234,49 @@ def update_task_status(request, pk):
         return JsonResponse({
             "error": "GET or PUT request required."
         }, status=400)
-    return JsonResponse({"msg": "Link Ok"})
+
+
+@csrf_exempt
+def update_task_due_date(request, pk):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("due_date") is not None:
+            id = data["id"]
+            task = Task.objects.get(pk=id)
+            due_date = data["due_date"]
+            task.due_date = due_date
+            task.save()
+            return JsonResponse({"msg": "OK"})
+        if data.get("msg") is not None:
+            print(data["msg"])
+        return JsonResponse({"msg": "OMG OK"})
+
+    # Task must be updated via  PUT
+    else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)
+    
+
+@csrf_exempt
+def update_milestone_due_date(request, pk):
+    if request.method == "PUT":
+        print("MILESTONE DUE DATE UPDATE")
+        data = json.loads(request.body)
+        if data.get("due_date") is not None:
+            id = data["id"]
+            milestone = Milestone.objects.get(pk=id)
+            due_date = data["due_date"]
+            print("MILESTONE DUE_DATE", due_date)
+            milestone.due_date = due_date
+            milestone.save()
+            return JsonResponse({"msg": "OK"})
+        if data.get("msg") is not None:
+            print(data["msg"])
+        return JsonResponse({"msg": "OMG OK"})
+
+    # Task must be updated via  PUT
+    else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)

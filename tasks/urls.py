@@ -22,6 +22,8 @@ tasks_patterns = [
     path('tasks/<int:pk>/', TaskDetailView.as_view(), name='task_detail'),
     path('tasks/<int:pk>/update/', views.update_task, name="task_update"),
     path('tasks/<int:pk>/update-status/', views.update_task_status, name="task_update_status"),
+    path('tasks/<int:pk>/update-task-due-date/', views.update_task_due_date, name="task_update_due_date"),
+    
 ]
 
     # URLs for Milestones
@@ -30,7 +32,11 @@ milestone_patterns = [
     path('<int:project_id>/milestones/create', MilestoneCreateView.as_view(), name='milestone_create'),
     path('<int:project_id>/milestones/<int:pk>/', MilestoneDetailView.as_view(), name='milestone_detail'),
     path('<int:project_id>/milestones/<int:pk>/update/', MilestoneUpdateView.as_view(), name='milestone_update'),
-    path('<int:project_id>/milestones/<int:pk>/delete/', MilestoneDeleteView.as_view(), name='milestone_delete')
+    path('<int:project_id>/milestones/<int:pk>/delete/', MilestoneDeleteView.as_view(), name='milestone_delete'),
+    path('milestones/create', MilestoneCreateView.as_view(), name='milestone_single_create'),
+    path('milestones/<int:pk>/update/', MilestoneUpdateView.as_view(), name='milestone_single_update'),
+    path('milestones/<int:pk>/delete/', MilestoneDeleteView.as_view(), name='milestone_single_delete'),
+    path('milestones/<int:pk>/update-milestone-due-date/', views.update_milestone_due_date, name="milestone_update_due_date"),
 ]
 
 urlpatterns = [

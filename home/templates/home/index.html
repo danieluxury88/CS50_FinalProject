@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load tz %}
 {% load static %}
+{% load due_date_tags %}
 
 {% block content %}
         
@@ -10,99 +11,90 @@
                     <div class="col-md-10">
                     <h1 class="mx-1">Goals <span class="badge bg-secondary">2</span></h1>
                         <div class="accordion" id="accordionPanelsStayOpenExample">
+                            {% for milestone in milestones_for_today %}
                             <div class="accordion-item my-2">
                                 <h2 class="accordion-header ">
 
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                                        aria-controls="panelsStayOpen-collapseOne">
-                                        Integrate With Django
+                                        data-bs-target="#panelsStayOpen-{{milestone.pk}}" aria-expanded="true"
+                                        aria-controls="panelsStayOpen-{{milestone.pk}}">
+                                        {{milestone.title}}
                                         <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">{{milestone.tasks.all|length}}
                                             <span class="visually-hidden">unread messages</span></span>
                                     </button>
 
                                 </h2>
 
-                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+                                <div id="panelsStayOpen-{{milestone.pk}}" class="accordion-collapse collapse">
                                     <div class="accordion-body">
-                                        Integrate work cycle, work-cycle, tasks, events
+                                        {{milestone.description|default:''}}
                                         <ol class="list-group list-group-numbered my-2">
-                                            <li class="list-group-item d-flex justify-content-between align-items-start"
-                                                onclick="myFunction()" title="Click to take a note">
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-md-8">
-                                                            <div class="fw-bold">
-                                                                Integrate cycle logic
+                                            {% for task in milestone.tasks.all %}   
+                                            <div class="work-item">
+                                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                    <div class="fw-bold title">
+                                                                        <a href="{% url 'tasks:task_update' task.pk %}">
+                                                                        {{task.title}}
+                                                                        </a>
+                                                                    </div>
+                                                                    {{ task.description|default:'' }}
+                                                                    <p>
+                                                                        <span class="label"><strong>Status:</strong></span>
+                                                                        <span class="status" id = "status_{{task.pk}}">{{ task.status|status_display }}</span>
+                                                                        <span class="label"><strong>Priority:</strong></span>
+                                                                        <span class="priority">{{ task.priority }}</span>
+                                                                        <span class="label"><strong>Duration:</strong></span>
+                                                                        <span class="duration">{{ task.estimated_duration }}</span>
+                                                                    </p>
                                                             </div>
-                                                            Content for list item
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button">To Do</a>
+                                                            <div class="col-md-4">
+                                                                <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},1)'
+                                                                    role="button">In Progress</a>
 
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button">In Progress</a>
+                                                                <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},2)'
+                                                                    role="button">To Do</a>
 
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button">Completed</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-start"
-                                                onclick="myFunction()" title="Click to take a note">
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-md-8">
-                                                            <div class="fw-bold">
-                                                                Add Work Cycle logic
+                                                                <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},3)'
+                                                                    role="button">Completed</a>
                                                             </div>
-                                                            Content for list item
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button">To Do</a>
-
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button">In Progress</a>
-
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button">Completed</a>
+                                                            <div class="col-md-4">
+                                                                <form action="/action_page.php" id="myForm">
+                                                                    <label for="dues">Due:</label>
+                                                                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="task_due" id="task_due" onchange="updateTaskDueDate({{task.pk}}, this)">
+                                                                        <option value="1" {% if task.due_date == 1 %}selected{% endif %}>Today</option>
+                                                                        <option value="2" {% if task.due_date == 2 %}selected{% endif %}>Tomorrow</option>
+                                                                        <option value="3" {% if task.due_date == 3 %}selected{% endif %}>This Cycle</option>
+                                                                        <option value="4" {% if task.due_date == 4 %}selected{% endif %}>Next Cycle</option>
+                                                                        <option value="5" {% if task.due_date == 5 %}selected{% endif %}>Unplanned</option>
+                                                                        <option value="6" {% if task.due_date == 6 %}selected{% endif %}>Completed</option>
+                                                                    </select>
+                                                                </form>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </li>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-start"
-                                        onclick="myFunction()" title="Click to take a note">
-                                            <div class="container">
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                        <div class="fw-bold">
-                                                            Add Milestone logic
-                                                        </div>
-                                                        Content for list item
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <a class="btn btn-outline-primary" href="#"
-                                                            role="button">To Do</a>
-
-                                                        <a class="btn btn-outline-primary" href="#"
-                                                            role="button">In Progress</a>
-
-                                                        <a class="btn btn-outline-primary" href="#"
-                                                            role="button">Completed</a>
-                                                    </div>
-                                                </div>
+                                                </li>
                                             </div>
-                                        </li>
+                                            {% endfor %}
                                         </ol>
                                     </div>
-                                    <div class="col-md-2 my-1 mx-1 ms-auto d-flex justify-content-end">
-                                        <button class="btn btn-primary"> New Task</button>
+                                    <div class="row">
+                                        <div class="col-md-4 my-1 mx-1 ms-auto d-flex justify-content-end">
+                                            <a href="{% url 'tasks:milestone_single_delete' pk=milestone.id  %}"><button class="btn btn-primary w-200 mx-1"><i class="bi bi-trash"></i></button></a>
+                                            <a href="{% url 'tasks:milestone_single_update' pk=milestone.id  %}"><button class="btn btn-primary w-200 mx-1"><i class="bi bi-pencil-square"></i></button></a>
+                                            <a href="{% url 'tasks:task_create_alone' %}"><button class="btn btn-primary w-200 mx-1"><i class="bi bi-plus-square-fill"></i></button></a>
+                                        </div>
                                     </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            
+                            <div class="row">
+                                <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
+                                    <a href="{% url 'tasks:milestone_single_create' %}"><button class="btn btn-primary position-relative start-0"> New Milestone</button></a>
                                 </div>
                             </div>
 
@@ -112,7 +104,7 @@
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true"
                                         aria-controls="panelsStayOpen-collapseTwo">
-                                        Indepent Tasks
+                                        Independent Tasks
                                         <span
                                             class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">{{ tasks_without_milestones|length }}
                                             <span class="visually-hidden">unread messages</span>
@@ -123,7 +115,6 @@
 
                                 <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
                                     <div class="accordion-body">
-                                        Independent Tasks
                                         <ol class="list-group list-group-numbered my-2">
                                             {% for task in tasks_without_milestones  %}                                            
                                                 <li class="list-group-item d-flex justify-content-between align-items-start"
@@ -159,11 +150,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
-                                <button class="btn btn-primary position-relative start-0"> New Milestone</button>
-                            </div>
-                        </div>
+
 
 
                     </div>
