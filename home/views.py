@@ -87,8 +87,19 @@ class TestView(View):
         else:
             current_cycle_str = None
 
+        completed_milestones = Milestone.objects.filter(status=Status.COMPLETED.value)
+        completed_independent_tasks = Task.objects.filter(milestone__isnull=True, status=Status.COMPLETED.value).order_by('priority')
+        today_work_sessions = WorkSession.get_today_work_sessions()
+        today_total_work_session_duration = WorkSession.get_todays_work_sessions_duration()
+
+
         context= {
                   "current_cycle_str":current_cycle_str,
+                  "completed_milestones":completed_milestones,
+                  "completed_independent_tasks":completed_independent_tasks,
+                  "today_work_sessions":today_work_sessions,
+                "today_total_work_session_duration":today_total_work_session_duration,
+
               }
         return render(request, 'home/test.html', context)
 

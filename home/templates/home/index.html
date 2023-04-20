@@ -22,7 +22,7 @@
             <div class="container my-3">
                 <div class="row">
                     <div class="col-md-10">
-                    <h1 class="mx-1">Goals <span class="badge bg-secondary">2</span></h1>
+                    <h1 class="mx-1">Goals <span class="badge bg-secondary">{{milestones_for_today|length}}</span></h1>
                         <div class="accordion" id="accordionPanelsStayOpenExample">
                             {% for milestone in milestones_for_today %}
                             <div class="accordion-item my-2">
