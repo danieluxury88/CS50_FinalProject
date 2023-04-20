@@ -120,7 +120,6 @@ class ReportView(View):
             current_cycle_str = json.dumps(current_cycle.to_dict())
         else:
             current_cycle_str = None
-        print(self.day)
         completed_milestones = Milestone.objects.filter(status=Status.COMPLETED.value, end_time__date=self.day)
         completed_independent_tasks = Task.objects.filter(milestone__isnull=True, status=Status.COMPLETED.value, end_time__date=self.day).order_by('priority')
 

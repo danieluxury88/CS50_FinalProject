@@ -8,8 +8,6 @@ Organize and measure your daily life. Create cycles of time, define objectives a
 - [Technologies Used](#technologies-used)
 - [Installation Instructions](#installation-instructions)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Project Description
 
@@ -61,11 +59,3 @@ Create 3 apps to split logic.
 ## Usage
 
 Explain how to use the project. Provide examples, screenshots, or links to live demos if applicable.
-
-## Contributing
-
-Explain how others can contribute to your project. Include guidelines for code formatting, branch naming conventions, and commit message formats.
-
-## License
-
-Include information about the license for your project, including any copyright or authorship notices. Also indicate whether contributions are accepted under the same license.

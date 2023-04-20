@@ -194,10 +194,8 @@ class TaskUpdateView(UpdateView):
         try:
             project_id = self.kwargs['project_id']
             milestone_id = self.kwargs['milestone_id']
-            print("ok")
             return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
         except:
-            print("nok")
             return reverse('home:index')
 
 
@@ -277,13 +275,11 @@ def update_task_due_date(request, pk):
 @csrf_exempt
 def update_milestone_due_date(request, pk):
     if request.method == "PUT":
-        print("MILESTONE DUE DATE UPDATE")
         data = json.loads(request.body)
         if data.get("due_date") is not None:
             id = data["id"]
             milestone = Milestone.objects.get(pk=id)
             due_date = data["due_date"]
-            print("MILESTONE DUE_DATE", due_date)
             milestone.due_date = due_date
             milestone.save()
             return JsonResponse({"msg": "OK"})

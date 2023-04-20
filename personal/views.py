@@ -61,7 +61,6 @@ def test_register_event(request):
         try:
             data = json.loads(request.body)
             event_type = EventType.objects.get(pk= data.get('event_type'))
-            print(event_type);
             date = timezone.now()
             event = Event.objects.create(date=date, event_type=event_type, title = event_type.title)
             event.save()
