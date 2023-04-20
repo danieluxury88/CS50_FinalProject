@@ -112,6 +112,31 @@ class TestView(View):
 
               }
         return render(request, 'home/test.html', context)
+    
+
+class ReportView(View):
+    def get(self, request):
+        current_cycle = Cycle.get_current_cycle()
+        if current_cycle:
+            current_cycle_str = json.dumps(current_cycle.to_dict())
+        else:
+            current_cycle_str = None
+
+        completed_milestones = Milestone.objects.filter(status=Status.COMPLETED.value)
+        completed_independent_tasks = Task.objects.filter(milestone__isnull=True, status=Status.COMPLETED.value).order_by('priority')
+        today_work_sessions = WorkSession.get_today_work_sessions()
+        today_total_work_session_duration = WorkSession.get_todays_work_sessions_duration()
+
+
+        context= {
+                  "current_cycle_str":current_cycle_str,
+                  "completed_milestones":completed_milestones,
+                  "completed_independent_tasks":completed_independent_tasks,
+                  "today_work_sessions":today_work_sessions,
+                "today_total_work_session_duration":today_total_work_session_duration,
+
+              }
+        return render(request, 'home/report.html', context)
 
 
 

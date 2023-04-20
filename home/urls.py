@@ -12,6 +12,7 @@ urlpatterns = [
     
     path('', views.index, name ='index'),
     path('missions', views.MissionView.as_view(), name ='missions'),
+    path('today-report', views.ReportView.as_view(), name ='today-report'),
     path('test', views.TestView.as_view(), name ='test'),
 
 ]

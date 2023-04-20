@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load tz %}
+{% load static %}
+
+{% block content %}
+
+
+
+<section id="Report">
+    <div class="container my-1">
+        <div class="row justify-content-center">
+            <div class="col-md-10 my-2">
+                <h1 class="mx-2">Completed Milestones <span
+                        class="badge rounded-pill text-bg-primary">{{completed_milestones|length}}</span></h1>
+
+                {% for milestone in completed_milestones %}
+                <div class="card">
+                    <a href="{% url 'tasks:milestone_update' milestone.project.id milestone.id%}">
+                    <div class="card-header">
+                        <h3>{{milestone.title}} <span
+                                class="badge rounded-pill text-bg-success">{{milestone.tasks.all|length}}</span></h3>
+                    </div>
+                    </a>
+                    <ol class="list-group list-group-numbered list-group-flush">
+                        {% for task in milestone.tasks.all %}
+                        <a href="{% url 'tasks:task_update' task.pk %}"><li class="list-group-item" >{{task.title}}</li></a>
+                        {% empty %}
+                        No milestone completed
+                        {% endfor %}
+                    </ol>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-10 my-2">
+                <h1 class="mx-2">Completed Independent Tasks <span
+                        class="badge rounded-pill text-bg-primary">{{completed_independent_tasks|length}}</span></h1>
+
+                {% for task in completed_independent_tasks %}
+                <div class="card">
+                    <ol class="list-group list-group-numbered list-group-flush">
+                        <a href="{% url 'tasks:task_update' task.pk %}"><li class="list-group-item" >{{task.title}}</li></a>
+                    </ol>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="row justify-content-between my-2">
+            <div class="col-md-6">
+                <div class="row">
+                <h1>Work Sessions</h1>
+                </div>
+                <div class="row justify-content-end">
+                    <div class="card ws_list_container">
+                        <ul class="list-group list-group-flush">
+                            {% for work_session in today_work_sessions  %}
+                            <li class="list-group-item jus"> <strong> Start Time: </strong> {{work_session.start_time|timezone:"Etc/GMT+5"|date:"g:i a"}}<br><strong>End Time: </strong>{{work_session.end_time|timezone:"Etc/GMT+5"|date:"g:i a"}}<br><strong>Duration: </strong>{{work_session.duration}}</li>
+                            {% empty %}
+                            <li class="list-group-item jus"> <strong> Not work sessions today yet </strong></li>
+                            {% endfor %}
+                        </ul>
+                        <div class="card-footer">
+                                Total Time: {{today_total_work_session_duration}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 border">
+                <h1>Events</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr style="border-top: 3px solid black;">
+
+
+{% endblock %}
+
+{% block extend_footer %}
+
+<script src="{% static 'home/test.js' %}"></script>
+
+{%endblock%}
