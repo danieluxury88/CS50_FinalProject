@@ -133,6 +133,11 @@ class ReportView(View):
         today_work_sessions = WorkSession.get_today_work_sessions()
         today_total_work_session_duration = WorkSession.get_todays_work_sessions_duration()
 
+        # Define a Prefetch object that filters events based on today's date
+        today = timezone.now().date()
+        events_today_prefetch = Prefetch('events', queryset=Event.objects.filter(date__date=today))
+        event_types = EventType.objects.all().prefetch_related(events_today_prefetch)
+
 
         context= {
                   "current_cycle_str":current_cycle_str,
@@ -140,6 +145,7 @@ class ReportView(View):
                   "completed_independent_tasks":completed_independent_tasks,
                   "today_work_sessions":today_work_sessions,
                 "today_total_work_session_duration":today_total_work_session_duration,
+                "event_types":event_types,
 
               }
         return render(request, 'home/report.html', context)
