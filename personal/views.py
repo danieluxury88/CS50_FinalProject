@@ -57,14 +57,18 @@ def register_event(request):
         
 
 def test_register_event(request):
-    if request.method == "GET":
-        date = timezone.now()
-        event_type = EventType.objects.get(pk= 2)
-        print(event_type);
-        event = Event.objects.create(date=date, event_type=event_type, title = event_type.title)
-        event.save()
-        serialized_event = serializers.serialize('json', [event])
-        return JsonResponse({'event': serialized_event})
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            event_type = EventType.objects.get(pk= data.get('event_type'))
+            print(event_type);
+            date = timezone.now()
+            event = Event.objects.create(date=date, event_type=event_type, title = event_type.title)
+            event.save()
+            serialized_event = serializers.serialize('json', [event])
+            return JsonResponse({'event': serialized_event})
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest("Invalid JSON data")
     else:
         return JsonResponse({'event': "none"})
 

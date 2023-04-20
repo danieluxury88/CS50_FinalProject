@@ -103,15 +103,21 @@ class TestView(View):
         today_total_work_session_duration = WorkSession.get_todays_work_sessions_duration()
 
 
-        context= {
-                  "current_cycle_str":current_cycle_str,
-                  "completed_milestones":completed_milestones,
-                  "completed_independent_tasks":completed_independent_tasks,
-                  "today_work_sessions":today_work_sessions,
-                "today_total_work_session_duration":today_total_work_session_duration,
+        # Get the current date (timezone-aware)
+        today = timezone.now().date()
 
+        # Define a Prefetch object that filters events based on today's date
+        events_today_prefetch = Prefetch('events', queryset=Event.objects.filter(date__date=today))
+
+        # Get all regular EventTypes and prefetch related events using the Prefetch object
+        regular_events = EventType.objects.filter(is_regular=True).prefetch_related(events_today_prefetch)
+
+
+        context= {"msg": "ok", 
+              "current_cycle_str":current_cycle_str,
+              "regular_events": regular_events,
               }
-        return render(request, 'home/test.html', context)
+        return render(request, "home/test.html", context)
     
 
 class ReportView(View):

@@ -5,7 +5,7 @@
 
 {% block content %}
 
-    <section id="In Progress Tasl">
+    <section id="In Progress Task">
         {% if task_in_progress %}
         <div class="container my-1">
             <div class="row">
@@ -261,37 +261,31 @@
                                         data-bs-target="#panelsStayOpen-collapseEvent-{{event_type.pk}}" aria-expanded="true"
                                         aria-controls="panelsStayOpen-collapseEvent-{{event_type.pk}}">
                                         <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"> {{event_type.events.all|length}}
-                                            <span class="visually-hidden">unread messages</span></span>
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"id="event-counter-{{event_type.pk}}">{{event_type.events.all|length}}</span>
                                         {{event_type.title}}
                                     </button>
                                         </div>
                                         <div class="col-md-2">
-                                            <div class="btn btn-primary"> New</div>
+                                            <div class="btn btn-primary" id="create-work-session" onclick="RegisterEvent({{ event_type.pk }})">Register</div>
                                         </div>
-
+        
                                     </div>
                                     
-    
+        
                                 </h2>
-    
+        
                                 <div id="panelsStayOpen-collapseEvent-{{event_type.pk}}" class="accordion-collapse collapse">
                                     <div class="accordion-body">
-                                        <ol class="list-group list my-2">
+                                        <ol class="list-group list my-2" id="event-list-{{event_type.pk}}">
                                             {% for event_register in event_type.events.all %}
-                                            <li class="list-group-item d-flex justify-content-between align-items-start" 
-                                            onclick="myFunction()" title="Click to take a note">
+                                            <li class="list-group-item d-flex justify-content-between align-items-start">
                                                 <div class="container">
                                                     <div class="row">
                                                         <div class="col-md-8">
                                                             <div class="fw-bold">
                                                                 {{event_type.title}}
                                                             </div>
-                                                            {{event_register.date}}
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button"><i class="bi bi-trash"></i> </a>
+                                                            {{event_register.date|date:"g:i a"}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -305,19 +299,19 @@
                             {% empty %}
                                 No regular events
                             {% endfor %}
-
+        
                         </div>
                         <div class="row d-none">
                             <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
                                 <button class="btn btn-primary position-relative start-0"> New Event Type</button>
                             </div>
                         </div>
-    
-    
+        
+        
                     </div>
                 </div>
             </div>
-            </section>
+        </section>
 
         <hr style="border-top: 3px solid black;">
 
@@ -355,4 +349,5 @@
 
 <script src="{% static 'home/work_cycle.js' %}"></script>
 <script src="{% static 'tasks/functions.js' %}"></script>
+<script src="{% static 'personal/events.js' %}"></script>
 {%endblock%}
