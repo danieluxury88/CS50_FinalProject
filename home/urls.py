@@ -12,7 +12,9 @@ urlpatterns = [
     
     path('', views.index, name ='index'),
     path('missions', views.MissionView.as_view(), name ='missions'),
-    path('today-report', views.ReportView.as_view(), name ='today-report'),
+    path('today-report', views.TodayReportView.as_view(), name ='today-report'),
+    path('yesterday-report', views.YesterdayReportView.as_view(), name ='yesterday-report'),
+    path('cycle-report', views.CycleReportView.as_view(), name ='cycle-report'),
     path('test', views.TestView.as_view(), name ='test'),
 
 ]

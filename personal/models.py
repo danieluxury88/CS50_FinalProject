@@ -105,28 +105,25 @@ class WorkSession(models.Model):
         
 
     @staticmethod
-    def get_today_work_sessions():
-        today = timezone.localdate()
-        tomorrow = today + timezone.timedelta(days=1)
+    def get_today_work_sessions(day):
+        next_day = day + timezone.timedelta(days=1)
 
         return WorkSession.objects.filter(
-            start_time__range=(today, tomorrow - timezone.timedelta(seconds=1)),
-            end_time__range=(today, tomorrow - timezone.timedelta(seconds=1)),
+            start_time__range=(day, next_day - timezone.timedelta(seconds=1)),
+            end_time__range=(day, next_day - timezone.timedelta(seconds=1)),
         )
     
 
     @classmethod
-    def get_todays_work_sessions_duration(cls):
-        today = timezone.localdate()
-        tomorrow = today + timezone.timedelta(days=1)
-
-        work_sessions_today = cls.objects.filter(
-            start_time__range=(today, tomorrow - timezone.timedelta(seconds=1)),
-            end_time__range=(today, tomorrow - timezone.timedelta(seconds=1)),
+    def get_todays_work_sessions_duration(cls, day):
+        next_day = day + timezone.timedelta(days=1)
+        work_sessions = cls.objects.filter(
+            start_time__range=(day, next_day - timezone.timedelta(seconds=1)),
+            end_time__range=(day, next_day - timezone.timedelta(seconds=1)),
         )
 
         total_duration = timedelta()
-        for session in work_sessions_today:
+        for session in work_sessions:
             if session.end_time is not None:
                 total_duration += session.end_time - session.start_time
 

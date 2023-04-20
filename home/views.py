@@ -8,10 +8,13 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils import formats, timezone
 from django.views import View
+from django.db.models import Sum
+from django.db.models import F, ExpressionWrapper, DurationField
 
 from personal.models import Cycle, WorkSession
 
 from .models import User
+from .utils import format_timedelta_to_hours_minutes
 from personal.models import Cycle, WorkSession, EventType, Event
 from tasks.models import Project,Milestone, Task, DueDateChoice, Status
 
@@ -40,8 +43,10 @@ def index(request):
 
     tasks_without_milestones = Task.objects.filter(milestone__isnull=True, due_date=DueDateChoice.DUE_TODAY.value).order_by('priority').order_by('status')
 
-    today_work_sessions = WorkSession.get_today_work_sessions()
-    today_total_work_session_duration = WorkSession.get_todays_work_sessions_duration()
+    day = timezone.localdate()
+
+    today_work_sessions = WorkSession.get_today_work_sessions(day)
+    today_total_work_session_duration = WorkSession.get_todays_work_sessions_duration(day)
 
     task_in_progress = Task.objects.filter(status=Status.IN_PROGRESS.value).order_by('priority').first()
 
@@ -97,30 +102,59 @@ class TestView(View):
         else:
             current_cycle_str = None
 
-        completed_milestones = Milestone.objects.filter(status=Status.COMPLETED.value)
-        completed_independent_tasks = Task.objects.filter(milestone__isnull=True, status=Status.COMPLETED.value).order_by('priority')
-        today_work_sessions = WorkSession.get_today_work_sessions()
-        today_total_work_session_duration = WorkSession.get_todays_work_sessions_duration()
-
-
-        # Get the current date (timezone-aware)
-        today = timezone.now().date()
-
-        # Define a Prefetch object that filters events based on today's date
-        events_today_prefetch = Prefetch('events', queryset=Event.objects.filter(date__date=today))
-
-        # Get all regular EventTypes and prefetch related events using the Prefetch object
-        regular_events = EventType.objects.filter(is_regular=True).prefetch_related(events_today_prefetch)
-
 
         context= {"msg": "ok", 
               "current_cycle_str":current_cycle_str,
-              "regular_events": regular_events,
               }
         return render(request, "home/test.html", context)
     
 
+
+
+
 class ReportView(View):
+    day = timezone.localdate() 
+    def get(self, request):
+        current_cycle = Cycle.get_current_cycle()
+        if current_cycle:
+            current_cycle_str = json.dumps(current_cycle.to_dict())
+        else:
+            current_cycle_str = None
+        print(self.day)
+        completed_milestones = Milestone.objects.filter(status=Status.COMPLETED.value, end_time__date=self.day)
+        completed_independent_tasks = Task.objects.filter(milestone__isnull=True, status=Status.COMPLETED.value, end_time__date=self.day).order_by('priority')
+
+        work_sessions = WorkSession.get_today_work_sessions(self.day)
+        total_work_session_duration = WorkSession.get_todays_work_sessions_duration(self.day)
+
+        # Define a Prefetch object that filters events based on today's date
+        events_prefetch = Prefetch('events', queryset=Event.objects.filter(date__date=self.day))
+        event_types = EventType.objects.all().prefetch_related(events_prefetch)
+
+
+        context= {
+                  "current_cycle_str":current_cycle_str,
+                  "completed_milestones":completed_milestones,
+                  "completed_independent_tasks":completed_independent_tasks,
+                  "work_sessions":work_sessions,
+                "total_work_session_duration":total_work_session_duration,
+                "event_types":event_types,
+
+              }
+        return render(request, 'home/report.html', context)
+    
+
+class TodayReportView(ReportView):
+    day = timezone.localdate()
+    
+
+class YesterdayReportView(ReportView):
+    day = timezone.localdate() - timedelta(days=1)
+
+
+
+class CycleReportView(View):
+    day = timezone.localdate() 
     def get(self, request):
         current_cycle = Cycle.get_current_cycle()
         if current_cycle:
@@ -128,23 +162,33 @@ class ReportView(View):
         else:
             current_cycle_str = None
 
-        completed_milestones = Milestone.objects.filter(status=Status.COMPLETED.value)
-        completed_independent_tasks = Task.objects.filter(milestone__isnull=True, status=Status.COMPLETED.value).order_by('priority')
-        today_work_sessions = WorkSession.get_today_work_sessions()
-        today_total_work_session_duration = WorkSession.get_todays_work_sessions_duration()
+            
+
+        completed_milestones = Milestone.objects.filter(status=Status.COMPLETED.value, end_time__range=(current_cycle.start_time, current_cycle.end_time))
+        completed_independent_tasks = Task.objects.filter(milestone__isnull=True, status=Status.COMPLETED.value, end_time__range=(current_cycle.start_time, current_cycle.end_time)).order_by('priority')
+
+
+        work_sessions = WorkSession.objects.filter(end_time__range=(current_cycle.start_time, current_cycle.end_time)).annotate(
+            duration=ExpressionWrapper(F('end_time') - F('start_time'), output_field=DurationField())
+        )
+
+        total_work_session_duration_unformatted = work_sessions.aggregate(total=Sum('duration'))['total']
+
+        total_work_session_duration = format_timedelta_to_hours_minutes(total_work_session_duration_unformatted)
+
+        work_sessions = WorkSession.objects.filter(end_time__range=(current_cycle.start_time, current_cycle.end_time))
 
         # Define a Prefetch object that filters events based on today's date
-        today = timezone.now().date()
-        events_today_prefetch = Prefetch('events', queryset=Event.objects.filter(date__date=today))
-        event_types = EventType.objects.all().prefetch_related(events_today_prefetch)
+        events_prefetch = Prefetch('events', queryset=Event.objects.filter(date__date__range=(current_cycle.start_time,current_cycle.end_time )))
+        event_types = EventType.objects.all().prefetch_related(events_prefetch)
 
 
         context= {
                   "current_cycle_str":current_cycle_str,
                   "completed_milestones":completed_milestones,
                   "completed_independent_tasks":completed_independent_tasks,
-                  "today_work_sessions":today_work_sessions,
-                "today_total_work_session_duration":today_total_work_session_duration,
+                  "work_sessions":work_sessions,
+                "total_work_session_duration":total_work_session_duration,
                 "event_types":event_types,
 
               }

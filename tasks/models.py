@@ -52,6 +52,23 @@ class Project(WorkItem):
 class Milestone(WorkItem):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='milestones')
 
+    def save(self, *args, **kwargs):
+        # Check if the status has been updated to 'IN_PROGRESS'
+        if self.status == Status.IN_PROGRESS.value:
+            self.start_time = timezone.now()
+            self.end_time = None
+
+        # Check if the status has been updated to 'COMPLETED'
+        if self.status == Status.COMPLETED.value:
+            self.end_time = timezone.now()
+            self.due_date = DueDateChoice.COMPLETED.value
+
+        if self.due_date == DueDateChoice.COMPLETED.value:
+            self.end_time = timezone.now()
+            self.status = Status.COMPLETED.value
+
+        super(WorkItem, self).save(*args, **kwargs)
+
 class Task(WorkItem):
     milestone = models.ForeignKey(Milestone, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
     def __str__(self):
@@ -66,12 +83,18 @@ class Task(WorkItem):
 
     def save(self, *args, **kwargs):
         # Check if the status has been updated to 'IN_PROGRESS'
-        if self.status == 'IN_PROGRESS' and not self.start_time:
+        if self.status == Status.IN_PROGRESS.value:
             self.start_time = timezone.now()
+            self.end_time = None
 
         # Check if the status has been updated to 'COMPLETED'
-        if self.status == 'COMPLETED' and not self.end_time:
+        if self.status == Status.COMPLETED.value:
             self.end_time = timezone.now()
+            self.due_date = DueDateChoice.COMPLETED.value
+
+        if self.due_date == DueDateChoice.COMPLETED.value:
+            self.end_time = timezone.now()
+            self.status = Status.COMPLETED.value
 
         super(WorkItem, self).save(*args, **kwargs)
 

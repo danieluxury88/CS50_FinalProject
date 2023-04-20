@@ -55,14 +55,14 @@
                 <div class="row justify-content-end">
                     <div class="card ws_list_container">
                         <ul class="list-group list-group-flush">
-                            {% for work_session in today_work_sessions  %}
-                            <li class="list-group-item jus"> <strong> Start Time: </strong> {{work_session.start_time|timezone:"Etc/GMT+5"|date:"g:i a"}}<br><strong>End Time: </strong>{{work_session.end_time|timezone:"Etc/GMT+5"|date:"g:i a"}}<br><strong>Duration: </strong>{{work_session.duration}}</li>
+                            {% for work_session in work_sessions  %}
+                            <li class="list-group-item jus"> <strong> Start Time: </strong> {{work_session.start_time|timezone:"Etc/GMT+5"|date:"g:i a"}}<br><strong>End Time: </strong>{{work_session.end_time|timezone:"Etc/GMT+5"|date:"g:i a"}}<br><strong>Duration: </strong>{{work_session.duration }}</li>
                             {% empty %}
-                            <li class="list-group-item jus"> <strong> Not work sessions today yet </strong></li>
+                            <li class="list-group-item jus"> <strong> Not work sessions yet </strong></li>
                             {% endfor %}
                         </ul>
                         <div class="card-footer">
-                                Total Time: {{today_total_work_session_duration}}
+                                Total Time: {{total_work_session_duration}}
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                         {% for event_type in event_types %}
                         <li class="list-group-item jus"> <strong> {{event_type.title}}: </strong> {{event_type.events.all|length}}</li>
                         {% empty %}
-                        <li class="list-group-item jus"> <strong> Not events today yet </strong></li>
+                        <li class="list-group-item jus"> <strong> Not events yet </strong></li>
                         {% endfor %}
                     </ul>
                 </div>

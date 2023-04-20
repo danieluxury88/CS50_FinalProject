@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function filterListByTitle() {
-    console.log("filterListByTitle");
     let input = document.querySelector('#title-filter');
     let filter = input.value.toUpperCase();
     let workItems = document.querySelectorAll('.work-item');
@@ -19,7 +18,6 @@ function filterListByTitle() {
 
   let durationSortedAscending = false;
   function sortListByDuration() {
-    console.log("sortListByDuration");
     let workItems = document.querySelectorAll('.work-item');
     workItems = Array.prototype.slice.call(workItems, 0);
     workItems.sort(function(a, b) {
@@ -68,7 +66,6 @@ function filterListByTitle() {
   }
 
   function filterListByStatus() {
-    console.log("filterListByStatus");
     let workItems = document.querySelectorAll('.work-item');
     workItems = Array.prototype.slice.call(workItems, 0);
     let selectedStatuses = Array.from(document.querySelectorAll('input[name="status"]:checked'))
