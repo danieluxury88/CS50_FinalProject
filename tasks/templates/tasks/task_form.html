@@ -2,12 +2,23 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <p>
-    <form action="" method="post" id="upload_form">
-      {% csrf_token %}
-      {{ form|crispy }}
-      <input type="submit" value="Submit">
-      <input type="submit" value="Cancel" onclick="window.location.href='{% url 'tasks:index' %}';return false;">
-    </form>
-  </p>
-{% endblock %}
+
+<section id="task-detail">
+  <div class="container my-1">
+    <h1><strong>Task: </strong>{{object.title}}</h1> 
+    {% if object.milestone.id %}
+    <h3><strong>Milestone: </strong><a href="{% url 'tasks:milestone_single_update' pk=object.milestone.id  %}">{{object.milestone.title}}</a></h3>
+    {% endif %}
+    <div class="row my-1">
+      <form action="" method="post" id="upload_form">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Submit">
+        <input type="submit" value="Cancel" onclick="window.location.href='{% url 'home:index' %}';return false;">
+      </form>
+    </div>
+  </div>
+  <hr>
+  </section>
+
+  {% endblock %}

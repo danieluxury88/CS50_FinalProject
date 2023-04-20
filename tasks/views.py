@@ -59,24 +59,33 @@ class ProjectCreateView(CreateView):
     model = Project
     template_name = 'tasks/project/project_form.html'
     fields = ['title', 'estimated_duration', 'status']
-    success_url = reverse_lazy('tasks:project_list')
+    success_url = reverse_lazy('home:missions')
+
 
 
 class ProjectUpdateView(UpdateView):
     model = Project
     template_name = 'tasks/project/project_form.html'
     fields = ['title', 'estimated_duration', 'status']
-    success_url = reverse_lazy('tasks:project_list')
+    success_url = reverse_lazy('home:missions')
 
     def get_object(self, queryset=None):
         project_id = self.kwargs.get('pk')
         return get_object_or_404(Project, id=project_id)
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        project = get_object_or_404(Project, id=self.kwargs['pk'])
+        milestones = Milestone.objects.filter(project=project)
+        context['milestones'] = milestones
+        return context
 
 
 class ProjectDeleteView(DeleteView):
     model = Project
     template_name = 'tasks/project/project_confirm_delete.html'
-    success_url = reverse_lazy('tasks:project_list')
+    success_url = reverse_lazy('home:missions')
 
     def get_object(self, queryset=None):
         project_id = self.kwargs.get('pk')
@@ -128,8 +137,7 @@ class MilestoneUpdateView(UpdateView):
             return reverse('tasks:project_detail', args=[project_id])
         except:
             return reverse('home:index')
-    
-
+        
 class MilestoneDeleteView(DeleteView):
     model = Milestone
     success_url = reverse_lazy('tasks:project_detail')
@@ -154,7 +162,7 @@ class TaskListView(ListView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        context['test'] = "joseu"
+        context['message'] = "ok"
         return context
 
 
@@ -174,7 +182,7 @@ class TaskCreateView(CreateView):
             milestone_id = self.kwargs['milestone_id']
             return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
         except:
-            return reverse('tasks:task_list')
+            return reverse('home:index')
 
 
 class TaskUpdateView(UpdateView):
@@ -183,9 +191,14 @@ class TaskUpdateView(UpdateView):
     success_url = reverse_lazy('tasks:milestone_detail')
 
     def get_success_url(self):
-        project_id = self.kwargs['project_id']
-        milestone_id = self.kwargs['milestone_id']
-        return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
+        try:
+            project_id = self.kwargs['project_id']
+            milestone_id = self.kwargs['milestone_id']
+            print("ok")
+            return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
+        except:
+            print("nok")
+            return reverse('home:index')
 
 
 class TaskDeleteView(DeleteView):
@@ -193,10 +206,12 @@ class TaskDeleteView(DeleteView):
     success_url = reverse_lazy('tasks:milestone_detail')
 
     def get_success_url(self):
-        project_id = self.kwargs['project_id']
-        milestone_id = self.kwargs['milestone_id']
-        return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
-
+        try:
+            project_id = self.kwargs['project_id']
+            milestone_id = self.kwargs['milestone_id']
+            return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
+        except:
+            return reverse('home:index')
 #endregion
 
 
@@ -206,7 +221,8 @@ def update_task(request, pk):
     update_view = UpdateView.as_view(
         model=Task,
         form_class=TaskForm,
-        template_name='tasks/task_form.html'
+        template_name='tasks/task_form.html',
+        success_url = reverse_lazy('home:index')
     )
     return update_view(request, pk=pk, form=form)
 

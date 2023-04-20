@@ -34,7 +34,7 @@ function updateDayProgressBar() {
 
 function calculateDayProgressBarPercentage(inverted){
   const currentTime = new Date();
-  const startHour = 4;
+  const startHour = 6;
   const endHour = 22;
   const totalMinutes = (endHour - startHour) * 60;
   const elapsedMinutes = currentTime.getHours()*60 + currentTime.getMinutes() - startHour * 60;

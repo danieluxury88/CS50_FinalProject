@@ -2,12 +2,49 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <p>
-    <form action="" method="post" id="upload_form">
-      {% csrf_token %}
-      {{ form|crispy }}
-      <input type="submit" value="Submit">
-      <input type="submit" value="Cancel" onclick="window.location.href='{% url 'tasks:index' %}';return false;">
-    </form>
-  </p>
+<section id="project-detail">
+  <div class="container my-1">
+    <h1><strong>Project: </strong>{{object.title}}</h1> 
+    <div class="row">
+      <form action="" method="post" id="upload_form">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="my-1">
+          <input type="submit" value="Submit">
+          <input type="submit" value="Cancel" onclick="window.location.href='{% url 'home:missions' %}';return false;">
+        </div>
+      </form>
+    </div>
+  </div>
+  <hr>
+  <div class="container my-1">
+    <div class="row">
+      <div class="work-items-container">
+        <h2> <strong>Milestones:</strong></h2>
+        {% for milestone in milestones %}
+        <div class="work-item">
+          <h2 class="title"><a
+              href="{% url 'tasks:milestone_update' project_id=milestone.project.id pk=milestone.pk %}">{{ milestone.title }} </a>( {{milestone.tasks.count}} tasks )</h2>
+          <a href="{% url 'tasks:milestone_update' project_id=milestone.project.id pk=milestone.id %}"><i
+              class="bi bi-pencil"></i>update</a>
+          <a href="{% url 'tasks:milestone_delete' project_id=milestone.project.id pk=milestone.id %}"><i
+              class="bi bi-trash">delete</i></a>
+        </div>
+        {% empty %}
+        <p>No milestones found.</p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col mx-3">
+        {% if object %}
+        <a href="{% url 'tasks:milestone_single_create' %}"><button class="btn btn-primary w-200 mx-1"><i class="bi bi-plus-square-fill"></i><span class="mx-2">Milestone</span></button></a>
+        {% endif %}
+        <a href="{% url 'home:missions' %}"><button class="btn btn-primary w-200 mx-1"><i class="bi bi-arrow-left-square-fill"></i><span class="mx-2">Projects</span></button></a>
+      </div>
+    </div>
+  </div>
+  </div>
+  <hr>
+</section>
 {% endblock %}

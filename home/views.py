@@ -12,7 +12,7 @@ from personal.models import Cycle, WorkSession
 
 from .models import User
 from personal.models import Cycle, WorkSession
-from tasks.models import Project,Milestone, Task, DueDateChoice
+from tasks.models import Project,Milestone, Task, DueDateChoice, Status
 
 from datetime import timedelta
 import json
@@ -36,15 +36,18 @@ def index(request):
         work_session_start_time_timestamp = None
 
     milestones_due_today = Milestone.objects.filter(due_date=DueDateChoice.DUE_TODAY.value)
-    print(milestones_due_today)
 
-    tasks_without_milestones = Task.objects.filter(milestone__isnull=True, due_date=DueDateChoice.DUE_TODAY.value).order_by('priority')
+    tasks_without_milestones = Task.objects.filter(milestone__isnull=True, due_date=DueDateChoice.DUE_TODAY.value).order_by('priority').order_by('status')
 
     today_work_sessions = WorkSession.get_today_work_sessions()
     today_total_work_session_duration = WorkSession.get_todays_work_sessions_duration()
 
+    task_in_progress = Task.objects.filter(status=Status.IN_PROGRESS.value).order_by('priority').first()
+
+
 
     context= {"msg": "ok", 
+              "task_in_progress": task_in_progress,
               "current_cycle_str":current_cycle_str,
               "work_session_start_time": work_session_start_time_timestamp,
               "milestones_for_today":milestones_due_today,

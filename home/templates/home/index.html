@@ -4,6 +4,19 @@
 {% load due_date_tags %}
 
 {% block content %}
+
+    <section id="In Progress Task">
+        {% if task_in_progress %}
+        <div class="container my-1">
+            <div class="row">
+                <div class="col-md-10">
+                <h3 class="mx-1"><strong>Current Task: </strong><a href="{% url 'tasks:task_update' task_in_progress.pk %}">{{task_in_progress.title}}</a></h3>
+                </div>
+            </div>
+        </div>
+        <hr style="border-top: 3px solid black;">
+        {% endif %}
+    </section>
         
         <section id="Goals">
             <div class="container my-3">
@@ -30,12 +43,12 @@
                                     <div class="accordion-body">
                                         {{milestone.description|default:''}}
                                         <ol class="list-group list-group-numbered my-2">
-                                            {% for task in milestone.tasks.all %}   
-                                            <div class="work-item">
+                                            {% for task in milestone.tasks.all|dictsort:"status" %}   
+                                            <div class="work-item ">
                                                 <li class="list-group-item d-flex justify-content-between align-items-start">
-                                                    <div class="container">
-                                                        <div class="row">
-                                                            <div class="col-md-4">
+                                                    <div class="container {% if task.status == 3%}completed{% else %}in-progress{% endif %}">
+                                                        <div class="row ">
+                                                            <div class="col-md-6 ">
                                                                     <div class="fw-bold title">
                                                                         <a href="{% url 'tasks:task_update' task.pk %}">
                                                                         {{task.title}}
@@ -61,7 +74,7 @@
                                                                 <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},3)'
                                                                     role="button">Completed</a>
                                                             </div>
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-2">
                                                                 <form action="/action_page.php" id="myForm">
                                                                     <label for="dues">Due:</label>
                                                                     <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="task_due" id="task_due" onchange="updateTaskDueDate({{task.pk}}, this)">
@@ -117,29 +130,40 @@
                                     <div class="accordion-body">
                                         <ol class="list-group list-group-numbered my-2">
                                             {% for task in tasks_without_milestones  %}                                            
-                                                <li class="list-group-item d-flex justify-content-between align-items-start"
-                                                    onclick="myFunction()" title="Click to take a note">
-                                                    <div class="container">
-                                                        <div class="row">
-                                                            <div class="col-md-7">
-                                                                <div class="fw-bold">
-                                                                    {{task.title}}
+                                                <div class="work-item">
+                                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                        <div class="container {% if task.status == 3%}completed{% else %}in-progress{% endif %}">
+                                                            <div class="row">
+                                                                <div class="col-md-8">
+                                                                        <div class="fw-bold title">
+                                                                            <a href="{% url 'tasks:task_update' task.pk %}">
+                                                                            {{task.title}}
+                                                                            </a>
+                                                                        </div>
+                                                                        {{ task.description|default:'' }}
+                                                                        <p>
+                                                                            <span class="label"><strong>Status:</strong></span>
+                                                                            <span class="status" id = "status_{{task.pk}}">{{ task.status|status_display }}</span>
+                                                                            <span class="label"><strong>Priority:</strong></span>
+                                                                            <span class="priority">{{ task.priority }}</span>
+                                                                            <span class="label"><strong>Duration:</strong></span>
+                                                                            <span class="duration">{{ task.estimated_duration }}</span>
+                                                                        </p>
                                                                 </div>
-                                                                {{task.description}}
-                                                            </div>
-                                                            <div class="col-md-5">
-                                                                <a class="btn btn-outline-primary" href="#"
-                                                                    role="button">To Do</a>
-
-                                                                <a class="btn btn-outline-primary" href="#"
-                                                                    role="button">In Progress</a>
-
-                                                                <a class="btn btn-outline-primary" href="#"
-                                                                    role="button">Completed</a>
+                                                                <div class="col-md-4">
+                                                                    <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},1)'
+                                                                        role="button">In Progress</a>
+    
+                                                                    <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},2)'
+                                                                        role="button">To Do</a>
+    
+                                                                    <a class="btn btn-outline-primary" onclick='updateStatus( {{task.pk}},3)'
+                                                                        role="button">Completed</a>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </li>
+                                                    </li>
+                                                </div>
                                             {% endfor %}
                                         </ol>
                                     </div>
@@ -427,4 +451,5 @@
     
 
 <script src="{% static 'home/work_cycle.js' %}"></script>
+<script src="{% static 'tasks/functions.js' %}"></script>
 {%endblock%}

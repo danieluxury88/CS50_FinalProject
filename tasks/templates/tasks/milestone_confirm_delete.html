@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Delete Ad</h1>
+<h1>Delete Milestone</h1>
 
 <p>Are you sure you want to delete the milestone: {{ milestone }}?</p>
 
@@ -8,5 +8,5 @@
   {% csrf_token %}
   <input type="submit" value="Yes, delete.">
 </form>
- <input type="button" value="No">
+ <input type="button" value="No" onclick="window.location.href='{% url 'tasks:index' %}';return false;">
 {% endblock %}
