@@ -7,7 +7,7 @@ from django.http import HttpResponseBadRequest
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView, View)
 
-from .models import Challenge, Cycle, Date, DayRegister, Event, WorkSession
+from .models import Challenge, Cycle, Date, DayRegister, Event, EventType, WorkSession
 
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -40,6 +40,33 @@ def work_sessions(request):
 @csrf_exempt
 def work_sessions_no_csrf(request):
     return work_sessions(request)
+
+
+def register_event(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            start_time = timezone.now()
+            event_type = data.get('event_type')
+            event = Event.objects.create(start_time=start_time, event_type=event_type)
+            event.save()
+            serialized_event = serializers.serialize('json', [event])
+            return JsonResponse({'event': serialized_event})
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest("Invalid JSON data")
+        
+
+def test_register_event(request):
+    if request.method == "GET":
+        date = timezone.now()
+        event_type = EventType.objects.get(pk= 2)
+        print(event_type);
+        event = Event.objects.create(date=date, event_type=event_type, title = event_type.title)
+        event.save()
+        serialized_event = serializers.serialize('json', [event])
+        return JsonResponse({'event': serialized_event})
+    else:
+        return JsonResponse({'event': "none"})
 
 
 

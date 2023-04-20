@@ -14,6 +14,8 @@ urlpatterns = [
     # urls.py
     # path('work_sessions/', views.WorkSessionView.as_view(), name='work_sessions'),
     path('work_sessions/', views.work_sessions_no_csrf, name='work_sessions'),
+    path('register-event/', views.register_event, name='register_event'),
+    path('test-register-event/', views.test_register_event, name='test_register_event'),
 
     
 ]

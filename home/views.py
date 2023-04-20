@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
 from django.db import IntegrityError
+from django.db.models import Prefetch
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -11,7 +12,7 @@ from django.views import View
 from personal.models import Cycle, WorkSession
 
 from .models import User
-from personal.models import Cycle, WorkSession
+from personal.models import Cycle, WorkSession, EventType, Event
 from tasks.models import Project,Milestone, Task, DueDateChoice, Status
 
 from datetime import timedelta
@@ -44,6 +45,14 @@ def index(request):
 
     task_in_progress = Task.objects.filter(status=Status.IN_PROGRESS.value).order_by('priority').first()
 
+    # Get the current date (timezone-aware)
+    today = timezone.now().date()
+
+    # Define a Prefetch object that filters events based on today's date
+    events_today_prefetch = Prefetch('events', queryset=Event.objects.filter(date__date=today))
+
+    # Get all regular EventTypes and prefetch related events using the Prefetch object
+    regular_events = EventType.objects.filter(is_regular=True).prefetch_related(events_today_prefetch)
 
 
     context= {"msg": "ok", 
@@ -54,6 +63,7 @@ def index(request):
               "tasks_without_milestones": tasks_without_milestones,
               "today_work_sessions":today_work_sessions,
               "today_total_work_session_duration":today_total_work_session_duration,
+              "regular_events": regular_events,
               }
     return render(request, "home/index.html", context)
 
@@ -69,7 +79,7 @@ class MissionView(View):
 
         projects = Project.objects.all()
         # independent_tasks = Task.objects.filter(milestone__isnull=True).exclude(due_date=DueDateChoice.COMPLETED.value).exclude(status='COMPLETED').order_by('priority').order_by('due_date')
-        independent_tasks = Task.objects.filter(milestone__isnull=True).order_by('-status').order_by('due_date').order_by('priority').order_by('due_date')
+        independent_tasks = Task.objects.filter(milestone__isnull=True).order_by('due_date')
 
         context= {
                   "current_cycle_str":current_cycle_str,

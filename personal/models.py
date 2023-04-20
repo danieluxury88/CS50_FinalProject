@@ -43,11 +43,6 @@ class Cycle (models.Model):
         }
 
 
-        
-
-
-
-
 #Challenges & Events
 class Challenge (Cycle):
     title = models.CharField(max_length=100)
@@ -58,13 +53,14 @@ class Challenge (Cycle):
 
 class EventType(models.Model):
     title = models.CharField(max_length=100)
+    is_regular = models.BooleanField(default=False)
     def __str__(self):
         return self.title
     
     
 class Event(models.Model):
     challenge = models.ForeignKey(Challenge, on_delete=models.SET_NULL, blank=True, null=True)
-    event_type = models.ForeignKey(EventType, on_delete=models.SET_NULL, blank=True, null=True)
+    event_type = models.ForeignKey(EventType, on_delete=models.SET_NULL, blank=True, null=True, related_name='events')
     title = models.CharField(max_length=100, blank=True, null=True)
     date = models.DateTimeField()
     extra_info_1 = models.CharField(max_length=200, blank=True, null=True)
@@ -164,10 +160,6 @@ class WorkSession(models.Model):
     
 
 
-
-
-
-
 #Dates/Calendar
 class DateType (models.Model):
     type = models.CharField(max_length=100)
@@ -190,7 +182,6 @@ class Date (models.Model):
     def get_dates_within_cycle(cycle):
         return Date.objects.filter(date__gte=cycle.start_time.date(), date__lte=cycle.end_time.date())
     
-
 
 class DayRegister (models.Model):
     date = models.DateField()

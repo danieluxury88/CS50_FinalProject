@@ -5,7 +5,7 @@
 
 {% block content %}
 
-    <section id="In Progress Task">
+    <section id="In Progress Tasl">
         {% if task_in_progress %}
         <div class="container my-1">
             <div class="row">
@@ -22,7 +22,7 @@
             <div class="container my-3">
                 <div class="row">
                     <div class="col-md-10">
-                    <h1 class="mx-1">Goals <span class="badge bg-secondary">{{milestones_for_today|length}}</span></h1>
+                    <h1 class="mx-1">Goals <span class="badge bg-secondary">2</span></h1>
                         <div class="accordion" id="accordionPanelsStayOpenExample">
                             {% for milestone in milestones_for_today %}
                             <div class="accordion-item my-2">
@@ -252,17 +252,18 @@
                     <div class="col-md-10">
                        <h1 class="mx-1">Events</h1>
                         <div class="accordion" id="accordionPanelsStayOpenExample">
+                            {% for event_type in regular_events %}
                             <div class="accordion-item my-2">
                                 <h2 class="accordion-header ">
                                     <div class="row justify-content-end">
                                         <div class="col-md-10">
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#panelsStayOpen-collapseEventOne" aria-expanded="true"
-                                        aria-controls="panelsStayOpen-collapseEventOne">
+                                        data-bs-target="#panelsStayOpen-collapseEvent-{{event_type.pk}}" aria-expanded="true"
+                                        aria-controls="panelsStayOpen-collapseEvent-{{event_type.pk}}">
                                         <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"> {{event_type.events.all|length}}
                                             <span class="visually-hidden">unread messages</span></span>
-                                        Meditation
+                                        {{event_type.title}}
                                     </button>
                                         </div>
                                         <div class="col-md-2">
@@ -274,18 +275,19 @@
     
                                 </h2>
     
-                                <div id="panelsStayOpen-collapseEventOne" class="accordion-collapse collapse">
+                                <div id="panelsStayOpen-collapseEvent-{{event_type.pk}}" class="accordion-collapse collapse">
                                     <div class="accordion-body">
                                         <ol class="list-group list my-2">
+                                            {% for event_register in event_type.events.all %}
                                             <li class="list-group-item d-flex justify-content-between align-items-start" 
                                             onclick="myFunction()" title="Click to take a note">
                                                 <div class="container">
                                                     <div class="row">
                                                         <div class="col-md-8">
                                                             <div class="fw-bold">
-                                                                Meditation
+                                                                {{event_type.title}}
                                                             </div>
-                                                            6:30 AM 
+                                                            {{event_register.date}}
                                                         </div>
                                                         <div class="col-md-4">
                                                             <a class="btn btn-outline-primary" href="#"
@@ -294,93 +296,18 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-start" 
-                                                onclick="myFunction()" title="Click to take a note">
-                                                    <div class="container">
-                                                        <div class="row">
-                                                            <div class="col-md-8">
-                                                                <div class="fw-bold">
-                                                                    Meditation
-                                                                </div>
-                                                                6:30 AM 
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <a class="btn btn-outline-primary" href="#"
-                                                                    role="button"><i class="bi bi-trash"></i> </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
+                                            {% empty %}
+                                            {% endfor %}
                                             </ol>
                                         </div>
                                 </div>
                             </div>
-                            <div class="accordion-item my-2">
-                                <h2 class="accordion-header ">
-                                    <div class="row justify-content-end">
-                                        <div class="col-md-10">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#panelsStayOpen-collapseEventTwo" aria-expanded="true"
-                                        aria-controls="panelsStayOpen-collapseEventTwo">
-                                        <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">3
-                                            <span class="visually-hidden">unread messages</span></span>
-                                        Exercise
-                                    </button>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="btn btn-primary"> New</div>
-                                        </div>
-
-                                    </div>
-                                    
-    
-                                </h2>
-    
-                                <div id="panelsStayOpen-collapseEventTwo" class="accordion-collapse collapse">
-                                    <div class="accordion-body">
-                                        <ol class="list-group list my-2">
-                                            <li class="list-group-item d-flex justify-content-between align-items-start" 
-                                            onclick="myFunction()" title="Click to take a note">
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-md-8">
-                                                            <div class="fw-bold">
-                                                                Exercise
-                                                            </div>
-                                                            6:30 AM 
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <a class="btn btn-outline-primary" href="#"
-                                                                role="button"><i class="bi bi-trash"></i> </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-start" 
-                                                onclick="myFunction()" title="Click to take a note">
-                                                    <div class="container">
-                                                        <div class="row">
-                                                            <div class="col-md-8">
-                                                                <div class="fw-bold">
-                                                                    Exercise
-                                                                </div>
-                                                                6:30 AM 
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <a class="btn btn-outline-primary" href="#"
-                                                                    role="button"><i class="bi bi-trash"></i> </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ol>
-                                        </div>
-                                </div>
-                            </div>
+                            {% empty %}
+                                No regular events
+                            {% endfor %}
 
                         </div>
-                        <div class="row">
+                        <div class="row d-none">
                             <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
                                 <button class="btn btn-primary position-relative start-0"> New Event Type</button>
                             </div>
@@ -394,30 +321,6 @@
 
         <hr style="border-top: 3px solid black;">
 
-        <section id="Css_sample">
-            <div class="container mt-5 border">
-                <div class="row justify-content-between">
-                    <div class="col-md-5 border">
-                        <div class="row">
-                            <h1>Current Work Session</h1>
-                        </div>
-                    </div>
-                    <div class="col-md-5 border">
-                        <div class="row">
-                            <h1>Current Work Session</h1>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12 border" id="work_session-container">
-                        {% if work_session %}
-                            <p id="object-text">{{ work_session.start_time }}</p>
-                        {% else %}
-                            <button id="start-work-cycle-btn"></button>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </section>
 {% endblock %}
 
 {% block extend_footer %}
