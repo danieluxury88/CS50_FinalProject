@@ -18,10 +18,22 @@ Start Footer
         <script src="{% static 'home/cycle-timer.js' %}"></script>
         <script src="{% static 'home/day-timer.js' %}"></script>
         <script src="{% static 'home/utils-update-time-components-functions.js' %}"></script>
+        <script src="{% static 'tasks/functions.js' %}"></script>
     
     <script>
         var current_cycle_obj = '{{current_cycle_str|escapejs }}';
+
+        const djangoCycleData = {
+            csrfToken: "{{ csrf_token }}",
+            createCycleUrl: "{% url 'personal:create_cycle' %}",
+        };
+        document.addEventListener("DOMContentLoaded", function() {
+            const starCycleBtn = document.getElementById('cycle-start-button');
+            starCycleBtn.addEventListener('click', StartCycle);
+        });
     </script>
+
+    
 </div>
 <!-- ================================
 End Footer

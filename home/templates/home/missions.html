@@ -196,27 +196,4 @@
 {% endblock %}
 
 {% block extend_footer %}
-<script>
-
-    const djangoCycleData = {
-        csrfToken: "{{ csrf_token }}",
-        createCycleUrl: "{% url 'personal:create_cycle' %}",
-    };
-    document.addEventListener("DOMContentLoaded", function() {
-        const starCycleBtn = document.getElementById('cycle-start-button');
-        starCycleBtn.addEventListener('click', StartCycle);
-    });
-</script>
-
-<script>
-    function printSelectedOption(milestone_id) {
-        const selectElement = document.getElementById('milestone_due');
-        const selectedOption = selectElement.options[selectElement.selectedIndex];
-        const selectedValue = selectedOption.value;
-        const selectedText = selectedOption.text;
-
-        console.log(`MilestoneId: ${milestone_id} Selected Value: ${selectedValue}, Selected Text: ${selectedText}`);
-    }
-</script>
-<script src="{% static 'tasks/functions.js' %}"></script>
 {%endblock%}

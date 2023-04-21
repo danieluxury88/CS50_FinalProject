@@ -164,9 +164,11 @@ class CycleReportView(View):
                 duration=ExpressionWrapper(F('end_time') - F('start_time'), output_field=DurationField())
             )
 
-            total_work_session_duration_unformatted = work_sessions.aggregate(total=Sum('duration'))['total']
-
-            total_work_session_duration = format_timedelta_to_hours_minutes(total_work_session_duration_unformatted)
+            if work_sessions:
+                total_work_session_duration_unformatted = work_sessions.aggregate(total=Sum('duration'))['total']
+                total_work_session_duration = format_timedelta_to_hours_minutes(total_work_session_duration_unformatted)
+            else:
+                total_work_session_duration = None
 
             work_sessions = WorkSession.objects.filter(end_time__range=(current_cycle.start_time, current_cycle.end_time))
 
