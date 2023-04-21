@@ -14,4 +14,5 @@ urlpatterns = [
     path('today-report', views.TodayReportView.as_view(), name ='today-report'),
     path('yesterday-report', views.YesterdayReportView.as_view(), name ='yesterday-report'),
     path('cycle-report', views.CycleReportView.as_view(), name ='cycle-report'),
+    path('about', views.AboutView.as_view(), name ='about'),
 ]

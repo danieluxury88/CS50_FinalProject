@@ -132,6 +132,23 @@ class YesterdayReportView(ReportView):
     day = timezone.localdate() - timedelta(days=1)
 
 
+class MyDefaultView(View):
+    def get(self, request):
+        current_cycle = Cycle.get_current_cycle()
+        if current_cycle:
+            current_cycle_str = json.dumps(current_cycle.to_dict())
+        else:
+            current_cycle_str = None
+
+        context= {
+                  "current_cycle_str":current_cycle_str}
+        return render(request, 'home/about.html', context)
+    
+
+class AboutView(MyDefaultView):
+    pass
+
+
 
 class CycleReportView(View):
     day = timezone.localdate() 

@@ -1,5 +1,3 @@
-ADD ABOUT & CONTACT
-
 # 99 Hours - Personal Management Project
 
 Organize and measure your daily life. Create cycles of time, define objectives and rules, and compare your growth.
@@ -30,9 +28,9 @@ If you see how much can you do in 4 days, you will want to start a new Cycle aga
 
 ## Technologies Used
 
-Django web framework
-Python
-JavaScript
+- Django web framework
+- Python
+- JavaScript
 
 ## Installation Instructions
 
@@ -46,6 +44,8 @@ JavaScript
 from django.core.management.utils import get_random_secret_key
 print(get_random_secret_key())
 ```
+- create superuser **python manage.py createsuperuser**
+- enter admin site and create EventTypes, and set them as regular (as Meditation, Exercise, Videogames, **etc**)
 
 ## Distinctiveness and Complexity
 

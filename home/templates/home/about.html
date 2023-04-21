@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+
+<section id="About">
+    <div class="container my-1">
+        <div class="row justify-content-center">
+            <div class="col-md-10 my-2">
+                <h1> 99 Hours - Personal Management</h1>
+                <p> 
+                    <li>Measure your life to start changing it.</li>
+                    <li>Each day starts at 6 AM and ends at 10 PM.</li>
+                    <li>Each Cycle last 99 hours and 59 minutes (about 4 days).</li>
+                    <li>Events type can only be added on admin site.</li>
+                </p>
+
+                <h2>Pending Features:</h2>
+                <p>
+                    <li>Work Session is not added on list automatically when session ends.</li>     
+                    <li>Improve reports.</li>
+                    <li>Add challenges to create/break habits.</li>
+                    <li>Add login/register feature.</li>
+                    <li>Change SB to PostgreSQL.</li>
+                    <li>Allow ability to define start and end day times</li>
+                    <li>Allow ability to define cycle duration</li>
+                    <li>Use django-rest framework to allow CLI and accessing from other API</li>
+                    <li>Add calendar to include deadlines and future events</li>
+                    <li>Integrate with google calendar</li>
+                    <li>Create Alexa integration</li>
+                    <li>Create WearOS integration</li>
+                </p>
+
+                <h2>Known Issues:</h2>
+                <p>
+                    <li>Current work session start time is not displayed on second time.</li>
+                    <li>Queries depend on local time.</li>
+                </p>
+
+                <h2>Contact/Suggestions:</h2>
+                <p>
+                    Let me know any suggestion so the platform will it work better for you <br>                
+                </p>
+                
+                    <a href="https://github.com/danieluxury88" target="_blank">
+                    <button type="button" class="btn btn-success" >
+                        <i class="bi bi-github"></i> Contact </button>
+                    </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr style="border-top: 3px solid black;">
+
+
+{% endblock %}
+
+{% block extend_footer %}
+{%endblock%}
