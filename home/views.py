@@ -156,28 +156,30 @@ class CycleReportView(View):
         current_cycle = Cycle.get_current_cycle()
         if current_cycle:
             current_cycle_str = json.dumps(current_cycle.to_dict())
+            completed_milestones = Milestone.objects.filter(status=Status.COMPLETED.value, end_time__range=(current_cycle.start_time, current_cycle.end_time))
+            completed_independent_tasks = Task.objects.filter(milestone__isnull=True, status=Status.COMPLETED.value, end_time__range=(current_cycle.start_time, current_cycle.end_time)).order_by('priority')
+
+
+            work_sessions = WorkSession.objects.filter(end_time__range=(current_cycle.start_time, current_cycle.end_time)).annotate(
+                duration=ExpressionWrapper(F('end_time') - F('start_time'), output_field=DurationField())
+            )
+
+            total_work_session_duration_unformatted = work_sessions.aggregate(total=Sum('duration'))['total']
+
+            total_work_session_duration = format_timedelta_to_hours_minutes(total_work_session_duration_unformatted)
+
+            work_sessions = WorkSession.objects.filter(end_time__range=(current_cycle.start_time, current_cycle.end_time))
+
+            # Define a Prefetch object that filters events based on today's date
+            events_prefetch = Prefetch('events', queryset=Event.objects.filter(date__date__range=(current_cycle.start_time,current_cycle.end_time )))
+            event_types = EventType.objects.all().prefetch_related(events_prefetch)
         else:
             current_cycle_str = None
-
-            
-
-        completed_milestones = Milestone.objects.filter(status=Status.COMPLETED.value, end_time__range=(current_cycle.start_time, current_cycle.end_time))
-        completed_independent_tasks = Task.objects.filter(milestone__isnull=True, status=Status.COMPLETED.value, end_time__range=(current_cycle.start_time, current_cycle.end_time)).order_by('priority')
-
-
-        work_sessions = WorkSession.objects.filter(end_time__range=(current_cycle.start_time, current_cycle.end_time)).annotate(
-            duration=ExpressionWrapper(F('end_time') - F('start_time'), output_field=DurationField())
-        )
-
-        total_work_session_duration_unformatted = work_sessions.aggregate(total=Sum('duration'))['total']
-
-        total_work_session_duration = format_timedelta_to_hours_minutes(total_work_session_duration_unformatted)
-
-        work_sessions = WorkSession.objects.filter(end_time__range=(current_cycle.start_time, current_cycle.end_time))
-
-        # Define a Prefetch object that filters events based on today's date
-        events_prefetch = Prefetch('events', queryset=Event.objects.filter(date__date__range=(current_cycle.start_time,current_cycle.end_time )))
-        event_types = EventType.objects.all().prefetch_related(events_prefetch)
+            completed_milestones = None
+            completed_independent_tasks = None
+            work_sessions = None
+            total_work_session_duration = None
+            event_types = None
 
 
         context= {

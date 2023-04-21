@@ -220,7 +220,6 @@ class TaskDetailView(DetailView):
     model = Task
 
 
-
 class TaskCreateView(CreateView):
     model = Task
     fields = ['title', 'description', 'status', 'estimated_duration', 'priority', 'milestone', 'due_date']
@@ -233,6 +232,20 @@ class TaskCreateView(CreateView):
             return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
         except:
             return reverse('home:missions')
+        
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        current_cycle = Cycle.get_current_cycle()
+        if current_cycle:
+            current_cycle_str = json.dumps(current_cycle.to_dict())
+        else:
+            current_cycle_str = None
+
+        context['current_cycle_str'] = current_cycle_str
+        return context
+
 
 class TaskUpdateView(UpdateView):
     model = Task
@@ -260,9 +273,6 @@ class TaskUpdateView(UpdateView):
         context['current_cycle_str'] = current_cycle_str
         return context
         
-
-
-
 
 
 class TaskDeleteView(DeleteView):
