@@ -1,13 +1,11 @@
 from datetime import timedelta
 
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import formats, timezone
 from django.http import HttpResponseBadRequest
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView, View)
 
-from .models import Challenge, Cycle, Date, DayRegister, Event, EventType, WorkSession
+from .models import Cycle, Event, EventType, WorkSession
 
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -41,22 +39,9 @@ def work_sessions(request):
 def work_sessions_no_csrf(request):
     return work_sessions(request)
 
-
-def register_event(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            start_time = timezone.now()
-            event_type = data.get('event_type')
-            event = Event.objects.create(start_time=start_time, event_type=event_type)
-            event.save()
-            serialized_event = serializers.serialize('json', [event])
-            return JsonResponse({'event': serialized_event})
-        except json.JSONDecodeError:
-            return HttpResponseBadRequest("Invalid JSON data")
         
 
-def test_register_event(request):
+def register_event(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
@@ -70,27 +55,6 @@ def test_register_event(request):
             return HttpResponseBadRequest("Invalid JSON data")
     else:
         return JsonResponse({'event': "none"})
-
-
-
-
-def index(request):
-    cycle = Cycle.get_current_cycle()
-    work_session = WorkSession.get_current_work_session()
-        
-    dates = Date.objects.all()
-    challenges = Challenge.objects.all()
-    events = Event.objects.all()
-    days = DayRegister.objects.all()
-
-    context = {"msg":"Current Cycle",
-               "work_session": work_session, 
-               "current_cycle": cycle,
-               "dates":dates,
-               "challenges":challenges,
-               "days":days,
-               "events":events}
-    return render(request, "personal/personal_page.html", context)
 
 
 def create_cycle(request):
@@ -131,22 +95,3 @@ def stop_work_session(request):
     text = f"WorkSession {work_session.id}"
 
     return JsonResponse({'id': work_session.id, 'text': text})
-
-
-"""
-UNUSED FUNCTION
-"""
-# def toggle_work_session(request):
-#     if request.method == 'GET':
-#         current_time = timezone.now()
-#         work_session = WorkSession.get_current_work_session()
-#         if not work_session:
-#             work_session = WorkSession.objects.create(
-#                 start_time=current_time,
-#             )
-#         else:
-#             work_session.end_time = current_time
-#         work_session.save()
-#         return HttpResponse('WorkSession updated successfully.', status=200)
-#     else:
-#         return HttpResponse('Invalid request method.', status=400)

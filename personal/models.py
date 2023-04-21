@@ -43,7 +43,7 @@ class Cycle (models.Model):
         }
 
 
-#Challenges & Events
+#Events
 class Challenge (Cycle):
     title = models.CharField(max_length=100)
     comment = models.CharField(max_length=200, blank=True, null=True)
@@ -79,7 +79,6 @@ class Event(models.Model):
 
 
 #Work Session
-
 
 class WorkSession(models.Model):
     start_time = models.DateTimeField()

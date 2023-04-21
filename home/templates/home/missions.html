@@ -193,6 +193,20 @@
             </div>
         </section>
 
+        <section id="view_all_tasks">
+            <div class="container my-3">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-4 my-15 ms-auto d-flex justify-content-end ">
+                                <a href="{% url 'tasks:task_list' %}"><button class="btn btn-primary position-relative start-0">View All Tasks</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
 {% endblock %}
 
 {% block extend_footer %}

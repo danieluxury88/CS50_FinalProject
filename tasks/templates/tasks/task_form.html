@@ -5,7 +5,8 @@
 
 <section id="task-detail">
   <div class="container my-1">
-    <h1><strong>Task: </strong>{{object.title}}</h1> 
+    <h1><strong>Task: </strong>{{object.title}} <span><a href="{% url 'tasks:task_delete' pk=object.id  %}"><button class="btn btn-primary w-200 mx-1"><i class="bi bi-trash"></i></button></a></span></h1> 
+    
     {% if object.milestone.id %}
     <h3><strong>Milestone: </strong><a href="{% url 'tasks:milestone_single_update' pk=object.milestone.id  %}">{{object.milestone.title}}</a></h3>
     {% endif %}

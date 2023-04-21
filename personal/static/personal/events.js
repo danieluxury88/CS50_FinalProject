@@ -1,7 +1,7 @@
 function RegisterEvent(event_type) {
     const csrfToken = getCSRFToken();
 
-    fetch(`personal/test-register-event/`, {
+    fetch(`personal/register-event/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

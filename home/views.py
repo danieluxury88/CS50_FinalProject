@@ -92,23 +92,6 @@ class MissionView(View):
         return render(request, 'home/missions.html', context)
     
 
-class TestView(View):
-    def get(self, request):
-        current_cycle = Cycle.get_current_cycle()
-        if current_cycle:
-            current_cycle_str = json.dumps(current_cycle.to_dict())
-        else:
-            current_cycle_str = None
-
-
-        context= {"msg": "ok", 
-              "current_cycle_str":current_cycle_str,
-              }
-        return render(request, "home/test.html", context)
-    
-
-
-
 
 class ReportView(View):
     day = timezone.localdate() 

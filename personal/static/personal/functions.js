@@ -49,16 +49,3 @@ function updateTimers() {
 }
 
 
-
-// .then(response => {
-//     if (response.ok) {
-//       // Update the end time in the HTML DOM.
-//       console.log("Ok")
-//     } else {
-//       throw new Error('WorkSession update failed.');
-//     }
-//   })
-//   .then(()=> startWorkSessionTimer())
-//   .catch(error => {
-//     console.error(error);
-//   });

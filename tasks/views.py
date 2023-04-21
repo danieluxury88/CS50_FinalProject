@@ -15,9 +15,6 @@ from .forms import TaskForm
 import json
 
 
-def test(request):
-    return JsonResponse({"msg":"ok"})
-
 # PROJECTS
 #region project_region
 class ProjectListView(ListView):
@@ -111,6 +108,19 @@ class ProjectDeleteView(DeleteView):
     def get_object(self, queryset=None):
         project_id = self.kwargs.get('pk')
         return get_object_or_404(Project, id=project_id)
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        current_cycle = Cycle.get_current_cycle()
+        if current_cycle:
+            current_cycle_str = json.dumps(current_cycle.to_dict())
+        else:
+            current_cycle_str = None
+
+        context['current_cycle_str'] = current_cycle_str
+        return context
     
 #endregion
 
@@ -209,10 +219,18 @@ class TaskListView(ListView):
     context_object_name = 'tasks'
     ordering = 'status'
 
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        context['message'] = "ok"
+
+        current_cycle = Cycle.get_current_cycle()
+        if current_cycle:
+            current_cycle_str = json.dumps(current_cycle.to_dict())
+        else:
+            current_cycle_str = None
+
+        context['current_cycle_str'] = current_cycle_str
         return context
 
 
@@ -278,7 +296,7 @@ class TaskUpdateView(UpdateView):
 class TaskDeleteView(DeleteView):
     model = Task
     success_url = reverse_lazy('tasks:milestone_detail')
-
+    print("delete task")
     def get_success_url(self):
         try:
             project_id = self.kwargs['project_id']

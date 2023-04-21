@@ -49,7 +49,6 @@ PROJECT_APPS = [
     'home.apps.HomeConfig',
     'tasks.apps.TasksConfig',
     'personal.apps.PersonalConfig',
-    'report.apps.ReportConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
