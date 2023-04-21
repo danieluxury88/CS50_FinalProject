@@ -11,8 +11,6 @@ from django.views import View
 from django.db.models import Sum
 from django.db.models import F, ExpressionWrapper, DurationField
 
-from personal.models import Cycle, WorkSession
-
 from .models import User
 from .utils import format_timedelta_to_hours_minutes
 from personal.models import Cycle, WorkSession, EventType, Event

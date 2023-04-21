@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("cycle page loaded")
     startWorkSessionTimer();
     updateTimers();
   });
