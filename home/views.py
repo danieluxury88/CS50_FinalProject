@@ -37,11 +37,9 @@ def index(request):
         work_session_start_time_timestamp = None
 
     milestones_due_today = Milestone.objects.filter(due_date=DueDateChoice.DUE_TODAY.value)
-
     tasks_without_milestones = Task.objects.filter(milestone__isnull=True, due_date=DueDateChoice.DUE_TODAY.value).order_by('priority').order_by('status')
 
     day = timezone.localdate()
-
     today_work_sessions = WorkSession.get_today_work_sessions(day)
     today_total_work_session_duration = WorkSession.get_todays_work_sessions_duration(day)
 
@@ -111,14 +109,13 @@ class ReportView(View):
 
 
         context= {
-                  "current_cycle_str":current_cycle_str,
-                  "completed_milestones":completed_milestones,
-                  "completed_independent_tasks":completed_independent_tasks,
-                  "work_sessions":work_sessions,
-                "total_work_session_duration":total_work_session_duration,
-                "event_types":event_types,
-
-              }
+            "current_cycle_str":current_cycle_str,
+            "completed_milestones":completed_milestones,
+            "completed_independent_tasks":completed_independent_tasks,
+            "work_sessions":work_sessions,
+            "total_work_session_duration":total_work_session_duration,
+            "event_types":event_types,
+        }
         return render(request, 'home/report.html', context)
     
 
@@ -128,23 +125,6 @@ class TodayReportView(ReportView):
 
 class YesterdayReportView(ReportView):
     day = timezone.localdate() - timedelta(days=1)
-
-
-class MyDefaultView(View):
-    def get(self, request):
-        current_cycle = Cycle.get_current_cycle()
-        if current_cycle:
-            current_cycle_str = json.dumps(current_cycle.to_dict())
-        else:
-            current_cycle_str = None
-
-        context= {
-                  "current_cycle_str":current_cycle_str}
-        return render(request, 'home/about.html', context)
-    
-
-class AboutView(MyDefaultView):
-    pass
 
 
 
@@ -193,5 +173,20 @@ class CycleReportView(View):
               }
         return render(request, 'home/report.html', context)
 
+
+
+class MyDefaultView(View):
+    def get(self, request):
+        current_cycle = Cycle.get_current_cycle()
+        if current_cycle:
+            current_cycle_str = json.dumps(current_cycle.to_dict())
+        else:
+            current_cycle_str = None
+
+        context= {
+                  "current_cycle_str":current_cycle_str}
+        return render(request, 'home/about.html', context)
     
-    
+
+class AboutView(MyDefaultView):
+    pass

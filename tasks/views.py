@@ -5,8 +5,7 @@ from django.shortcuts import get_object_or_404,HttpResponse, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView)
+from django.views.generic import (View,CreateView, DeleteView, ListView,UpdateView)
 
 from personal.models import Cycle
 from .models import Milestone, Project, Task, Status
@@ -15,16 +14,8 @@ from .forms import TaskForm
 import json
 
 
-# PROJECTS
-#region project_region
-class ProjectCreateView(CreateView):
-    model = Project
-    template_name = 'tasks/project/project_form.html'
-    fields = ['title', 'estimated_duration', 'status']
-    success_url = reverse_lazy('home:missions')
-
+class CurrentCycleMixin(View):
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
 
         current_cycle = Cycle.get_current_cycle()
@@ -36,9 +27,18 @@ class ProjectCreateView(CreateView):
         context['current_cycle_str'] = current_cycle_str
         return context
 
+    
+# PROJECTS
+#region project_region
+class ProjectCreateView(CurrentCycleMixin, CreateView):
+    model = Project
+    template_name = 'tasks/project/project_form.html'
+    fields = ['title', 'estimated_duration', 'status']
+    success_url = reverse_lazy('home:missions')
 
 
-class ProjectUpdateView(UpdateView):
+
+class ProjectUpdateView(CurrentCycleMixin, UpdateView):
     model = Project
     template_name = 'tasks/project/project_form.html'
     fields = ['title', 'estimated_duration', 'status']
@@ -49,23 +49,14 @@ class ProjectUpdateView(UpdateView):
         return get_object_or_404(Project, id=project_id)
     
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         project = get_object_or_404(Project, id=self.kwargs['pk'])
         milestones = Milestone.objects.filter(project=project)
-        context['milestones'] = milestones
-
-        current_cycle = Cycle.get_current_cycle()
-        if current_cycle:
-            current_cycle_str = json.dumps(current_cycle.to_dict())
-        else:
-            current_cycle_str = None
-
-        context['current_cycle_str'] = current_cycle_str
+        context["milestones"] = milestones
         return context
 
 
-class ProjectDeleteView(DeleteView):
+class ProjectDeleteView(CurrentCycleMixin, DeleteView):
     model = Project
     template_name = 'tasks/project/project_confirm_delete.html'
     success_url = reverse_lazy('home:missions')
@@ -74,76 +65,26 @@ class ProjectDeleteView(DeleteView):
         project_id = self.kwargs.get('pk')
         return get_object_or_404(Project, id=project_id)
     
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-
-        current_cycle = Cycle.get_current_cycle()
-        if current_cycle:
-            current_cycle_str = json.dumps(current_cycle.to_dict())
-        else:
-            current_cycle_str = None
-
-        context['current_cycle_str'] = current_cycle_str
-        return context
     
 #endregion
 
 # MILESTONES
 #region milestone_region
-class MilestoneCreateView(CreateView):
+class MilestoneCreateView(CurrentCycleMixin, CreateView):
     model = Milestone
     fields = ['title', 'estimated_duration', 'status', 'project', 'due_date']
-    
-    def get_success_url(self):
-        try:
-            project_id = self.kwargs['project_id']
-            # return reverse('tasks:project_detail', args=[project_id])
-            return reverse('home:missions')
-        except:
-            return reverse('home:missions')
+    success_url = reverse_lazy('home:missions')
         
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-
-        current_cycle = Cycle.get_current_cycle()
-        if current_cycle:
-            current_cycle_str = json.dumps(current_cycle.to_dict())
-        else:
-            current_cycle_str = None
-
-        context['current_cycle_str'] = current_cycle_str
-        return context
     
 
-class MilestoneUpdateView(UpdateView):
+class MilestoneUpdateView(CurrentCycleMixin, UpdateView):
     model = Milestone
     fields = ['title', 'estimated_duration', 'status', 'project', 'due_date']
+    success_url = reverse_lazy('home:missions')
 
-    def get_success_url(self):
-        try:
-            project_id = self.kwargs['project_id']
-            # return reverse('tasks:project_detail', args=[project_id])
-            return reverse('home:missions')
-        except:
-            return reverse('home:missions')
-        
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-
-        current_cycle = Cycle.get_current_cycle()
-        if current_cycle:
-            current_cycle_str = json.dumps(current_cycle.to_dict())
-        else:
-            current_cycle_str = None
-
-        context['current_cycle_str'] = current_cycle_str
-        return context
         
         
-class MilestoneDeleteView(DeleteView):
+class MilestoneDeleteView(CurrentCycleMixin,DeleteView):
     model = Milestone
     success_url = reverse_lazy('tasks:project_detail')
 
@@ -159,24 +100,10 @@ class MilestoneDeleteView(DeleteView):
 
 # TASKS
 # region task_region
-class TaskListView(ListView):
+class TaskListView(CurrentCycleMixin, ListView):
     model = Task
     context_object_name = 'tasks'
     ordering = 'status'
-
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-
-        current_cycle = Cycle.get_current_cycle()
-        if current_cycle:
-            current_cycle_str = json.dumps(current_cycle.to_dict())
-        else:
-            current_cycle_str = None
-
-        context['current_cycle_str'] = current_cycle_str
-        return context
 
 
 
@@ -200,24 +127,13 @@ class TaskCreateView(CreateView):
         return context
 
 
-class TaskUpdateView(UpdateView):
+class TaskUpdateView(CurrentCycleMixin, UpdateView):
     model = Task
     form_class = TaskForm
     template_name = 'tasks/task_form.html'
     success_url = reverse_lazy('home:missions')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
 
-        current_cycle = Cycle.get_current_cycle()
-        if current_cycle:
-            current_cycle_str = json.dumps(current_cycle.to_dict())
-        else:
-            current_cycle_str = None
-
-        context['current_cycle_str'] = current_cycle_str
-        # Add your additional context here
-        return context
 
 def update_task(request, pk):
     model_instance = Task.objects.get(pk=pk)
@@ -228,7 +144,7 @@ def update_task(request, pk):
         
 
 
-class TaskDeleteView(DeleteView):
+class TaskDeleteView(CurrentCycleMixin, DeleteView):
     model = Task
     success_url = reverse_lazy('home:missions')
 
