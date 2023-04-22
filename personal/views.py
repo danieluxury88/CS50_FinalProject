@@ -11,7 +11,6 @@ from django.core import serializers
 from .models import Cycle, Event, EventType, WorkSession
 
 
-
 def register_event(request):
     if request.method == "POST":
         try:
@@ -42,10 +41,7 @@ def start_work_session(request):
     start_time = timezone.now()
     work_session = WorkSession.objects.create(start_time=start_time)
 
-    # Convert the start_time to a Unix timestamp (in seconds)
     start_time_timestamp = int(start_time.timestamp())
-
-    # You can customize the text field if you want, here I'm just using the id of the object
     text = f"WorkSession {work_session.id}"
 
     local_start_time = timezone.localtime(work_session.start_time, timezone=timezone.pytz.timezone('America/Guayaquil'))
@@ -60,9 +56,7 @@ def stop_work_session(request):
     if  work_session:
         work_session.end_time = current_time
         work_session.save()
-    
 
-    # You can customize the text field if you want, here I'm just using the id of the object
     text = f"WorkSession {work_session.id}"
 
     return JsonResponse({'id': work_session.id, 'text': text})

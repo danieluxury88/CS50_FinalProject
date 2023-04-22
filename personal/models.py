@@ -6,17 +6,15 @@ from django.db.models import Q
 from tasks.models import Task
 from django.db.models import Count
 
-#Cycle duration
+#Cycle
 class Cycle (models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    # duration = models.DurationField(default=timedelta(hours=99, minutes =59, seconds =99))
 
     @staticmethod
     def get_current_cycle():
         current_time = timezone.now()
-        existing_cycle = Cycle.objects.filter( start_time__lte=current_time, end_time__gte=current_time).exclude(
-        challenge__isnull=False ).first()
+        existing_cycle = Cycle.objects.filter( start_time__lte=current_time, end_time__gte=current_time).first()
         return existing_cycle
     
     def get_completed_tasks(self):
@@ -44,22 +42,14 @@ class Cycle (models.Model):
 
 
 #Events
-class Challenge (Cycle):
-    title = models.CharField(max_length=100)
-    comment = models.CharField(max_length=200, blank=True, null=True)
-    def __str__(self):
-        return self.title                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-
-
 class EventType(models.Model):
     title = models.CharField(max_length=100)
-    is_regular = models.BooleanField(default=False)
+    is_regular = models.BooleanField(default=True)
     def __str__(self):
         return self.title
     
     
 class Event(models.Model):
-    challenge = models.ForeignKey(Challenge, on_delete=models.SET_NULL, blank=True, null=True)
     event_type = models.ForeignKey(EventType, on_delete=models.SET_NULL, blank=True, null=True, related_name='events')
     title = models.CharField(max_length=100, blank=True, null=True)
     date = models.DateTimeField()
@@ -79,7 +69,6 @@ class Event(models.Model):
 
 
 #Work Session
-
 class WorkSession(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(blank=True, null=True)
@@ -129,8 +118,7 @@ class WorkSession(models.Model):
         hours, remainder = divmod(total_duration.seconds, 3600)
         minutes, _ = divmod(remainder, 60)
         return f"{hours}h {minutes}m"
-
-        
+    
 
     @staticmethod
     def get_current_work_session():
@@ -145,52 +133,3 @@ class WorkSession(models.Model):
             Q(end_time__gt=cycle.start_time, end_time__lte=cycle.end_time) |
             Q(start_time__lt=cycle.start_time, end_time__gt=cycle.end_time)
         )
-    
-    def get_completed_tasks(self):
-        # return Task.objects.filter(status='COMPLETED', end_time__gte=self.start_time, end_time__lte=self.end_time)
-        return Task.objects.filter(status='TO_DO')
-    
-
-
-#Dates/Calendar
-class DateType (models.Model):
-    type = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.type
-    
-class Date (models.Model):
-    title = models.CharField(max_length=100)
-    type = models.ForeignKey(DateType, on_delete=models.SET_NULL, blank=True, null=True)
-    date = models.DateField()
-
-    class Meta:
-        ordering = ['date']
-
-    def __str__(self):
-        return f" {self.date.strftime('%B %d')} -  {self.title}"
-    
-    @staticmethod
-    def get_dates_within_cycle(cycle):
-        return Date.objects.filter(date__gte=cycle.start_time.date(), date__lte=cycle.end_time.date())
-    
-
-class DayRegister (models.Model):
-    date = models.DateField()
-    note = models.IntegerField(blank=True, null=True)
-    comment = models.TextField(max_length=1000)
-
-    class Meta:
-        ordering = ['date']
-
-    def __str__(self):
-        return f" {self.date.strftime('%B %d')}"
-    
-    @staticmethod
-    def get_registers_within_cycle(cycle):
-        return DayRegister.objects.filter(date__gte=cycle.start_time.date(), date__lte=cycle.end_time.date())
-    
-
-    def get_sessions_within_day(self):
-        return WorkSession.objects.filter(start_time__date=self.date)
-

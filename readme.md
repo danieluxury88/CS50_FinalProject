@@ -35,6 +35,7 @@ If you see how much can you do in 4 days, you will want to start a new Cycle aga
    - admin personalization
    - models (including abstract model)
    - template tags
+   - template inheritance
 - Python
    - virtual environment
    - 
