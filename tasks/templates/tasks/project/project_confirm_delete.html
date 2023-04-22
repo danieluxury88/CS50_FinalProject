@@ -8,5 +8,5 @@
   {% csrf_token %}
   <input type="submit" value="Yes, delete.">
 </form>
-<input type="button" value="No" onclick="window.location.href='{% url 'tasks:index' %}';return false;">
+<input type="button" value="No" onclick="window.location.href='{% url 'home:missions' %}';return false;">
 {% endblock %}

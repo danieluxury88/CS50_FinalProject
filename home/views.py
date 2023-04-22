@@ -47,7 +47,6 @@ def index(request):
 
     task_in_progress = Task.objects.filter(status=Status.IN_PROGRESS.value).order_by('priority').first()
 
-    # Get the current date (timezone-aware)
     today = timezone.now().date()
 
     # Define a Prefetch object that filters events based on today's date

@@ -17,41 +17,6 @@ import json
 
 # PROJECTS
 #region project_region
-class ProjectListView(ListView):
-    model = Project
-    template_name = 'tasks/project/project_list.html'
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-
-        current_cycle = Cycle.get_current_cycle()
-        if current_cycle:
-            current_cycle_str = json.dumps(current_cycle.to_dict())
-        else:
-            current_cycle_str = None
-
-        context['current_cycle_str'] = current_cycle_str
-        return context
-
-
-class ProjectDetailView(ListView):
-    model = Project
-    template_name = 'tasks/project/project_detail.html'
-    context_object_name = 'milestones'
-
-    def get_queryset(self):
-        project = get_object_or_404(Project, id=self.kwargs['pk'])
-        return Milestone.objects.filter(project=project)
-    
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        project = get_object_or_404(Project, id=self.kwargs['pk'])
-        context['project'] = project
-        return context
-
-
 class ProjectCreateView(CreateView):
     model = Project
     template_name = 'tasks/project/project_form.html'
@@ -234,9 +199,6 @@ class TaskListView(ListView):
         return context
 
 
-class TaskDetailView(DetailView):
-    model = Task
-
 
 class TaskCreateView(CreateView):
     model = Task
@@ -267,50 +229,17 @@ class TaskCreateView(CreateView):
 
 class TaskUpdateView(UpdateView):
     model = Task
-    fields = ['title', 'description', 'status', 'estimated_duration', 'priority', 'milestone']
-    success_url = reverse_lazy('tasks:milestone_detail')
-
-    def get_success_url(self):
-        try:
-            project_id = self.kwargs['project_id']
-            milestone_id = self.kwargs['milestone_id']
-            return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
-        except:
-            return reverse('home:index')
-        
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-
-        current_cycle = Cycle.get_current_cycle()
-        if current_cycle:
-            current_cycle_str = json.dumps(current_cycle.to_dict())
-        else:
-            current_cycle_str = None
-
-        context['current_cycle_str'] = current_cycle_str
-        return context
-        
-
-
-class TaskDeleteView(DeleteView):
-    model = Task
-    success_url = reverse_lazy('tasks:milestone_detail')
-    def get_success_url(self):
-        try:
-            project_id = self.kwargs['project_id']
-            milestone_id = self.kwargs['milestone_id']
-            return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
-        except:
-            return reverse('home:index')
-#endregion
-
-
-class TaskUpdateView(UpdateView):
-    model = Task
     form_class = TaskForm
     template_name = 'tasks/task_form.html'
     success_url = reverse_lazy('home:index')
+
+    def get_success_url(self):
+        try:
+            project_id = self.kwargs['project_id']
+            milestone_id = self.kwargs['milestone_id']
+            return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
+        except:
+            return reverse('home:index')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -331,6 +260,20 @@ def update_task(request, pk):
     
     update_view = TaskUpdateView.as_view()
     return update_view(request, pk=pk, form=form)
+        
+
+
+class TaskDeleteView(DeleteView):
+    model = Task
+    success_url = reverse_lazy('tasks:milestone_detail')
+    def get_success_url(self):
+        try:
+            project_id = self.kwargs['project_id']
+            milestone_id = self.kwargs['milestone_id']
+            return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
+        except:
+            return reverse('home:index')
+#endregion
 
 
 @csrf_exempt

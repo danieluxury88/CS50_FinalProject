@@ -31,6 +31,17 @@ function updateTimer(element_id, timer) {
   UpdateStringTimer(element_id,timeString );
 }
 
+function formatStartTime(dateTimeString) {
+  const date = new Date(dateTimeString);
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'p.m.' : 'a.m.';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  return hours + ':' + minutes + ' ' + ampm;
+}
+
 function padZero(number) {
   return number < 10 ? "0" + number : number;
 }
