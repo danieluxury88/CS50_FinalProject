@@ -1,9 +1,9 @@
 from django.db import models
-from datetime import timedelta,datetime
+from datetime import timedelta
 from django.utils import timezone
 from django.db.models import Q
 
-from tasks.models import Task, Milestone
+from tasks.models import Task
 from django.db.models import Count
 
 #Cycle duration
@@ -145,10 +145,6 @@ class WorkSession(models.Model):
             Q(end_time__gt=cycle.start_time, end_time__lte=cycle.end_time) |
             Q(start_time__lt=cycle.start_time, end_time__gt=cycle.end_time)
         )
-    
-    # def get_completed_task(self):
-    #     return Task.objects.filter(end_time__gte=self.start_time.date(), end_time__lte=self.end_time.date())
-    #     # return Task.objects.all()
     
     def get_completed_tasks(self):
         # return Task.objects.filter(status='COMPLETED', end_time__gte=self.start_time, end_time__lte=self.end_time)

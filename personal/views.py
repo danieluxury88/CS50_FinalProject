@@ -1,45 +1,16 @@
 from datetime import timedelta
+import json
 
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import formats, timezone
 from django.http import HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
 
 from .models import Cycle, Event, EventType, WorkSession
 
-import json
-from django.views.decorators.csrf import csrf_exempt
-import datetime
 
-
-
-# views.py
-from django.core import serializers
-
-
-def work_sessions(request):
-    if request.method == "GET":
-        work_sessions = WorkSession.objects.all()
-        return render(request, 'personal/work_sessions.html', {'work_sessions': work_sessions})
-    elif request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            start_time = timezone.now()
-            end_time_str = data.get('end_time')
-            end_time = timezone.make_aware(datetime.datetime.fromisoformat(end_time_str)) if end_time_str else None
-            work_session = WorkSession.objects.create(start_time=start_time, end_time=end_time)
-            work_session.save()
-            serialized_work_session = serializers.serialize('json', [work_session])
-            return JsonResponse({'work_session': serialized_work_session})
-        except json.JSONDecodeError:
-            return HttpResponseBadRequest("Invalid JSON data")
-
-
-@csrf_exempt
-def work_sessions_no_csrf(request):
-    return work_sessions(request)
-
-        
 
 def register_event(request):
     if request.method == "POST":
