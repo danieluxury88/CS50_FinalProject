@@ -168,7 +168,7 @@
                                         </ol>
                                     </div>
                                     <div class="col-md-2 my-1 mx-1 ms-auto d-flex justify-content-end">
-                                        <button class="btn btn-primary" onclick="navigateToCreateTask('{% url 'tasks:task_create_alone' %}', '{% url 'home:index' %}')">New Task</button>
+                                        <button class="btn btn-primary" onclick="navigateToCreateTask('{% url 'tasks:task_create_alone' %}')">New Task</button>
                                     </div>
                                 </div>
                             </div>
@@ -329,12 +329,8 @@
 </script>
 
 <script>
-    function navigateToCreateTask(createTaskUrl, homeUrl) {
-        if (createTaskUrl.includes("tasks:milestone_detail")) {
-            location.href = homeUrl;
-        } else {
-            location.href = createTaskUrl;
-        }
+    function navigateToCreateTask(createTaskUrl) {
+        location.href = createTaskUrl;
     }
     </script>
     

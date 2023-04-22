@@ -20,7 +20,6 @@ tasks_patterns = [
     # URLs for Milestones
 milestone_patterns = [
     path('<int:project_id>/milestones/create', MilestoneCreateView.as_view(), name='milestone_create'),
-    path('<int:project_id>/milestones/<int:pk>/', MilestoneDetailView.as_view(), name='milestone_detail'),
     path('<int:project_id>/milestones/<int:pk>/update/', MilestoneUpdateView.as_view(), name='milestone_update'),
     path('<int:project_id>/milestones/<int:pk>/delete/', MilestoneDeleteView.as_view(), name='milestone_delete'),
     path('milestones/create', MilestoneCreateView.as_view(), name='milestone_single_create'),

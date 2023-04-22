@@ -3,13 +3,13 @@ from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404,HttpResponse, redirect, render
 from django.urls import reverse, reverse_lazy
+from django.views.decorators.csrf import csrf_exempt
 
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
-from django.views.decorators.csrf import csrf_exempt
 
-from .models import Milestone, Project, Task, Status
 from personal.models import Cycle
+from .models import Milestone, Project, Task, Status
 from .forms import TaskForm
 
 import json
@@ -91,26 +91,6 @@ class ProjectDeleteView(DeleteView):
 
 # MILESTONES
 #region milestone_region
-class MilestoneListView(ListView):
-    model = Milestone
-
-
-class MilestoneDetailView(DetailView):
-    model = Milestone
-    fields = ['title', 'estimated_duration', 'status', 'project', 'due_date']
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        milestone = self.get_object()
-        context['f_creation_time'] = timezone.localtime(milestone.creation_time).strftime('%B %d')
-        context['tasks'] = milestone.tasks.all()
-        context['num_tasks'] = milestone.tasks.count()
-        context['num_completed_tasks'] = milestone.tasks.filter(status='COMPLETED').count()
-        context['total_estimated_duration'] = milestone.tasks.aggregate(Sum('estimated_duration'))['estimated_duration__sum']
-        context['total_left_estimated_duration'] = milestone.tasks.exclude(status='COMPLETED').aggregate(Sum('estimated_duration'))['estimated_duration__sum']
-        return context
-    
-
 class MilestoneCreateView(CreateView):
     model = Milestone
     fields = ['title', 'estimated_duration', 'status', 'project', 'due_date']
@@ -203,15 +183,8 @@ class TaskListView(ListView):
 class TaskCreateView(CreateView):
     model = Task
     fields = ['title', 'description', 'status', 'estimated_duration', 'priority', 'milestone', 'due_date']
-    success_url = reverse_lazy('tasks:milestone_detail')
+    success_url = reverse_lazy('home:missions')
 
-    def get_success_url(self):
-        try:
-            project_id = self.kwargs['project_id']
-            milestone_id = self.kwargs['milestone_id']
-            return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
-        except:
-            return reverse('home:missions')
         
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -231,15 +204,7 @@ class TaskUpdateView(UpdateView):
     model = Task
     form_class = TaskForm
     template_name = 'tasks/task_form.html'
-    success_url = reverse_lazy('home:index')
-
-    def get_success_url(self):
-        try:
-            project_id = self.kwargs['project_id']
-            milestone_id = self.kwargs['milestone_id']
-            return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
-        except:
-            return reverse('home:index')
+    success_url = reverse_lazy('home:missions')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -265,14 +230,8 @@ def update_task(request, pk):
 
 class TaskDeleteView(DeleteView):
     model = Task
-    success_url = reverse_lazy('tasks:milestone_detail')
-    def get_success_url(self):
-        try:
-            project_id = self.kwargs['project_id']
-            milestone_id = self.kwargs['milestone_id']
-            return reverse('tasks:milestone_detail', args=[project_id, milestone_id])
-        except:
-            return reverse('home:index')
+    success_url = reverse_lazy('home:missions')
+
 #endregion
 
 
