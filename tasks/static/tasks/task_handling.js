@@ -40,7 +40,6 @@ function filterListByTitle() {
 
   let statusSortedAscending = false;
   function sortListByStatus() {
-    console.log("sortListByStatus");
     let workItems = document.querySelectorAll('.work-item');
     workItems = Array.prototype.slice.call(workItems, 0);
     workItems.sort(function(a, b) {
@@ -62,12 +61,10 @@ function filterListByTitle() {
     workItems.forEach(function(item) {
       parent.appendChild(item);
     });
-    console.log(statusSortedAscending);
   }
 
   let prioritySortedAscending = true;
   function sortListByPriority() {
-    console.log("sortListByPriority");
     let workItems = document.querySelectorAll('.work-item');
     workItems = Array.prototype.slice.call(workItems, 0);
     workItems.sort(function(a, b) {
@@ -109,12 +106,15 @@ function filterListByTitle() {
   function updateStatus(task_id, status) {
     console.log("updateStatus");
     let status_content = document.getElementById(`status_${task_id}`);
-    fetch(`duty/tasks/${task_id}/update-status/`, {
+    fetch(djangoTaskData.taskUpdateStatusUrl, {
       method: 'PUT',
       body: JSON.stringify({
         id: task_id,
         status: status,
-      })
+      }),
+      headers: {
+        "X-CSRFToken": djangoTaskData.csrfToken
+      }
     }).then(response => response.json())
       .then(data => {
         const newStatus = data.status;
@@ -129,7 +129,7 @@ function filterListByTitle() {
     const selectedValue = selectedOption.value;
     const selectedText = selectedOption.text;
 
-    console.log(`Selected Value: ${selectedValue}, Selected Text: ${selectedText}`);
+    // console.log(`Selected Value: ${selectedValue}, Selected Text: ${selectedText}`);
     fetch(`duty/tasks/${task_id}/update-task-due-date/`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -146,7 +146,7 @@ function filterListByTitle() {
     const selectedValue = selectedOption.value;
     const selectedText = selectedOption.text;
 
-    console.log(`Selected Value: ${selectedValue}, Selected Text: ${selectedText}`);
+    // console.log(`Selected Value: ${selectedValue}, Selected Text: ${selectedText}`);
     fetch(`duty/milestones/${milestone_id}/update-milestone-due-date/`, {
       method: 'PUT',
       body: JSON.stringify({

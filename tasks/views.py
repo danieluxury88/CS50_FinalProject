@@ -152,7 +152,7 @@ class TaskListView(CurrentCycleMixin, ListView):
 
 
 @csrf_exempt
-def update_task_status(request, pk):
+def update_task_status(request):
     if request.method == "PUT":
         data = json.loads(request.body)
         if data.get("status") is not None:

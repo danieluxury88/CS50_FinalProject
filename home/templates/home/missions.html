@@ -210,4 +210,11 @@
 {% endblock %}
 
 {% block extend_footer %}
+<script src="{% static 'tasks/task_handling.js' %}"></script>
+<script>
+    const djangoTaskData = {
+        taskUpdateStatusUrl: "{% url 'tasks:task_update_status' %}",
+        csrfToken: "{{ csrf_token }}",
+      };
+    </script>
 {%endblock%}
