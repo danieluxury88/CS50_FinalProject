@@ -100,12 +100,6 @@ class MilestoneDeleteView(CurrentCycleMixin,DeleteView):
 
 # TASKS
 # region task_region
-class TaskListView(CurrentCycleMixin, ListView):
-    model = Task
-    context_object_name = 'tasks'
-    ordering = 'status'
-
-
 
 class TaskCreateView(CreateView):
     model = Task
@@ -147,6 +141,12 @@ def update_task(request, pk):
 class TaskDeleteView(CurrentCycleMixin, DeleteView):
     model = Task
     success_url = reverse_lazy('home:missions')
+
+
+class TaskListView(CurrentCycleMixin, ListView):
+    model = Task
+    context_object_name = 'tasks'
+    ordering = 'status'
 
 #endregion
 

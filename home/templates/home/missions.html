@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load tz %}
 {% load static %}
-{% load due_date_tags %}
+{% load format_data_tags %}
 
 {% block content %}
         
@@ -42,7 +42,7 @@
                                                             {{ milestone.description|default:'' }}
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <form action="/action_page.php" id="myForm">
+                                                            <form action="" id="myForm">
                                                                 <label for="dues">Due:</label>
                                                                 <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="milestone_due" id="milestone_due" onchange="updateMilestoneDueDate({{milestone.pk}}, this)">
                                                                     <option value="1" {% if milestone.due_date == 1 %}selected{% endif %}>Today</option>
@@ -161,7 +161,7 @@
                                                                     role="button">Completed</a>
                                                             </div>
                                                             <div class="col-md-4">
-                                                                <form action="/action_page.php" id="myForm">
+                                                                <form action="" id="myForm">
                                                                     <label for="dues">Due:</label>
                                                                     <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="task_due" id="task_due" onchange="updateTaskDueDate({{task.pk}}, this)">
                                                                         <option value="1" {% if task.due_date == 1 %}selected{% endif %}>Today</option>

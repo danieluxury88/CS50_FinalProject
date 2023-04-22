@@ -65,23 +65,6 @@ function filterListByTitle() {
     console.log(statusSortedAscending);
   }
 
-  function filterListByStatus() {
-    let workItems = document.querySelectorAll('.work-item');
-    workItems = Array.prototype.slice.call(workItems, 0);
-    let selectedStatuses = Array.from(document.querySelectorAll('input[name="status"]:checked'))
-      .map(function(checkbox) { return checkbox.value; });
-
-    workItems.forEach(function(item) {
-      let status = item.querySelector('.status').textContent.toUpperCase();
-      if (selectedStatuses.length === 0 || selectedStatuses.includes(status)) {
-        item.style.display = 'block';
-      } else {
-        item.style.display = 'none';
-      }
-    });
-  }
-
-
   let prioritySortedAscending = true;
   function sortListByPriority() {
     console.log("sortListByPriority");
@@ -105,16 +88,23 @@ function filterListByTitle() {
     });
   }
 
+  function filterListByStatus() {
+    let workItems = document.querySelectorAll('.work-item');
+    workItems = Array.prototype.slice.call(workItems, 0);
+    let selectedStatuses = Array.from(document.querySelectorAll('input[name="status"]:checked'))
+      .map(function(checkbox) { return checkbox.value; });
 
-  function update_task_state(task_id , state) {
-    console.log("update_task_state");
-    fetch(`tasks/${task_id}/update` , {
-        method: 'PUT',
-        body: JSON.stringify({
-            state: state
-        })
-    }).then(()=> filterListByStatus())
+    workItems.forEach(function(item) {
+      let status = item.querySelector('.status').textContent.toUpperCase();
+      if (selectedStatuses.length === 0 || selectedStatuses.includes(status)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
   }
+
+
 
   function updateStatus(task_id, status) {
     console.log("updateStatus");
@@ -135,15 +125,9 @@ function filterListByTitle() {
   }
 
   function updateTaskDueDate(task_id, selectElement) {
-    console.log("updateTaskDueDate");
-    console.log(task_id);
-    console.log(selectElement);
     const selectedOption = selectElement.options[selectElement.selectedIndex];
     const selectedValue = selectedOption.value;
     const selectedText = selectedOption.text;
-
-    console.log(selectedText);
-    console.log(selectedValue);
 
     console.log(`Selected Value: ${selectedValue}, Selected Text: ${selectedText}`);
     fetch(`duty/tasks/${task_id}/update-task-due-date/`, {
@@ -158,14 +142,9 @@ function filterListByTitle() {
   }
 
   function updateMilestoneDueDate(milestone_id, selectElement) {
-    console.log("updateMilestoneDueDate");
-    console.log(milestone_id);
-    console.log(selectElement);
     const selectedOption = selectElement.options[selectElement.selectedIndex];
     const selectedValue = selectedOption.value;
     const selectedText = selectedOption.text;
-    console.log(selectedText);
-    console.log(selectedValue);
 
     console.log(`Selected Value: ${selectedValue}, Selected Text: ${selectedText}`);
     fetch(`duty/milestones/${milestone_id}/update-milestone-due-date/`, {

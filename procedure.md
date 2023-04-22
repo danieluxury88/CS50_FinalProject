@@ -30,8 +30,7 @@ from django.core.management.utils import get_random_secret_key
 print(get_random_secret_key())
 ```
 
-16. Add login and & register views, using template html to split header, nav, body and footer.
+16. Define apps & models.
+17. Create templates and UI with bootstrap.
+~~16. Add login and & register views, using template html to split header, nav, body and footer.~~
 
-17. Add Tasks app which includes task, milestone and project models.
-18. Add generic views for details and listing.
-x. Define apps & models.
