@@ -33,5 +33,9 @@
 #         m = Membership(role=r, person=p, course=c)
 #         m.save()
 
+from tasks.models import Task, Status
+
 def run():
-    print("Hello World")
+    completed_tasks = Task.objects.filter(status=Status.COMPLETED.value)
+    print(completed_tasks)
+    

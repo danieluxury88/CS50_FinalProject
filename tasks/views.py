@@ -296,7 +296,6 @@ class TaskUpdateView(UpdateView):
 class TaskDeleteView(DeleteView):
     model = Task
     success_url = reverse_lazy('tasks:milestone_detail')
-    print("delete task")
     def get_success_url(self):
         try:
             project_id = self.kwargs['project_id']

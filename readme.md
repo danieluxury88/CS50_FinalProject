@@ -38,9 +38,17 @@ If you see how much can you do in 4 days, you will want to start a new Cycle aga
    - template inheritance
 - Python
    - virtual environment
-   - 
 - JavaScript
+   - DOM Manipulation
+   - Fetch functions
+   - Async Functions
 - Bootstrap
+   - Accordions
+   - Cards
+   - Icons
+   - Badges
+   - Navigation
+   - Responsive containers
 - Css
 
 ## Installation Instructions
@@ -80,7 +88,7 @@ Project is composed of 3 apps:
 
 ## Usage
 
-1. Enter admin site and create EventTypes (here you will register your habits as Meditation, Exercise or addictions as VideoGames, Drugs, etc), and set them as regultar.
+1. Enter admin site and create EventTypes (here you will register your habits as Meditation, Exercise or addictions as VideoGames, Drugs, etc), and set them as regular.
 2. On every view you will see at the top the navigation bar and two percentages bars.
    - Navigation bar clocks: A clock with current time, and current remaining/elapsed cycle time. If you a cycle is active you can toggle the cycle timer from elapsed to remaining.
    - The **DAY BAR** starts at 6 AM and ends at 10 PM.
