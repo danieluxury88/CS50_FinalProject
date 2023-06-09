@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+
+<section id="About">
+    <div class="container my-1">
+        <div class="row justify-content-center">
+            <div class="col-md-10 my-2">
+                <h1> 99 Hours - Personal Management</h1>
+                
+                    <a href="https://github.com/danieluxury88" target="_blank">
+                    <button type="button" class="btn btn-success" >
+                        <i class="bi bi-github"></i> Contact </button>
+                    </a>
+
+                    <a href="https://www.twitter.com" target="_blank" class="js-download-link">
+                        <button type="button" class="btn btn-success" >
+                            <i class="bi bi-download"></i> Twitter </button>
+                        </a>
+
+                    <a href="https://www.google.com" target="_blank" class="js-download-link">
+                            <button type="button" class="btn btn-success" >
+                                <i class="bi bi-download"></i> Google </button>
+                            </a>
+
+                    <a href="https://www.fulterer.com" target="_blank" class="js-download-link">
+                        <button type="button" class="btn btn-success" >
+                            <i class="bi bi-download"></i> Fulterer </button>
+                        </a>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr style="border-top: 3px solid black;">
+
+
+{% endblock %}
+
+{% block extend_footer %}
+<script src="{% static 'home/analytics.js' %}"></script>
+{%endblock%}

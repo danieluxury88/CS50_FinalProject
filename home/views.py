@@ -190,3 +190,22 @@ class MyDefaultView(View):
 
 class AboutView(MyDefaultView):
     pass
+
+
+class TestView(View):
+    def get(self, request):
+        return render(request, 'home/test.html')
+    
+
+def register_download(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            print(data)
+            download_link = data.get('download_link')
+            print("It worked", download_link)
+            return JsonResponse({'event': "ok"})
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest("Invalid JSON data")
+    else:
+        return JsonResponse({'event': "none"})
